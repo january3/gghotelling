@@ -8,7 +8,15 @@
 coverage](https://codecov.io/gh/january3/gghotelling/graph/badge.svg)](https://app.codecov.io/gh/january3/gghotelling)
 <!-- badges: end -->
 
-Show Hotelling ellipses with ggplot2.
+Show Hotelling T² ellipses with ggplot2.
+
+This is different from the `stat_ellipse()` function in ggplot2, which
+draws normal data ellipses. Hotelling ellipses are multivariate
+confidence regions for the mean of a multivariate normal distribution.
+This is also different from the ellipses returned by the
+`ellipse::ellipse()` function, which are confidence regions for the
+covariance matrix of a multivariate normal distribution (data ellipses
+again).
 
 ## Installation
 
