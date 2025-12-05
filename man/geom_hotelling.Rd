@@ -13,6 +13,8 @@ geom_hotelling(
   position = "identity",
   ...,
   ci = 0.95,
+  type = TRUE,
+  npoints = 100,
   na.rm = FALSE,
   show.legend = NA,
   inherit.aes = TRUE
@@ -57,6 +59,12 @@ or to \code{ggplot2::layer()}.}
 
 \item{ci}{Confidence interval}
 
+\item{type}{t2data - Hotelling T² data ellipse; t2mean - Hotelling
+confidence interval for the mean; data - normal data elllipse
+(using χ² distribution).}
+
+\item{npoints}{Number of points to estimate}
+
 \item{na.rm}{Logical. Should missing values be removed? Default is FALSE.}
 
 \item{show.legend}{logical. Should this layer be included in the legends?
@@ -72,6 +80,10 @@ the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 }
 \description{
 Hotelling ellipses for ggplot2
+}
+\details{
+This geom adds data or confidence ellipses to the plot. See
+\code{hotelling_ellipse()} documentation for more information.
 }
 \examples{
 pca <- prcomp(iris[, 1:4], scale.=TRUE)

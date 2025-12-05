@@ -4,7 +4,7 @@
 \alias{hotelling_ellipse}
 \title{Calculate Hotelling or data ellipse around some points}
 \usage{
-hotelling_ellipse(x, ci = 0.95, npoints = 100, hotelling = TRUE)
+hotelling_ellipse(x, ci = 0.95, npoints = 100, type = "t2data")
 }
 \arguments{
 \item{x}{A two-column matrix or data frame like object}
@@ -13,7 +13,8 @@ hotelling_ellipse(x, ci = 0.95, npoints = 100, hotelling = TRUE)
 
 \item{npoints}{Number of points to estimate}
 
-\item{hotelling}{If FALSE, it will calculate a standard data ellipse
+\item{type}{t2data - Hotelling T² data ellipse; t2mean - Hotelling
+confidence interval for the mean; data - normal data elllipse
 (using χ² distribution).}
 }
 \value{
@@ -24,7 +25,15 @@ Calculate Hotelling or data ellipse around some points
 }
 \details{
 This functions calculates the T² Hotelling ellipse or a data ellipse for
-the given coverage probability.
+the given coverage probability. There are three types of ellipses which
+can be plotted:
+\itemize{
+\item T² Hotelling data ellipses, showing data coverage (like the
+\code{type="t"} version of \code{stat_ellipse})
+\item normal multivariate distribution ellipses (like the \code{type="norm"}
+version of the \code{stat_ellipse})
+\item T² Hotelling confidence areas for the group means.
+}
 }
 \examples{
 df <- iris[ iris$Species == "setosa", 1:2 ]

@@ -3,11 +3,20 @@
 #' Calculate Hotelling or data ellipse around some points
 #'
 #' This functions calculates the T² Hotelling ellipse or a data ellipse for
-#' the given coverage probability.
+#' the given coverage probability. There are three types of ellipses which
+#' can be plotted:
+#'
+#'  * T² Hotelling data ellipses, showing data coverage (like the
+#'  `type="t"` version of `stat_ellipse`)
+#'  * normal multivariate distribution ellipses (like the `type="norm"`
+#'  version of the `stat_ellipse`)
+#'  * T² Hotelling confidence areas for the group means.
+#'
 #' @param x A two-column matrix or data frame like object
 #' @param ci coverage probability (confidence interval)
 #' @param npoints Number of points to estimate
-#' @param hotelling If FALSE, it will calculate a standard data ellipse
+#' @param type t2data - Hotelling T² data ellipse; t2mean - Hotelling
+#' confidence interval for the mean; data - normal data elllipse
 #'     (using χ² distribution).
 #' @return A two-column matrix or data frame with npoints rows
 #' @examples
@@ -16,7 +25,7 @@
 #' plot(df[,1], df[,2])
 #' lines(eli)
 #' @export
-hotelling_ellipse <- function(x, ci = 0.95, npoints = 100, hotelling = TRUE) {
+hotelling_ellipse <- function(x, ci = 0.95, npoints = 100, type = "t2data") {
   convert_to_df <- FALSE
   if(is.data.frame(x)) {
     convert_to_df <- TRUE
@@ -35,6 +44,8 @@ hotelling_ellipse <- function(x, ci = 0.95, npoints = 100, hotelling = TRUE) {
   # Critical Hotelling T^2 value (for the DATA cloud, not mean CI)
   t2crit <- (p * (n - 1) / (n - p)) * qf(ci, df1 = p, df2 = n - p)
   c2   <- qchisq(ci, df = p)     # chi-square, df = p
+  #fcrit <- stats::qf(conf, df1 = p, df2 = n - p)
+  #c2 <- (p * (n - 1) / (n - p)) * fcrit / n  # divide by n for mean
 
   # Eigen-decomposition
   eig <- eigen(S)
@@ -42,9 +53,15 @@ hotelling_ellipse <- function(x, ci = 0.95, npoints = 100, hotelling = TRUE) {
   eigvecs <- eig$vectors
   
   # Semi-axis lengths of the ellipse
-  if(hotelling) {
+  if(type == "t2data") {
+    message("computing Hotelling data")
+    axes <- sqrt(t2crit * eigvals)
+  } else if(type == "t2mean") {
+    message("computing Hotelling mean")
+    t2crit <- t2crit / n
     axes <- sqrt(t2crit * eigvals)
   } else {
+    message("computing normal")
     axes <- sqrt(c2 * eigvals)
   }
   
@@ -72,8 +89,8 @@ StatHotelling <- ggproto(
   
   required_aes = c("x", "y"),
   
-  compute_group = function(data, scales, ci = 0.95) {
-    eli <- hotelling_ellipse(data[ , c("x", "y")])
+  compute_group = function(data, scales, ci = 0.95, type = type, npoints = npoints) {
+    eli <- hotelling_ellipse(data[ , c("x", "y")], ci = ci, type = type, npoints = npoints)
 
     defaults <- data[1, setdiff(names(data), c("x", "y", "group")), drop = FALSE]
     rownames(defaults) <- NULL
@@ -110,11 +127,16 @@ GeomHotelling <- ggproto(
 #' Hotelling ellipses for ggplot2
 #'
 #' Hotelling ellipses for ggplot2
+#'
+#' This geom adds data or confidence ellipses to the plot. See
+#' `hotelling_ellipse()` documentation for more information.
+#'
 #' @param ci Confidence interval
 #' @param ... Additional parameters passed to underlying `geom_polygon()`
 #'   or to `ggplot2::layer()`.
 #' @param na.rm Logical. Should missing values be removed? Default is FALSE.
 #' @inheritParams ggplot2::layer
+#' @inheritParams hotelling_ellipse
 #' @importFrom ggplot2 ggproto layer Stat GeomPolygon aes
 #' @importFrom stats qchisq cov qf
 #' @examples
@@ -138,6 +160,8 @@ geom_hotelling <- function(mapping = NULL, data = NULL,
                             position = "identity",
                             ...,
                             ci = 0.95,
+                            type = TRUE,
+                            npoints = 100,
                             na.rm = FALSE,
                             show.legend = NA,
                             inherit.aes = TRUE) {
@@ -149,7 +173,7 @@ geom_hotelling <- function(mapping = NULL, data = NULL,
     position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params = list(ci = ci, na.rm = na.rm, ...)
+    params = list(ci = ci, type = type, npoints = npoints, na.rm = na.rm, ...)
   )
 }
 
