@@ -38,7 +38,13 @@ test_that("hotelling statistics are calculated correctly", {
 
   eli <- hotelling_ellipse(as.matrix(iris_subset), ci = 0.95, npoints = 10)
 
+  eli <- hotelling_ellipse(as.matrix(iris_subset), ci = 0.95, npoints = 10, type = "t2mean")
+  eli <- hotelling_ellipse(as.matrix(iris_subset), ci = 0.95, npoints = 10, type = "data")
+
   # is eli a matrix?
   expect_true(is.matrix(eli))
+
+  expect_error(hotelling_ellipse(iris, ci = 0.95, npoints = 10))
+  expect_error(hotelling_ellipse(iris_subset[1:2, ], ci = 0.95, npoints = 10))
 
 })
