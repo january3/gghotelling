@@ -1,6 +1,6 @@
 Package: gghotelling
 Title: Hotelling's T-Squared Ellipse Visualization with ggplot2
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R: 
     person("January", "Weiner", , "january.weiner@gmail.com", role = c("aut", "cre"))
 Description: What the package does (one paragraph).
@@ -11,3 +11,6 @@ RoxygenNote: 7.3.2
 Imports: 
     ellipse,
     ggplot2
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
