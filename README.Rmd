@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
 # gghotelling
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/january3/gghotelling/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/january3/gghotelling/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 Show Hotelling ellipses with ggplot2.
@@ -49,9 +50,6 @@ ggplot(df, aes(PC1, PC2, color=Species)) +
 ggplot(df, aes(PC1, PC2, color=Species)) +
   geom_hotelling(alpha=0.1, aes(fill = Species)) +
   geom_point()
-
-
-## basic example code
 ```
 
 

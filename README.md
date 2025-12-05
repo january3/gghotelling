@@ -2,6 +2,8 @@
 # gghotelling
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/january3/gghotelling/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/january3/gghotelling/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 Show Hotelling ellipses with ggplot2.
@@ -51,9 +53,3 @@ ggplot(df, aes(PC1, PC2, color=Species)) +
 ```
 
 <img src="man/figures/README-example-3.png" width="100%" />
-
-``` r
-
-
-## basic example code
-```
