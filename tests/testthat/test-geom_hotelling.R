@@ -1,6 +1,5 @@
 test_that("geom_hotelling works correctly", {
   library(ggplot2)
-  library(dplyr)
 
   # Create a sample dataset
   set.seed(123)
