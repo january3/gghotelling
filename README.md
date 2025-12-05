@@ -69,3 +69,13 @@ ggplot(df, aes(PC1, PC2, color=Species)) +
 ```
 
 <img src="man/figures/README-example-3.png" width="50%" style="display: block; margin: auto;" />
+
+``` r
+
+# set custom CI/coverage level
+ggplot(df, aes(PC1, PC2, color=Species)) +
+  geom_hotelling(alpha=0.1, aes(fill = Species), ci=.99) +
+  geom_point()
+```
+
+<img src="man/figures/README-example-4.png" width="50%" style="display: block; margin: auto;" />

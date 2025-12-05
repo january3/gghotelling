@@ -66,6 +66,11 @@ ggplot(df, aes(PC1, PC2, color=Species)) +
 ggplot(df, aes(PC1, PC2, color=Species)) +
   geom_hotelling(alpha=0.1, aes(fill = Species)) +
   geom_point()
+
+# set custom CI/coverage level
+ggplot(df, aes(PC1, PC2, color=Species)) +
+  geom_hotelling(alpha=0.1, aes(fill = Species), ci=.99) +
+  geom_point()
 ```
 
 
