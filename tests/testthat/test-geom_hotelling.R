@@ -28,7 +28,7 @@ test_that("hotelling statistics are calculated correctly", {
   data(iris)
   iris_subset <- iris[ iris$Species == "setosa", 1:2 ]
 
-  eli <- hotelling(iris_subset, ci = 0.95, npoints = 10)
+  eli <- hotelling_ellipse(iris_subset, ci = 0.95, npoints = 10)
 
   # is eli a data frame?
   expect_s3_class(eli, "data.frame")
@@ -36,7 +36,7 @@ test_that("hotelling statistics are calculated correctly", {
   expect_equal(nrow(eli), 10)
   expect_equal(ncol(eli), 2)
 
-  eli <- hotelling(as.matrix(iris_subset), ci = 0.95, npoints = 10)
+  eli <- hotelling_ellipse(as.matrix(iris_subset), ci = 0.95, npoints = 10)
 
   # is eli a matrix?
   expect_true(is.matrix(eli))

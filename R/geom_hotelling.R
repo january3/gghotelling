@@ -1,49 +1,79 @@
-#' Calculate confidence ellipse around some points
+#' Calculate Hotelling or data ellipse around some points
 #'
-#' Calculate confidence ellipse around some points
+#' Calculate Hotelling or data ellipse around some points
 #'
-#' This is a wrapper around the `ellipse` function from the `ellipse`
-#' package. 
+#' This functions calculates the T² Hotelling ellipse or a data ellipse for
+#' the given coverage probability.
 #' @param x A two-column matrix or data frame like object
-#' @param ci confidence interval
+#' @param ci coverage probability (confidence interval)
 #' @param npoints Number of points to estimate
+#' @param hotelling If FALSE, it will calculate a standard data ellipse
+#'     (using χ² distribution).
 #' @return A two-column matrix or data frame with npoints rows
 #' @examples
 #' df <- iris[ iris$Species == "setosa", 1:2 ]
-#' eli <- hotelling(df)
+#' eli <- hotelling_ellipse(df)
 #' plot(df[,1], df[,2])
 #' lines(eli)
 #' @export
-hotelling <- function(x, ci = 0.95, npoints = 100) {
-
-  if(!is.matrix(x) & !is.data.frame(x) & !ncol(x) == 2) {
-    stop("x must be a data frame and matrix with two columns")
-  }
-
-
-  s <- cov(x)
-
-  cc <- colSums(x) / nrow(x)
-  eli <- ellipse::ellipse(s, centre=cc, level = ci, npoints = npoints)
-
+hotelling_ellipse <- function(x, ci = 0.95, npoints = 100, hotelling = TRUE) {
+  convert_to_df <- FALSE
   if(is.data.frame(x)) {
-    eli <- as.data.frame(eli)
+    convert_to_df <- TRUE
   }
 
-  eli
+  x <- as.matrix(x)
+  if (ncol(x) != 2L) stop("x must have exactly 2 columns.")
+  
+  n <- nrow(x)
+  p <- 2L
+  if (n <= p) stop("Need n > p to compute Hotelling ellipse.")
+  
+  center <- colMeans(x)
+  S <- cov(x)
+  
+  # Critical Hotelling T^2 value (for the DATA cloud, not mean CI)
+  t2crit <- (p * (n - 1) / (n - p)) * qf(ci, df1 = p, df2 = n - p)
+  c2   <- qchisq(ci, df = p)     # chi-square, df = p
+
+  # Eigen-decomposition
+  eig <- eigen(S)
+  eigvals <- eig$values
+  eigvecs <- eig$vectors
+  
+  # Semi-axis lengths of the ellipse
+  if(hotelling) {
+    axes <- sqrt(t2crit * eigvals)
+  } else {
+    axes <- sqrt(c2 * eigvals)
+  }
+  
+  # Parametric angles
+  theta <- seq(0, 2 * pi, length.out = npoints)
+  circle <- rbind(cos(theta), sin(theta))  # 2 x npoints
+  
+  # Transform unit circle to a Hotelling ellipse
+  ellipse <- t(center + eigvecs %*% (diag(axes) %*% circle))
+  colnames(ellipse) <- c("x", "y")
+
+  if(convert_to_df) {
+    ellipse <- as.data.frame(ellipse)
+  }
+
+  ellipse
 }
 
 #' @rdname geom_hotelling
 #' @format NULL
 #' @usage NULL
 #' @export
-StatHotelling <- ggplot2::ggproto(
-  "StatHotelling", ggplot2::Stat,
+StatHotelling <- ggproto(
+  "StatHotelling", Stat,
   
   required_aes = c("x", "y"),
   
   compute_group = function(data, scales, ci = 0.95) {
-    eli <- hotelling(data[ , c("x", "y")])
+    eli <- hotelling_ellipse(data[ , c("x", "y")])
 
     defaults <- data[1, setdiff(names(data), c("x", "y", "group")), drop = FALSE]
     rownames(defaults) <- NULL
@@ -64,10 +94,10 @@ StatHotelling <- ggplot2::ggproto(
 #' @format NULL
 #' @usage NULL
 #' @export
-GeomHotelling <- ggplot2::ggproto(
-  "GeomHotelling", ggplot2::GeomPolygon,
+GeomHotelling <- ggproto(
+  "GeomHotelling", GeomPolygon,
   
-  default_aes = ggplot2::aes(
+  default_aes = aes(
     colour    = "black",  # default outline
     fill      = NA,       # default no fill
     linewidth = 0.5,
@@ -85,8 +115,8 @@ GeomHotelling <- ggplot2::ggproto(
 #'   or to `ggplot2::layer()`.
 #' @param na.rm Logical. Should missing values be removed? Default is FALSE.
 #' @inheritParams ggplot2::layer
-#' @importFrom ggplot2 ggproto layer Stat GeomPolygon
-#' @importFrom ellipse ellipse
+#' @importFrom ggplot2 ggproto layer Stat GeomPolygon aes
+#' @importFrom stats qchisq cov qf
 #' @examples
 #' pca <- prcomp(iris[, 1:4], scale.=TRUE)
 #' df <- cbind(iris, pca$x)
@@ -111,7 +141,7 @@ geom_hotelling <- function(mapping = NULL, data = NULL,
                             na.rm = FALSE,
                             show.legend = NA,
                             inherit.aes = TRUE) {
-  ggplot2::layer(
+  layer(
     stat = StatHotelling,      # use our Stat
     geom = GeomHotelling,          # but standard geom_polygon drawing
     data = data,
