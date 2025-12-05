@@ -1,3 +1,37 @@
+#' Calculate confidence ellipse around some points
+#'
+#' Calculate confidence ellipse around some points
+#'
+#' This is a wrapper around the `ellipse` function from the `ellipse`
+#' package. 
+#' @param x A two-column matrix or data frame like object
+#' @param ci confidence interval
+#' @param npoints Number of points to estimate
+#' @return A two-column matrix or data frame with npoints rows
+#' @examples
+#' df <- iris[ iris$Species == "setosa", 1:2 ]
+#' eli <- hotelling(df)
+#' plot(df[,1], df[,2])
+#' lines(eli)
+#' @export
+hotelling <- function(x, ci = 0.95, npoints = 100) {
+
+  if(!is.matrix(x) & !is.data.frame(x) & !ncol(x) == 2) {
+    stop("x must be a data frame and matrix with two columns")
+  }
+
+
+  s <- cov(x)
+
+  cc <- colSums(x) / nrow(x)
+  eli <- ellipse::ellipse(s, centre=cc, level = ci, npoints = npoints)
+
+  if(is.data.frame(x)) {
+    eli <- as.data.frame(eli)
+  }
+
+  eli
+}
 
 #' @rdname geom_hotelling
 #' @format NULL
@@ -9,9 +43,7 @@ StatHotelling <- ggplot2::ggproto(
   required_aes = c("x", "y"),
   
   compute_group = function(data, scales, ci = 0.95) {
-    s <- cov(data[, c("x", "y")])
-    cc <- c(mean(data$x, na.rm = TRUE), mean(data$y, na.rm = TRUE))
-    eli <- ellipse::ellipse(s, centre=cc, level = ci, npoints = 100)
+    eli <- hotelling(data[ , c("x", "y")])
 
     defaults <- data[1, setdiff(names(data), c("x", "y", "group")), drop = FALSE]
     rownames(defaults) <- NULL

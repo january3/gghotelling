@@ -1,0 +1,45 @@
+test_that("geom_hotelling works correctly", {
+  library(ggplot2)
+  library(dplyr)
+
+  # Create a sample dataset
+  set.seed(123)
+  df <- data.frame(
+    group = rep(c("A", "B"), each = 50),
+    x = c(rnorm(50, mean = 5), rnorm(50, mean = 7)),
+    y = c(rnorm(50, mean = 5), rnorm(50, mean = 7))
+  )
+
+  # Create a ggplot with geom_hotelling
+  p <- ggplot(df, aes(x = x, y = y, color = group)) +
+    geom_point() +
+    geom_hotelling(aes(group = group), ci = 0.95)
+
+  # Test that the plot object is created successfully
+  expect_s3_class(p, "ggplot")
+
+  # Test that the layers include geom_hotelling
+  layer_classes <- sapply(p$layers, function(layer) class(layer$geom)[1])
+  expect_true("GeomHotelling" %in% layer_classes)
+
+})
+
+test_that("hotelling statistics are calculated correctly", {
+  # use iris dataset for testing
+  data(iris)
+  iris_subset <- iris[ iris$Species == "setosa", 1:2 ]
+
+  eli <- hotelling(iris_subset, ci = 0.95, npoints = 10)
+
+  # is eli a data frame?
+  expect_s3_class(eli, "data.frame")
+
+  expect_equal(nrow(eli), 10)
+  expect_equal(ncol(eli), 2)
+
+  eli <- hotelling(as.matrix(iris_subset), ci = 0.95, npoints = 10)
+
+  # is eli a matrix?
+  expect_true(is.matrix(eli))
+
+})
