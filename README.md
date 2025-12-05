@@ -20,7 +20,8 @@ pak::pak("january3/gghotelling")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+The package defines a new geom, `geom_hotelling()`, which can be used to
+add Hotelling ellipses to ggplot2 scatter plots.
 
 ``` r
 library(ggplot2)
