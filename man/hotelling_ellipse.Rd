@@ -32,7 +32,7 @@ can be plotted:
 \code{type="t"} version of \code{stat_ellipse})
 \item normal multivariate distribution ellipses (like the \code{type="norm"}
 version of the \code{stat_ellipse})
-\item T² Hotelling confidence areas for the group means.
+\item T² Hotelling confidence ellipses of the group means.
 }
 }
 \examples{

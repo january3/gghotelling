@@ -10,7 +10,7 @@
 #'  `type="t"` version of `stat_ellipse`)
 #'  * normal multivariate distribution ellipses (like the `type="norm"`
 #'  version of the `stat_ellipse`)
-#'  * T² Hotelling confidence areas for the group means.
+#'  * T² Hotelling confidence ellipses of the group means.
 #'
 #' @param x A two-column matrix or data frame like object
 #' @param ci coverage probability (confidence interval)
@@ -54,14 +54,14 @@ hotelling_ellipse <- function(x, ci = 0.95, npoints = 100, type = "t2data") {
   
   # Semi-axis lengths of the ellipse
   if(type == "t2data") {
-    message("computing Hotelling data")
+    #message("computing Hotelling data")
     axes <- sqrt(t2crit * eigvals)
   } else if(type == "t2mean") {
-    message("computing Hotelling mean")
+    #message("computing Hotelling mean")
     t2crit <- t2crit / n
     axes <- sqrt(t2crit * eigvals)
   } else {
-    message("computing normal")
+    #message("computing normal")
     axes <- sqrt(c2 * eigvals)
   }
   

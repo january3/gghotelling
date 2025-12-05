@@ -48,7 +48,6 @@ df <- cbind(iris, pca$x)
 ggplot(df, aes(PC1, PC2)) +
   geom_hotelling(ci=.99) +
   geom_point()
-#> computing normal
 ```
 
 <img src="man/figures/README-example-1.png" width="50%" style="display: block; margin: auto;" />
@@ -58,9 +57,6 @@ ggplot(df, aes(PC1, PC2)) +
 ggplot(df, aes(PC1, PC2, color=Species)) +
   geom_hotelling() +
   geom_point()
-#> computing normal
-#> computing normal
-#> computing normal
 ```
 
 <img src="man/figures/README-example-2.png" width="50%" style="display: block; margin: auto;" />
@@ -70,9 +66,6 @@ ggplot(df, aes(PC1, PC2, color=Species)) +
 ggplot(df, aes(PC1, PC2, color=Species)) +
   geom_hotelling(alpha=0.1, aes(fill = Species)) +
   geom_point()
-#> computing normal
-#> computing normal
-#> computing normal
 ```
 
 <img src="man/figures/README-example-3.png" width="50%" style="display: block; margin: auto;" />
