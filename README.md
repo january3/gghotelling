@@ -37,7 +37,7 @@ ggplot(df, aes(PC1, PC2)) +
   geom_point()
 ```
 
-<img src="man/figures/README-example-1.png" width="100%" />
+<img src="man/figures/README-example-1.png" width="50%" style="display: block; margin: auto;" />
 
 ``` r
 
@@ -46,7 +46,7 @@ ggplot(df, aes(PC1, PC2, color=Species)) +
   geom_point()
 ```
 
-<img src="man/figures/README-example-2.png" width="100%" />
+<img src="man/figures/README-example-2.png" width="50%" style="display: block; margin: auto;" />
 
 ``` r
 
@@ -55,4 +55,4 @@ ggplot(df, aes(PC1, PC2, color=Species)) +
   geom_point()
 ```
 
-<img src="man/figures/README-example-3.png" width="100%" />
+<img src="man/figures/README-example-3.png" width="50%" style="display: block; margin: auto;" />
