@@ -23,6 +23,10 @@ also Hotelling data (?) ellipses. Unlike stat_ellipse(), it can also
 take the `fill` aesthetic for a visually pleasing representation of the
 ellipses.
 
+My main motivation for creating this package was sorting out the
+different ellipse types and allowing the use of `fill` aesthetics for
+Hotelling ellipses.
+
 ## Installation
 
 You can install the development version of gghotelling from
