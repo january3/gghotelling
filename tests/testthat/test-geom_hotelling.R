@@ -67,6 +67,17 @@ test_that("stat_hotelling_points works correctly", {
   # Test that the plot object is created successfully
   expect_s3_class(p, "ggplot")
 
+  p <- ggplot(df, aes(x = x, y = y, group = group)) +
+    stat_hotelling_points(aes(shape = group, color = after_stat(outside)), outlier_only = TRUE)
+  expect_s3_class(p, "ggplot")
+
+  # check that geom_label_repel works as well
+  library(ggrepel)
+  p <- ggplot(df, aes(x = x, y = y, group = group)) +
+    stat_hotelling_points(geom = "label_repel",
+                          outlier_only = TRUE)
+  expect_s3_class(p, "ggplot")
+
 })
 
 

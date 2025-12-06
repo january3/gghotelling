@@ -10,6 +10,7 @@ StatHotellingPoints <- ggproto(
   required_aes = c("x", "y"),
 
   compute_group = function(data, scales,
+                           outlier_only = FALSE,
                            type = c("t2data", "t2mean"),
                            ci = 0.95) {
 
@@ -20,6 +21,10 @@ StatHotellingPoints <- ggproto(
     data$t2 <- t2_df$t2
     data$t2crit <- t2_df$t2crit
     data$outside <- t2_df$outside
+
+    if(outlier_only) {
+      data <- data[ data$outside, , drop=FALSE ]
+    }
 
     data
   }
@@ -34,6 +39,7 @@ StatHotellingPoints <- ggproto(
 #' used as graphical parameters, e.g. for coloring the points (see Examples
 #' below) using the `ggplot2::after_stat()` function.
 #'
+#' @param outlier_only Only return the statistic for outliers
 #' @inheritParams geom_hotelling
 #' @inheritParams ggplot2::layer
 #' @examples
@@ -53,12 +59,20 @@ StatHotellingPoints <- ggproto(
 #'                         aes(shape = Species, 
 #'                         color = after_stat(t2)))
 #'
+#' # label the outliers
+#' ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
+#'   geom_hotelling(ci = 0.75, alpha=0.1, aes(fill = Species)) +
+#'   geom_point(aes(color = Species)) +
+#'   stat_hotelling_points(ci = .75, geom="label", 
+#'                         outlier_only = TRUE)
+#'
 #' @export
 stat_hotelling_points <- function(mapping = NULL, data = NULL,
                                   geom = "point", position = "identity",
                                   ...,
                                   type = "t2data",
                                   ci = 0.95,
+                                  outlier_only = FALSE,
                                   na.rm = FALSE,
                                   show.legend = NA,
                                   inherit.aes = TRUE) {
@@ -72,6 +86,7 @@ stat_hotelling_points <- function(mapping = NULL, data = NULL,
     inherit.aes = inherit.aes,
     params = list(
       type = type,
+      outlier_only = outlier_only,
       ci = ci,
       na.rm = na.rm,
       ...

@@ -91,5 +91,26 @@ ggplot(df, aes(PC1, PC2, group=Species)) +
   stat_hotelling_points(size=2, aes(shape = Species, color = after_stat(t2)))
 ```
 
+This can be useful for identifying potential outliers in multivariate data.
+The outliers can be directly labeled as follows:
+
+
+```{r}
+ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
+  geom_hotelling(alpha=0.1, aes(fill = Species)) +
+  geom_point(aes(color = Species)) +
+  stat_hotelling_points(geom="label", 
+                        outlier_only = TRUE)
+
+# or even with geom_label_repel from ggrepel
+library(ggrepel)
+ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
+  geom_hotelling(alpha=0.1, aes(fill = Species)) +
+  geom_point(aes(color = Species)) +
+  stat_hotelling_points(geom="label_repel",
+                        outlier_only = TRUE)
+```
+
+
 
 

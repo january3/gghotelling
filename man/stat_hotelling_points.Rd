@@ -14,6 +14,7 @@ stat_hotelling_points(
   ...,
   type = "t2data",
   ci = 0.95,
+  outlier_only = FALSE,
   na.rm = FALSE,
   show.legend = NA,
   inherit.aes = TRUE
@@ -75,6 +76,8 @@ confidence interval for the mean; data - normal data elllipse
 
 \item{ci}{Confidence interval}
 
+\item{outlier_only}{Only return the statistic for outliers}
+
 \item{na.rm}{Logical. Should missing values be removed? Default is FALSE.}
 
 \item{show.legend}{logical. Should this layer be included in the legends?
@@ -113,6 +116,13 @@ ggplot(df, aes(PC1, PC2, group=Species)) +
                         size=2, 
                         aes(shape = Species, 
                         color = after_stat(t2)))
+
+# label the outliers
+ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
+  geom_hotelling(ci = 0.75, alpha=0.1, aes(fill = Species)) +
+  geom_point(aes(color = Species)) +
+  stat_hotelling_points(ci = .75, geom="label", 
+                        outlier_only = TRUE)
 
 }
 \keyword{datasets}

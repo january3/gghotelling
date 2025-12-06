@@ -104,3 +104,29 @@ ggplot(df, aes(PC1, PC2, group=Species)) +
 ```
 
 <img src="man/figures/README-example2-2.png" width="50%" style="display: block; margin: auto;" />
+
+This can be useful for identifying potential outliers in multivariate
+data. The outliers can be directly labeled as follows:
+
+``` r
+ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
+  geom_hotelling(alpha=0.1, aes(fill = Species)) +
+  geom_point(aes(color = Species)) +
+  stat_hotelling_points(geom="label", 
+                        outlier_only = TRUE)
+```
+
+<img src="man/figures/README-unnamed-chunk-2-1.png" width="50%" style="display: block; margin: auto;" />
+
+``` r
+
+# or even with geom_label_repel from ggrepel
+library(ggrepel)
+ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
+  geom_hotelling(alpha=0.1, aes(fill = Species)) +
+  geom_point(aes(color = Species)) +
+  stat_hotelling_points(geom="label_repel",
+                        outlier_only = TRUE)
+```
+
+<img src="man/figures/README-unnamed-chunk-2-2.png" width="50%" style="display: block; margin: auto;" />

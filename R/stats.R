@@ -19,9 +19,6 @@ hotelling_points <- function(x, ci = 0.95, type = c("t2data", "t2mean")) {
   p <- 2L
   if (n <= p) stop("Need n > p to compute Hotelling ellipse.")
  
-  p <- 2L
-  if (n <= p) return(data)  # or stop with a helpful message
-
   center <- colMeans(x)
   S <- cov(x)
   Sinv <- solve(S)
