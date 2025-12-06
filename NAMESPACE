@@ -2,8 +2,11 @@
 
 export(GeomHotelling)
 export(StatHotelling)
+export(StatHotellingPoints)
 export(geom_hotelling)
 export(hotelling_ellipse)
+export(hotelling_points)
+export(stat_hotelling_points)
 importFrom(ggplot2,GeomPolygon)
 importFrom(ggplot2,Stat)
 importFrom(ggplot2,aes)

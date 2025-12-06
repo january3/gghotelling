@@ -75,4 +75,21 @@ ggplot(df, aes(PC1, PC2, color=Species)) +
   geom_point()
 ```
 
+The package also provides per-point, group-wise T² statistics which can be
+used to identify multivariate outliers.
+
+
+
+```{r example2,fig.width=10, fig.height=5}
+ggplot(df, aes(PC1, PC2, group=Species)) +
+  geom_hotelling(ci = 0.75, alpha=0.1, aes(fill = Species)) +
+  scale_color_manual(values=c("TRUE"="red", "FALSE"="grey")) +
+  stat_hotelling_points(ci = .75, aes(shape = Species, color = after_stat(outside)))
+
+ggplot(df, aes(PC1, PC2, group=Species)) +
+  geom_hotelling(alpha=0.1, aes(fill = Species)) +
+  stat_hotelling_points(size=2, aes(shape = Species, color = after_stat(t2)))
+```
+
+
 

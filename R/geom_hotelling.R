@@ -1,84 +1,85 @@
-#' Calculate Hotelling or data ellipse around some points
-#'
-#' Calculate Hotelling or data ellipse around some points
-#'
-#' This functions calculates the T² Hotelling ellipse or a data ellipse for
-#' the given coverage probability. There are three types of ellipses which
-#' can be plotted:
-#'
-#'  * T² Hotelling data ellipses, showing data coverage (like the
-#'  `type="t"` version of `stat_ellipse`)
-#'  * normal multivariate distribution ellipses (like the `type="norm"`
-#'  version of the `stat_ellipse`)
-#'  * T² Hotelling confidence ellipses of the group means.
-#'
-#' @param x A two-column matrix or data frame like object
-#' @param ci coverage probability (confidence interval)
-#' @param npoints Number of points to estimate
-#' @param type t2data - Hotelling T² data ellipse; t2mean - Hotelling
-#' confidence interval for the mean; data - normal data elllipse
-#'     (using χ² distribution).
-#' @return A two-column matrix or data frame with npoints rows
-#' @examples
-#' df <- iris[ iris$Species == "setosa", 1:2 ]
-#' eli <- hotelling_ellipse(df)
-#' plot(df[,1], df[,2])
-#' lines(eli)
+
+
+#' @rdname stat_hotelling_points 
+#' @format NULL
+#' @usage NULL
 #' @export
-hotelling_ellipse <- function(x, ci = 0.95, npoints = 100, type = "t2data") {
-  convert_to_df <- FALSE
-  if(is.data.frame(x)) {
-    convert_to_df <- TRUE
+StatHotellingPoints <- ggproto(
+  "StatHotellingPoints",
+  Stat,
+  required_aes = c("x", "y"),
+
+  compute_group = function(data, scales,
+                           type = c("t2data", "t2mean"),
+                           ci = 0.95) {
+
+
+    X <- cbind(data$x, data$y)
+    t2_df <- hotelling_points(X, ci = ci, type = type)
+
+    data$t2 <- t2_df$t2
+    data$t2crit <- t2_df$t2crit
+    data$outside <- t2_df$outside
+
+    data
   }
+)
 
-  x <- as.matrix(x)
-  if (ncol(x) != 2L) stop("x must have exactly 2 columns.")
-  
-  n <- nrow(x)
-  p <- 2L
-  if (n <= p) stop("Need n > p to compute Hotelling ellipse.")
-  
-  center <- colMeans(x)
-  S <- cov(x)
-  
-  # Critical Hotelling T^2 value (for the DATA cloud, not mean CI)
-  t2crit <- (p * (n - 1) / (n - p)) * qf(ci, df1 = p, df2 = n - p)
-  c2   <- qchisq(ci, df = p)     # chi-square, df = p
-  #fcrit <- stats::qf(conf, df1 = p, df2 = n - p)
-  #c2 <- (p * (n - 1) / (n - p)) * fcrit / n  # divide by n for mean
-
-  # Eigen-decomposition
-  eig <- eigen(S)
-  eigvals <- eig$values
-  eigvecs <- eig$vectors
-  
-  # Semi-axis lengths of the ellipse
-  if(type == "t2data") {
-    #message("computing Hotelling data")
-    axes <- sqrt(t2crit * eigvals)
-  } else if(type == "t2mean") {
-    #message("computing Hotelling mean")
-    t2crit <- t2crit / n
-    axes <- sqrt(t2crit * eigvals)
-  } else {
-    #message("computing normal")
-    axes <- sqrt(c2 * eigvals)
-  }
-  
-  # Parametric angles
-  theta <- seq(0, 2 * pi, length.out = npoints)
-  circle <- rbind(cos(theta), sin(theta))  # 2 x npoints
-  
-  # Transform unit circle to a Hotelling ellipse
-  ellipse <- t(center + eigvecs %*% (diag(axes) %*% circle))
-  colnames(ellipse) <- c("x", "y")
-
-  if(convert_to_df) {
-    ellipse <- as.data.frame(ellipse)
-  }
-
-  ellipse
+#' Calculate per-point T² Hotelling statistic 
+#'
+#' Calculate per-point T² Hotelling statistic for use in ggplot
+#'
+#' This calculates the T² Hotelling statistic for each point in the plot,
+#' group-wise. This allows to use the statistics `outside` and `t2` to be
+#' used as graphical parameters, e.g. for coloring the points (see Examples
+#' below) using the `ggplot2::after_stat()` function.
+#'
+#' @inheritParams geom_hotelling
+#' @inheritParams ggplot2::layer
+#' @examples
+#' pca <- prcomp(iris[, 1:4], scale.=TRUE)
+#' df <- cbind(iris, pca$x)
+#'
+#' library(ggplot2)
+#' ggplot(df, aes(PC1, PC2, group=Species)) +
+#'   geom_hotelling(alpha=0.1, aes(fill = Species)) +
+#'   scale_color_manual(values=c("TRUE"="red", "FALSE"="grey")) +
+#'   stat_hotelling_points(aes(color = after_stat(outside)))
+#'
+#' ggplot(df, aes(PC1, PC2, group=Species)) +
+#'   geom_hotelling(alpha=0.1, ci = .75, aes(fill = Species)) +
+#'   stat_hotelling_points(ci = .75, 
+#'                         size=2, 
+#'                         aes(shape = Species, 
+#'                         color = after_stat(t2)))
+#'
+#' @export
+stat_hotelling_points <- function(mapping = NULL, data = NULL,
+                                  geom = "point", position = "identity",
+                                  ...,
+                                  type = "t2data",
+                                  ci = 0.95,
+                                  na.rm = FALSE,
+                                  show.legend = NA,
+                                  inherit.aes = TRUE) {
+  layer(
+    stat = StatHotellingPoints, 
+    data = data, 
+    mapping = mapping,
+    geom = geom, 
+    position = position, 
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(
+      type = type,
+      ci = ci,
+      na.rm = na.rm,
+      ...
+    )
+  )
 }
+
+
 
 #' @rdname geom_hotelling
 #' @format NULL
@@ -132,7 +133,7 @@ GeomHotelling <- ggproto(
 #' `hotelling_ellipse()` documentation for more information.
 #'
 #' @param ci Confidence interval
-#' @param ... Additional parameters passed to underlying `geom_polygon()`
+#' @param ... Additional parameters passed to underlying `ggplot2::geom_polygon()`
 #'   or to `ggplot2::layer()`.
 #' @param na.rm Logical. Should missing values be removed? Default is FALSE.
 #' @inheritParams ggplot2::layer
