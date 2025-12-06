@@ -1,9 +1,9 @@
 Package: gghotelling
-Title: Hotelling's T-Squared Ellipse Visualization with ggplot2
-Version: 0.0.0.9002
+Title: Hotelling's T² Ellipses and Outlier Detection for ggplot2
+Version: 0.0.0.9003
 Authors@R: 
     person("January", "Weiner", , "january.weiner@gmail.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Description: Plot Hotelling's T² ellipses and detect multivariate outliers in ggplot2 scatter plots.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
