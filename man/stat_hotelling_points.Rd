@@ -71,8 +71,8 @@ to use \code{position_jitter()}, give the position as \code{"jitter"}.
 or to \code{ggplot2::layer()}.}
 
 \item{type}{t2data - Hotelling T² data ellipse; t2mean - Hotelling
-confidence interval for the mean; data - normal data elllipse
-(using χ² distribution).}
+confidence interval for the mean; data - normal
+data elllipse (using χ² distribution).}
 
 \item{level}{Either coverage probability (for type = "t2data" or "data") or
 confidence level (for type = "t2mean").}
@@ -121,6 +121,8 @@ ggplot(df, aes(PC1, PC2, group=Species)) +
                         color = after_stat(t2)))
 
 # label the outliers
+# note that you need to add the label aesthetics for the label geom to
+# work
 ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
   geom_hotelling(level = 0.75, alpha=0.1, aes(fill = Species)) +
   geom_point(aes(color = Species)) +

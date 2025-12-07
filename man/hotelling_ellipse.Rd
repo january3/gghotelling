@@ -8,7 +8,8 @@ hotelling_ellipse(
   x,
   level = 0.95,
   npoints = 100,
-  type = c("t2data", "t2mean", "data")
+  type = c("t2data", "t2mean", "data"),
+  robust = FALSE
 )
 }
 \arguments{
@@ -20,8 +21,11 @@ confidence level (for type = "t2mean").}
 \item{npoints}{Number of points to estimate}
 
 \item{type}{t2data - Hotelling T² data ellipse; t2mean - Hotelling
-confidence interval for the mean; data - normal data elllipse
-(using χ² distribution).}
+confidence interval for the mean; data - normal
+data elllipse (using χ² distribution).}
+
+\item{robust}{If TRUE, then robust estimates of mean and covariance are
+used}
 }
 \value{
 A two-column matrix or data frame with npoints rows
@@ -37,13 +41,22 @@ can be plotted:
 \item T² Hotelling data ellipses, showing data coverage (like the
 \code{type="t"} version of \code{stat_ellipse})
 \item normal multivariate distribution ellipses (like the \code{type="norm"}
-version of the \code{stat_ellipse}) which use Mahalonibis distance
+version of the \code{stat_ellipse}) which use Mahalonibis distance and
+chi-squared statistic
 \item T² Hotelling confidence ellipses of the group means.
 }
 
 The latter (for group means) correspond to the confidence interval for
 the mean in the univariate world, so the ellipses are very small
 (depending on the number of points).
+
+The function can also use a robust estimator of location and scatter
+using the \code{\link[robustbase]{covMcd}} function, which uses the
+Maximum Covariance Determinant (MCD) estimator. Note that while this
+results in ellipses which are more resistent to outliers, the
+interpretation slightly changes, as the T² statistic used is only an
+approximation in this case. In other words, use it for visualisation and
+QC, but not for statistical testing.
 }
 \examples{
 df <- iris[ iris$Species == "setosa", 1:2 ]

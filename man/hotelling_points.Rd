@@ -4,13 +4,21 @@
 \alias{hotelling_points}
 \title{Calculate the T2 statistic for individual points}
 \usage{
-hotelling_points(x, level = 0.95, type = c("t2data", "t2mean", "data"))
+hotelling_points(
+  x,
+  level = 0.95,
+  robust = FALSE,
+  type = c("t2data", "t2mean", "data")
+)
 }
 \arguments{
 \item{x}{A matrix or data frame with two columns}
 
 \item{level}{Either coverage probability (for type = "t2data" or "data") or
 confidence level (for type = "t2mean").}
+
+\item{robust}{If TRUE, then robust estimates of mean and covariance are
+used}
 
 \item{type}{what type of statistic should be calculated; can be t2data
 (for data coverage), t2mean (for difference from a mean) or
@@ -23,4 +31,17 @@ statistic), t2crit (critical t2 value for the given level) and is_outlier
 }
 \description{
 Calculate the T2 statistic or Mahalanobis distance for individual points
+}
+\details{
+The function can use a robust estimator of location and scatter
+using the \code{\link[robustbase]{covMcd}} function, which uses the
+Maximum Covariance Determinant (MCD) estimator. Note that while this
+results in ellipses which are more resistent to outliers, the
+interpretation slightly changes, as the T² statistic used is only an
+approximation in this case. In other words, use it for visualisation and
+QC, but not for statistical testing.
+}
+\seealso{
+\code{\link{hotelling_ellipse}} for more information on the
+differences between t2data, t2mean and data modes.
 }

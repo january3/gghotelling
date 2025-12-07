@@ -11,12 +11,13 @@ StatHotellingPoints <- ggproto(
 
   compute_group = function(data, scales,
                            outlier_only = FALSE,
+                           robust = FALSE,
                            type = c("t2data", "t2mean", "data"),
                            level = 0.95) {
 
 
     X <- cbind(data$x, data$y)
-    t2_df <- hotelling_points(X, level = level, type = type)
+    t2_df <- hotelling_points(X, level = level, robust = robust, type = type)
 
     data$t2 <- t2_df$t2
     data$t2crit <- t2_df$t2crit
@@ -60,6 +61,8 @@ StatHotellingPoints <- ggproto(
 #'                         color = after_stat(t2)))
 #'
 #' # label the outliers
+#' # note that you need to add the label aesthetics for the label geom to
+#' # work
 #' ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
 #'   geom_hotelling(level = 0.75, alpha=0.1, aes(fill = Species)) +
 #'   geom_point(aes(color = Species)) +
@@ -107,8 +110,15 @@ StatHotelling <- ggproto(
   
   required_aes = c("x", "y"),
   
-  compute_group = function(data, scales, level = 0.95, type = type, npoints = npoints) {
-    eli <- hotelling_ellipse(data[ , c("x", "y")], level = level, type = type, npoints = npoints)
+  compute_group = function(data, 
+                           scales, 
+                           level = 0.95, 
+                           type = c("t2data", "t2mean", "data"),
+                           robust = FALSE, 
+                           npoints = 100) {
+
+    eli <- hotelling_ellipse(data[ , c("x", "y")], level = level, 
+                             type = type, robust = robust, npoints = npoints)
 
     defaults <- data[1, setdiff(names(data), c("x", "y", "group")), drop = FALSE]
     rownames(defaults) <- NULL
@@ -174,12 +184,20 @@ GeomHotelling <- ggproto(
 #'   ggplot(df, aes(PC1, PC2, color=Species)) +
 #'     geom_hotelling(alpha=0.1, aes(fill = Species)) +
 #'     geom_point()
+#'   
+#' # compare the robust and regular approaches:
+#'   ggplot(df, aes(PC1, PC2, color=Species)) +
+#'     geom_hotelling() +
+#'     geom_hotelling(robust = TRUE, linetype = "dashed") +
+#'     geom_point()
+#' 
 #' @export
 geom_hotelling <- function(mapping = NULL, data = NULL,
                             position = "identity",
                             ...,
                             level = 0.95,
                             type = "t2data",
+                            robust = FALSE,
                             npoints = 100,
                             na.rm = FALSE,
                             show.legend = NA,
@@ -192,7 +210,8 @@ geom_hotelling <- function(mapping = NULL, data = NULL,
     position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params = list(level = level, type = type, npoints = npoints, na.rm = na.rm, ...)
+    params = list(level = level, type = type, robust = robust, 
+                  npoints = npoints, na.rm = na.rm, ...)
   )
 }
 

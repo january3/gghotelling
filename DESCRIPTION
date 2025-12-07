@@ -1,6 +1,6 @@
 Package: gghotelling
 Title: Hotelling's T² Ellipses and Outlier Detection for ggplot2
-Version: 0.0.0.9009
+Version: 0.0.0.9010
 Authors@R: 
     person("January", "Weiner", , "january.weiner@gmail.com", role = c("aut", "cre"))
 Description: Plot Hotelling's T² ellipses and detect multivariate outliers in ggplot2 scatter plots.
@@ -10,7 +10,8 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports: 
     ggplot2,
-    grDevices
+    grDevices,
+    robustbase
 Suggests: 
     testthat (>= 3.0.0),
     ggrepel

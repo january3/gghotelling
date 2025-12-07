@@ -14,6 +14,7 @@ geom_hotelling(
   ...,
   level = 0.95,
   type = "t2data",
+  robust = FALSE,
   npoints = 100,
   na.rm = FALSE,
   show.legend = NA,
@@ -61,8 +62,11 @@ or to \code{ggplot2::layer()}.}
 confidence level (for type = "t2mean").}
 
 \item{type}{t2data - Hotelling T² data ellipse; t2mean - Hotelling
-confidence interval for the mean; data - normal data elllipse
-(using χ² distribution).}
+confidence interval for the mean; data - normal
+data elllipse (using χ² distribution).}
+
+\item{robust}{If TRUE, then robust estimates of mean and covariance are
+used}
 
 \item{npoints}{Number of points to estimate}
 
@@ -104,5 +108,12 @@ library(ggplot2)
   ggplot(df, aes(PC1, PC2, color=Species)) +
     geom_hotelling(alpha=0.1, aes(fill = Species)) +
     geom_point()
+  
+# compare the robust and regular approaches:
+  ggplot(df, aes(PC1, PC2, color=Species)) +
+    geom_hotelling() +
+    geom_hotelling(robust = TRUE, linetype = "dashed") +
+    geom_point()
+
 }
 \keyword{datasets}

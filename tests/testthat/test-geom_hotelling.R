@@ -37,9 +37,9 @@ test_that("hotelling statistics are calculated correctly", {
   expect_equal(ncol(eli), 2)
 
   eli <- hotelling_ellipse(as.matrix(iris_subset), level = 0.95, npoints = 10)
-
   eli <- hotelling_ellipse(as.matrix(iris_subset), level = 0.95, npoints = 10, type = "t2mean")
   eli <- hotelling_ellipse(as.matrix(iris_subset), level = 0.95, npoints = 10, type = "data")
+  eli <- hotelling_ellipse(as.matrix(iris_subset), level = 0.95, npoints = 10, type = "data", robust = TRUE)
 
   # is eli a matrix?
   expect_true(is.matrix(eli))
