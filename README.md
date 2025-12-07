@@ -1,5 +1,5 @@
 
-# Hotelling’s T² Ellipses and Outlier Detection for ggplot2
+# Hotelling’s T² Ellipses and Outlier Detection for ggplot2 <img src="man/figures/logo.png" align="right" height="139" alt="" />
 
 <!-- badges: start -->
 
