@@ -5,7 +5,7 @@
 \alias{autolayer.prcomp}
 \title{Automatic plotting of PCA objects}
 \usage{
-\method{autoplot}{prcomp}(object, dims = c(1, 2), group = NULL, ...)
+\method{autoplot}{prcomp}(object, dims = c(1, 2), biplot = FALSE, group = NULL, ...)
 
 \method{autolayer}{prcomp}(
   object,
@@ -21,6 +21,8 @@
 \item{object}{An object of prcomp class}
 
 \item{dims}{Dimensions to plot}
+
+\item{biplot}{whether to show the loadings as well as the scores}
 
 \item{group}{Groups of the data to be shown on the plot}
 

@@ -17,6 +17,7 @@
 #'           confidence level (for type = "t2mean").
 #' @param labels optionally, a vector of labels for showing the outliers.
 #'               If NULL, the outliers will be identified by row number.
+#' @param biplot whether to show the loadings as well as the scores
 #' @param ... ignored
 #' @importFrom ggplot2 autolayer autoplot .data geom_point ggplot
 #' @examples
@@ -25,8 +26,13 @@
 #' library(ggplot2)
 #' autoplot(pca, group = iris$Species) + 
 #'   autolayer(pca, group = iris$Species)
+#' @importFrom ggplot2 geom_segment arrow unit geom_label
 #' @export
-autoplot.prcomp <- function(object, dims=c(1, 2), group = NULL, ...) {
+autoplot.prcomp <- function(object, dims=c(1, 2), biplot = FALSE, group = NULL, ...) {
+
+  if(length(dims) != 2) {
+    stop("Exactly two dimensions must be specified")
+  }
 
   df <- object$x[ , dims, drop = FALSE ]
   df <- as.data.frame(df)
@@ -34,9 +40,30 @@ autoplot.prcomp <- function(object, dims=c(1, 2), group = NULL, ...) {
   c1 <- colnames(df)[1]
   c2 <- colnames(df)[2]
 
-  ggplot(df, aes(x = .data[[c1]], y = .data[[c2]], color = group)) +
-    geom_point()
+  p <- ggplot(df, aes(x = .data[[c1]], y = .data[[c2]], color = group))
 
+  if(biplot) {
+    load <- object$rotation[ , dims, drop = FALSE ]
+    score_max <- max(abs(df))
+    load_max <- max(abs(load))
+
+    scale <- .9 * score_max / load_max
+    load_df <- as.data.frame(load * scale)
+    load_df$feature <- rownames(load)
+
+    p <- p +
+      geom_segment(data = load_df,
+               aes(x = 0, y = 0, xend = .data[[c1]], yend = .data[[c2]]),
+               arrow = arrow(length = unit(0.02, "npc")),
+               colour = "red") +
+      geom_label(data = load_df,
+                 aes(.data[[c1]], .data[[c2]], label = .data[["feature"]]),
+                 colour = "red", vjust = -.3)
+  }
+
+  p <- p + geom_point()
+
+  p
 }
 
 
