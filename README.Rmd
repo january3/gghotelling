@@ -9,6 +9,8 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "50%",
   fig.align = "center",
+  fig.width = 8,
+  fig.height = 5,
   dpi = 96
 )
 ```
@@ -57,11 +59,11 @@ You can install the development version of gghotelling from [GitHub](https://git
 pak::pak("january3/gghotelling")
 ```
 
-## Example
+## Hotelling Ellipses
 
 The package defines a new geom, `geom_hotelling()`, which can be used to add Hotelling ellipses to ggplot2 scatter plots.
 
-```{r example,fig.width=8, fig.height=5}
+```{r example}
 library(ggplot2)
 library(gghotelling)
 
@@ -91,7 +93,7 @@ used to identify multivariate outliers.
 
 
 
-```{r example2,fig.width=8, fig.height=5}
+```{r example2}
 ggplot(df, aes(PC1, PC2, group=Species)) +
   geom_hotelling(level = 0.75, alpha=0.1, aes(fill = Species)) +
   scale_color_manual(values=c("TRUE"="red", "FALSE"="grey")) +
@@ -106,7 +108,7 @@ This can be useful for identifying potential outliers in multivariate data.
 The outliers can be directly labeled as follows:
 
 
-```{r example3,fig.width=8, fig.height=5}
+```{r example3}
 ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
   geom_hotelling(alpha=0.1, aes(fill = Species)) +
   geom_point(aes(color = Species)) +
@@ -122,13 +124,26 @@ ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
                         outlier_only = TRUE)
 ```
 
+## Convex Hulls
+
+
+```{r example_hull}
+ggplot(iris, aes(Sepal.Length, Sepal.Width, color=Species)) +
+  geom_hull(mapping = aes(fill = Species), alpha=.1) +
+  geom_point()
+```
+
+
+
+
+## Autoplot
 
 The package also defines `autoplot.prcomp` and `autolayer.prcomp` for
 convenient plotting of PCA plots. Note that `autoplot.prcomp` is also
 implemented in a more sophisticated way in the `ggfortify` package.
 
 
-```{r example4,fig.width=8, fig.height=5}
+```{r example_autoplot}
 autoplot(pca, group = iris$Species) + 
   autolayer(pca, group = iris$Species)
 ```

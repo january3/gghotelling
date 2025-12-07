@@ -46,7 +46,7 @@ You can install the development version of gghotelling from
 pak::pak("january3/gghotelling")
 ```
 
-## Example
+## Hotelling Ellipses
 
 The package defines a new geom, `geom_hotelling()`, which can be used to
 add Hotelling ellipses to ggplot2 scatter plots.
@@ -164,6 +164,18 @@ ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
 
 <img src="man/figures/README-example3-2.png" width="50%" style="display: block; margin: auto;" />
 
+## Convex Hulls
+
+``` r
+ggplot(iris, aes(Sepal.Length, Sepal.Width, color=Species)) +
+  geom_hull(mapping = aes(fill = Species), alpha=.1) +
+  geom_point()
+```
+
+<img src="man/figures/README-example_hull-1.png" width="50%" style="display: block; margin: auto;" />
+
+## Autoplot
+
 The package also defines `autoplot.prcomp` and `autolayer.prcomp` for
 convenient plotting of PCA plots. Note that `autoplot.prcomp` is also
 implemented in a more sophisticated way in the `ggfortify` package.
@@ -173,4 +185,4 @@ autoplot(pca, group = iris$Species) +
   autolayer(pca, group = iris$Species)
 ```
 
-<img src="man/figures/README-example4-1.png" width="50%" style="display: block; margin: auto;" />
+<img src="man/figures/README-example_autoplot-1.png" width="50%" style="display: block; margin: auto;" />

@@ -185,8 +185,8 @@ geom_hotelling <- function(mapping = NULL, data = NULL,
                             show.legend = NA,
                             inherit.aes = TRUE) {
   layer(
-    stat = StatHotelling,      # use our Stat
-    geom = GeomHotelling,          # but standard geom_polygon drawing
+    stat = StatHotelling,
+    geom = GeomHotelling,
     data = data,
     mapping = mapping,
     position = position,
