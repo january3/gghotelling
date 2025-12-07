@@ -1,5 +1,5 @@
 
-# gghotelling
+# Hotelling’s T² Ellipses and Outlier Detection for ggplot2
 
 <!-- badges: start -->
 
@@ -7,8 +7,6 @@
 [![Codecov test
 coverage](https://codecov.io/gh/january3/gghotelling/graph/badge.svg)](https://app.codecov.io/gh/january3/gghotelling)
 <!-- badges: end -->
-
-Show Hotelling T² ellipses with ggplot2.
 
 Hotelling data ellipses are using the Hotelling T² distribution to
 create coverage regions for the distribution of the data, often used in
@@ -22,6 +20,14 @@ create data ellipses (much like the ones from `ellipse::ellipse()`), and
 also Hotelling data (?) ellipses. Unlike stat_ellipse(), it can also
 take the `fill` aesthetic for a visually pleasing representation of the
 ellipses.
+
+A lot of functionality overlaps with `ggfortify::ggbiplot()` (and by
+extension `autoplot.pca_class`), but this function is less flexible than
+a separate geom that you can add to the figure.
+
+Moreover, the package provides a `stat_hotelling_points()` function to
+compute the per-point Hotelling T² statistics, which can be used to
+identify and visualize multivariate outliers in scatter plots.
 
 My main motivation for creating this package was sorting out the
 different ellipse types and allowing the use of `fill` aesthetics for
@@ -116,7 +122,7 @@ ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
                         outlier_only = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="50%" style="display: block; margin: auto;" />
+<img src="man/figures/README-example3-1.png" width="50%" style="display: block; margin: auto;" />
 
 ``` r
 
@@ -129,4 +135,15 @@ ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
                         outlier_only = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-2.png" width="50%" style="display: block; margin: auto;" />
+<img src="man/figures/README-example3-2.png" width="50%" style="display: block; margin: auto;" />
+
+The package also defines `autoplot.prcomp` and `autolayer.prcomp` for
+convenient plotting of PCA plots. Note that `autoplot.prcomp` is also
+implemented in a more sophisticated way in the `ggfortify` package.
+
+``` r
+autoplot(pca, group = iris$Species) + 
+  autolayer(pca, group = iris$Species)
+```
+
+<img src="man/figures/README-example4-1.png" width="50%" style="display: block; margin: auto;" />

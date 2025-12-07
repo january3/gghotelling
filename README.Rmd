@@ -13,14 +13,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-# gghotelling
+# Hotelling's T² Ellipses and Outlier Detection for ggplot2
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/january3/gghotelling/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/january3/gghotelling/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/january3/gghotelling/graph/badge.svg)](https://app.codecov.io/gh/january3/gghotelling)
 <!-- badges: end -->
-
-Show Hotelling T² ellipses with ggplot2.
 
 Hotelling data ellipses are using the Hotelling T² distribution to create
 coverage regions for the distribution of the data, often used in outlier
@@ -33,6 +31,15 @@ This is also slightly different from the `stat_ellipse()` can be used to
 create data ellipses (much like the ones from `ellipse::ellipse()`), and
 also Hotelling data (?) ellipses. Unlike stat_ellipse(), it can also take
 the `fill` aesthetic for a visually pleasing representation of the ellipses.
+
+A lot of functionality overlaps with `ggfortify::ggbiplot()` (and by
+extension `autoplot.pca_class`),
+but this function is less flexible than a separate geom that you can add
+to the figure.
+
+Moreover, the package provides a `stat_hotelling_points()` function to compute
+the per-point Hotelling T² statistics, which can be used to identify and
+visualize multivariate outliers in scatter plots.
 
 My main motivation for creating this package was sorting out the different
 ellipse types and allowing the use of `fill` aesthetics for Hotelling ellipses.
@@ -50,7 +57,7 @@ pak::pak("january3/gghotelling")
 
 The package defines a new geom, `geom_hotelling()`, which can be used to add Hotelling ellipses to ggplot2 scatter plots.
 
-```{r example,fig.width=10, fig.height=5}
+```{r example,fig.width=8, fig.height=5}
 library(ggplot2)
 library(gghotelling)
 
@@ -80,7 +87,7 @@ used to identify multivariate outliers.
 
 
 
-```{r example2,fig.width=10, fig.height=5}
+```{r example2,fig.width=8, fig.height=5}
 ggplot(df, aes(PC1, PC2, group=Species)) +
   geom_hotelling(ci = 0.75, alpha=0.1, aes(fill = Species)) +
   scale_color_manual(values=c("TRUE"="red", "FALSE"="grey")) +
@@ -95,7 +102,7 @@ This can be useful for identifying potential outliers in multivariate data.
 The outliers can be directly labeled as follows:
 
 
-```{r}
+```{r example3,fig.width=8, fig.height=5}
 ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
   geom_hotelling(alpha=0.1, aes(fill = Species)) +
   geom_point(aes(color = Species)) +
@@ -109,6 +116,17 @@ ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
   geom_point(aes(color = Species)) +
   stat_hotelling_points(geom="label_repel",
                         outlier_only = TRUE)
+```
+
+
+The package also defines `autoplot.prcomp` and `autolayer.prcomp` for
+convenient plotting of PCA plots. Note that `autoplot.prcomp` is also
+implemented in a more sophisticated way in the `ggfortify` package.
+
+
+```{r example4,fig.width=8, fig.height=5}
+autoplot(pca, group = iris$Species) + 
+  autolayer(pca, group = iris$Species)
 ```
 
 
