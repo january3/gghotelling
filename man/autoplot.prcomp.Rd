@@ -11,6 +11,7 @@
   object,
   dims = c(1, 2),
   group = NULL,
+  labels = NULL,
   type = c("t2data", "t2mean"),
   ci = 0.95,
   ...
@@ -24,6 +25,9 @@
 \item{group}{Groups of the data to be shown on the plot}
 
 \item{...}{ignored}
+
+\item{labels}{optionally, a vector of labels for showing the outliers.
+If NULL, the outliers will be identified by row number.}
 
 \item{type}{The type of the coverage / confidence area shown by \code{autolayer.prcomp}, can be one of t2data or t2mean.}
 

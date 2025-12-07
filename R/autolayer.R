@@ -14,6 +14,8 @@
 #' @param group Groups of the data to be shown on the plot
 #' @param type The type of the coverage / confidence area shown by \code{autolayer.prcomp}, can be one of t2data or t2mean.
 #' @param ci coverage / confidence level for \code{autolayer.prcomp}
+#' @param labels optionally, a vector of labels for showing the outliers.
+#'               If NULL, the outliers will be identified by row number.
 #' @param ... ignored
 #' @importFrom ggplot2 autolayer autoplot .data geom_point ggplot
 #' @examples
@@ -40,6 +42,7 @@ autoplot.prcomp <- function(object, dims=c(1, 2), group = NULL, ...) {
 #' @rdname autoplot.prcomp
 #' @export
 autolayer.prcomp <- function(object,  dims = c(1,2), group=NULL,
+                             labels = NULL,
                              type = c("t2data", "t2mean"), ci = 0.95, ...) {
   type <- match.arg(type)
 
@@ -47,11 +50,24 @@ autolayer.prcomp <- function(object,  dims = c(1,2), group=NULL,
   df <- as.data.frame(df)
   colnames(df) <- c("x", "y")
 
-  geom_hotelling(aes(x=.data[["x"]], y=.data[["y"]], color = group, fill = group),
+  if(!is.null(labels)) {
+    df[["labels"]] <- labels
+  } else {
+    df[["labels"]] <- 1:nrow(df)
+  }
+
+  list(
+    geom_hotelling(aes(x=.data[["x"]], y=.data[["y"]], color = group, fill = group),
                         alpha = .1,
                         data = df,
                         ci = ci,
-                        type = type)
+                        type = type),
+    stat_hotelling_points(aes(x=.data[["x"]], y=.data[["y"]], label=labels),
+                          data = df,
+                          ci = ci,
+                          type = type,
+                          geom = "label", outlier_only = TRUE)
+  )
 
 
 }
