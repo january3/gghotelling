@@ -24,7 +24,7 @@ Hotelling data ellipses use the Hotelling T² distribution to create
 coverage regions for the distribution of the data, often used in outlier
 detection in multivariate data. This is different from the ellipses
 returned by the `ellipse::ellipse()` or `car::dataEllipse()` functions,
-which produce data ellipses based on a χ² (chi-square) contour,
+which produce data ellipses based on a Mahalanobis distance contour,
 representing the shape and spread of the data distribution.
 
 This is also slightly different from the `stat_ellipse()` can be used to

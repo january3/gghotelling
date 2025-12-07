@@ -4,7 +4,7 @@
 \alias{hotelling_points}
 \title{Calculate the T2 statistic for individual points}
 \usage{
-hotelling_points(x, level = 0.95, type = c("t2data", "t2mean"))
+hotelling_points(x, level = 0.95, type = c("t2data", "t2mean", "data"))
 }
 \arguments{
 \item{x}{A matrix or data frame with two columns}
@@ -13,7 +13,8 @@ hotelling_points(x, level = 0.95, type = c("t2data", "t2mean"))
 confidence level (for type = "t2mean").}
 
 \item{type}{what type of statistic should be calculated; can be t2data
-(for data coverage) or t2mean (for difference from a mean)}
+(for data coverage), t2mean (for difference from a mean) or
+"data" (for Mahalanobis distance)}
 }
 \value{
 A data frame with one row per point including the columns t2 (t2
@@ -21,5 +22,5 @@ statistic), t2crit (critical t2 value for the given level) and is_outlier
 (logical, whether t2 > t2crit).
 }
 \description{
-Calculate the T2 statistic for individual points
+Calculate the T2 statistic or Mahalanobis distance for individual points
 }

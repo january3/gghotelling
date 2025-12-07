@@ -11,7 +11,7 @@ StatHotellingPoints <- ggproto(
 
   compute_group = function(data, scales,
                            outlier_only = FALSE,
-                           type = c("t2data", "t2mean"),
+                           type = c("t2data", "t2mean", "data"),
                            level = 0.95) {
 
 
@@ -70,12 +70,14 @@ StatHotellingPoints <- ggproto(
 stat_hotelling_points <- function(mapping = NULL, data = NULL,
                                   geom = "point", position = "identity",
                                   ...,
-                                  type = "t2data",
+                                  type = c("t2data", "data", "t2mean"),
                                   level = 0.95,
                                   outlier_only = FALSE,
                                   na.rm = FALSE,
                                   show.legend = NA,
                                   inherit.aes = TRUE) {
+  type <- match.arg(type)
+
   layer(
     stat = StatHotellingPoints, 
     data = data, 

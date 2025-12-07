@@ -4,7 +4,12 @@
 \alias{hotelling_ellipse}
 \title{Calculate Hotelling or data ellipse around some points}
 \usage{
-hotelling_ellipse(x, level = 0.95, npoints = 100, type = "t2data")
+hotelling_ellipse(
+  x,
+  level = 0.95,
+  npoints = 100,
+  type = c("t2data", "t2mean", "data")
+)
 }
 \arguments{
 \item{x}{A two-column matrix or data frame like object}
@@ -32,13 +37,22 @@ can be plotted:
 \item T² Hotelling data ellipses, showing data coverage (like the
 \code{type="t"} version of \code{stat_ellipse})
 \item normal multivariate distribution ellipses (like the \code{type="norm"}
-version of the \code{stat_ellipse})
+version of the \code{stat_ellipse}) which use Mahalonibis distance
 \item T² Hotelling confidence ellipses of the group means.
 }
+
+The latter (for group means) correspond to the confidence interval for
+the mean in the univariate world, so the ellipses are very small
+(depending on the number of points).
 }
 \examples{
 df <- iris[ iris$Species == "setosa", 1:2 ]
 eli <- hotelling_ellipse(df)
 plot(df[,1], df[,2])
 lines(eli)
+}
+\seealso{
+\code{\link[=hotelling_points]{hotelling_points()}} for calculating per-point based T² and
+Mahalonibis values and \code{\link[=geom_hotelling]{geom_hotelling()}} for plotting of the ellipse with
+ggplot
 }

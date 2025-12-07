@@ -12,7 +12,7 @@ stat_hotelling_points(
   geom = "point",
   position = "identity",
   ...,
-  type = "t2data",
+  type = c("t2data", "data", "t2mean"),
   level = 0.95,
   outlier_only = FALSE,
   na.rm = FALSE,

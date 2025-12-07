@@ -12,8 +12,8 @@
 #' @param object An object of prcomp class
 #' @param dims Dimensions to plot
 #' @param group Groups of the data to be shown on the plot
-#' @param type The type of the coverage / confidence area shown by \code{autolayer.prcomp}, can be one of t2data or t2mean.
-#' @param level Either coverage probability (for type = "t2data") or
+#' @param type The type of the coverage / confidence area shown by \code{autolayer.prcomp}, can be one of t2data (T² Hotelling coverage), data (Mahalanobis coverage) or t2mean (confidence area for the group mean).
+#' @param level Either coverage probability (for type = "t2data" and "data") or
 #'           confidence level (for type = "t2mean").
 #' @param labels optionally, a vector of labels for showing the outliers.
 #'               If NULL, the outliers will be identified by row number.
@@ -44,7 +44,7 @@ autoplot.prcomp <- function(object, dims=c(1, 2), group = NULL, ...) {
 #' @export
 autolayer.prcomp <- function(object,  dims = c(1,2), group=NULL,
                              labels = NULL,
-                             type = c("t2data", "t2mean"), level = 0.95, ...) {
+                             type = c("t2data", "t2mean", "data"), level = 0.95, ...) {
   type <- match.arg(type)
 
   df <- object$x[ , dims, drop = FALSE ]

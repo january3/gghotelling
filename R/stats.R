@@ -1,16 +1,18 @@
 #' Calculate the T2 statistic for individual points
 #'
-#' Calculate the T2 statistic for individual points
+#' Calculate the T2 statistic or Mahalanobis distance for individual points
 #' @param x A matrix or data frame with two columns
 #' @param level Either coverage probability (for type = "t2data" or "data") or
 #'           confidence level (for type = "t2mean").
 #' @param type what type of statistic should be calculated; can be t2data
-#'        (for data coverage) or t2mean (for difference from a mean)
+#'        (for data coverage), t2mean (for difference from a mean) or
+#'        "data" (for Mahalanobis distance)
 #' @return A data frame with one row per point including the columns t2 (t2
 #' statistic), t2crit (critical t2 value for the given level) and is_outlier
 #' (logical, whether t2 > t2crit).
+#' @importFrom stats mahalanobis
 #' @export
-hotelling_points <- function(x, level = 0.95, type = c("t2data", "t2mean")) {
+hotelling_points <- function(x, level = 0.95, type = c("t2data", "t2mean", "data")) {
   type <- match.arg(type)
 
   x <- as.matrix(x)
@@ -27,17 +29,23 @@ hotelling_points <- function(x, level = 0.95, type = c("t2data", "t2mean")) {
   # subtract means
   Xc <- sweep(x, 2, center)
   t2 <- rowSums((Xc %*% Sinv) * Xc)
+  c2 <- mahalanobis(x, center, S)
 
   # Hotelling T^2 critical value
   fcrit <- qf(level, df1 = p, df2 = n - p)
   t2crit <- (p * (n - 1) / (n - p)) * fcrit
+  c2crit <- qchisq(level, df = p)     # chi-square, df = p
 
   if (type == "t2mean") {
     # CI for the mean: boundary for (x - mean) uses t2crit/n
     t2crit <- t2crit / n
   }
 
-  data <- data.frame(t2 = t2, t2crit = t2crit, is_outlier = t2 > t2crit)
+  data <- data.frame(t2 = t2, t2crit = t2crit, c2 = c2, c2crit = c2crit, is_outlier = t2 > t2crit)
+
+  if(type == "data") {
+    data$is_outlier = c2 > c2crit
+  }
 
   data
 }
@@ -53,8 +61,12 @@ hotelling_points <- function(x, level = 0.95, type = c("t2data", "t2mean")) {
 #'  * T² Hotelling data ellipses, showing data coverage (like the
 #'  `type="t"` version of `stat_ellipse`)
 #'  * normal multivariate distribution ellipses (like the `type="norm"`
-#'  version of the `stat_ellipse`)
+#'  version of the `stat_ellipse`) which use Mahalonibis distance
 #'  * T² Hotelling confidence ellipses of the group means.
+#'
+#' The latter (for group means) correspond to the confidence interval for
+#' the mean in the univariate world, so the ellipses are very small
+#' (depending on the number of points).
 #'
 #' @param x A two-column matrix or data frame like object
 #' @param level Either coverage probability (for type = "t2data" or "data") or
@@ -64,17 +76,22 @@ hotelling_points <- function(x, level = 0.95, type = c("t2data", "t2mean")) {
 #' confidence interval for the mean; data - normal data elllipse
 #'     (using χ² distribution).
 #' @return A two-column matrix or data frame with npoints rows
+#' @seealso [hotelling_points()] for calculating per-point based T² and
+#' Mahalonibis values and [geom_hotelling()] for plotting of the ellipse with
+#' ggplot
 #' @examples
 #' df <- iris[ iris$Species == "setosa", 1:2 ]
 #' eli <- hotelling_ellipse(df)
 #' plot(df[,1], df[,2])
 #' lines(eli)
 #' @export
-hotelling_ellipse <- function(x, level = 0.95, npoints = 100, type = "t2data") {
+hotelling_ellipse <- function(x, level = 0.95, npoints = 100, type = c("t2data", "t2mean", "data")) {
   convert_to_df <- FALSE
   if(is.data.frame(x)) {
     convert_to_df <- TRUE
   }
+
+  type <- match.arg(type)
 
   x <- as.matrix(x)
   if (ncol(x) != 2L) stop("x must have exactly 2 columns.")
@@ -89,8 +106,6 @@ hotelling_ellipse <- function(x, level = 0.95, npoints = 100, type = "t2data") {
   # Critical Hotelling T^2 value (for the DATA cloud, not mean CI)
   t2crit <- (p * (n - 1) / (n - p)) * qf(level, df1 = p, df2 = n - p)
   c2   <- qchisq(level, df = p)     # chi-square, df = p
-  #fcrit <- stats::qf(conf, df1 = p, df2 = n - p)
-  #c2 <- (p * (n - 1) / (n - p)) * fcrit / n  # divide by n for mean
 
   # Eigen-decomposition
   eig <- eigen(S)

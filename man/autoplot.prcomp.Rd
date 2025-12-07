@@ -12,7 +12,7 @@
   dims = c(1, 2),
   group = NULL,
   labels = NULL,
-  type = c("t2data", "t2mean"),
+  type = c("t2data", "t2mean", "data"),
   level = 0.95,
   ...
 )
@@ -29,9 +29,9 @@
 \item{labels}{optionally, a vector of labels for showing the outliers.
 If NULL, the outliers will be identified by row number.}
 
-\item{type}{The type of the coverage / confidence area shown by \code{autolayer.prcomp}, can be one of t2data or t2mean.}
+\item{type}{The type of the coverage / confidence area shown by \code{autolayer.prcomp}, can be one of t2data (T² Hotelling coverage), data (Mahalanobis coverage) or t2mean (confidence area for the group mean).}
 
-\item{level}{Either coverage probability (for type = "t2data") or
+\item{level}{Either coverage probability (for type = "t2data" and "data") or
 confidence level (for type = "t2mean").}
 }
 \description{

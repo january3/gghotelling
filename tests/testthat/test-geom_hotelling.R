@@ -88,13 +88,18 @@ test_that("hotelling point statistics are calculated correctly", {
 
   hp <- hotelling_points(iris_subset, type = "t2mean")
   expect_s3_class(hp, "data.frame")
-  expect_equal(ncol(hp), 3)
-  expect_true(all(c("t2", "t2crit", "is_outlier") %in% colnames(hp)))
+  expect_equal(ncol(hp), 5)
+  expect_true(all(c("t2", "t2crit", "c2", "c2crit", "is_outlier") %in% colnames(hp)))
 
   hp <- hotelling_points(as.matrix(iris_subset), type = "t2data")
   expect_s3_class(hp, "data.frame")
-  expect_equal(ncol(hp), 3)
-  expect_true(all(c("t2", "t2crit", "is_outlier") %in% colnames(hp)))
+  expect_equal(ncol(hp), 5)
+  expect_true(all(c("t2", "t2crit", "c2", "c2crit", "is_outlier") %in% colnames(hp)))
+
+  hp <- hotelling_points(as.matrix(iris_subset), type = "data")
+  expect_s3_class(hp, "data.frame")
+  expect_equal(ncol(hp), 5)
+  expect_true(all(c("t2", "t2crit", "c2", "c2crit", "is_outlier") %in% colnames(hp)))
 
   expect_error(hotelling_points(iris))
   expect_error(hotelling_points(iris_subset[1:2, ]))
