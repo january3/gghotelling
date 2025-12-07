@@ -1,11 +1,11 @@
 
 
-#' @rdname stat_hotelling_points 
+#' @rdname stat_outliers 
 #' @format NULL
 #' @usage NULL
 #' @export
-StatHotellingPoints <- ggproto(
-  "StatHotellingPoints",
+StatOutliers <- ggproto(
+  "StatOutliers",
   Stat,
   required_aes = c("x", "y"),
 
@@ -17,7 +17,7 @@ StatHotellingPoints <- ggproto(
 
 
     X <- cbind(data$x, data$y)
-    t2_df <- hotelling_points(X, level = level, robust = robust, type = type)
+    t2_df <- outliers(X, level = level, robust = robust, type = type)
 
     data$t2 <- t2_df$t2
     data$t2crit <- t2_df$t2crit
@@ -51,11 +51,11 @@ StatHotellingPoints <- ggproto(
 #' ggplot(df, aes(PC1, PC2, group=Species)) +
 #'   geom_hotelling(alpha=0.1, aes(fill = Species)) +
 #'   scale_color_manual(values=c("TRUE"="red", "FALSE"="grey")) +
-#'   stat_hotelling_points(aes(color = after_stat(is_outlier)))
+#'   stat_outliers(aes(color = after_stat(is_outlier)))
 #'
 #' ggplot(df, aes(PC1, PC2, group=Species)) +
 #'   geom_hotelling(alpha=0.1, level = .75, aes(fill = Species)) +
-#'   stat_hotelling_points(level = .75, 
+#'   stat_outliers(level = .75, 
 #'                         size=2, 
 #'                         aes(shape = Species, 
 #'                         color = after_stat(t2)))
@@ -66,11 +66,11 @@ StatHotellingPoints <- ggproto(
 #' ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
 #'   geom_hotelling(level = 0.75, alpha=0.1, aes(fill = Species)) +
 #'   geom_point(aes(color = Species)) +
-#'   stat_hotelling_points(level = .75, geom="label", 
+#'   stat_outliers(level = .75, geom="label", 
 #'                         outlier_only = TRUE)
 #'
 #' @export
-stat_hotelling_points <- function(mapping = NULL, data = NULL,
+stat_outliers <- function(mapping = NULL, data = NULL,
                                   geom = "point", position = "identity",
                                   ...,
                                   type = c("t2data", "data", "t2mean"),
@@ -82,7 +82,7 @@ stat_hotelling_points <- function(mapping = NULL, data = NULL,
   type <- match.arg(type)
 
   layer(
-    stat = StatHotellingPoints, 
+    stat = StatOutliers, 
     data = data, 
     mapping = mapping,
     geom = geom, 

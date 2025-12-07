@@ -28,9 +28,9 @@ A lot of functionality overlaps with `ggfortify::ggbiplot()` (and by
 extension `autoplot.pca_class`), but this function is less flexible than
 a separate geom that you can add to the figure.
 
-Moreover, the package provides a `stat_hotelling_points()` function to
-compute the per-point Hotelling T² statistics, which can be used to
-identify and visualize multivariate outliers in scatter plots.
+Moreover, the package provides a `stat_outliers()` function to compute
+the per-point Hotelling T² statistics, which can be used to identify and
+visualize multivariate outliers in scatter plots.
 
 My main motivation for creating this package was sorting out the
 different ellipse types and allowing the use of `fill` aesthetics for
@@ -100,7 +100,7 @@ be used to identify multivariate outliers.
 ggplot(df, aes(PC1, PC2, group=Species)) +
   geom_hotelling(level = 0.75, alpha=0.1, aes(fill = Species)) +
   scale_color_manual(values=c("TRUE"="red", "FALSE"="grey")) +
-  stat_hotelling_points(level = .75, aes(shape = Species, color = after_stat(is_outlier)))
+  stat_outliers(level = .75, aes(shape = Species, color = after_stat(is_outlier)))
 ```
 
 <img src="man/figures/README-example2-1.png" width="50%" style="display: block; margin: auto;" />
@@ -109,7 +109,7 @@ ggplot(df, aes(PC1, PC2, group=Species)) +
 
 ggplot(df, aes(PC1, PC2, group=Species)) +
   geom_hotelling(alpha=0.1, aes(fill = Species)) +
-  stat_hotelling_points(size=2, aes(shape = Species, color = after_stat(t2)))
+  stat_outliers(size=2, aes(shape = Species, color = after_stat(t2)))
 ```
 
 <img src="man/figures/README-example2-2.png" width="50%" style="display: block; margin: auto;" />
@@ -121,7 +121,7 @@ data. The outliers can be directly labeled as follows:
 ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
   geom_hotelling(alpha=0.1, aes(fill = Species)) +
   geom_point(aes(color = Species)) +
-  stat_hotelling_points(geom="label", 
+  stat_outliers(geom="label", 
                         outlier_only = TRUE)
 ```
 
@@ -134,7 +134,7 @@ library(ggrepel)
 ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
   geom_hotelling(alpha=0.1, aes(fill = Species)) +
   geom_point(aes(color = Species)) +
-  stat_hotelling_points(geom="label_repel",
+  stat_outliers(geom="label_repel",
                         outlier_only = TRUE)
 ```
 

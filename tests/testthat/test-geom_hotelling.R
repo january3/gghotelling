@@ -49,7 +49,7 @@ test_that("hotelling statistics are calculated correctly", {
 
 })
 
-test_that("stat_hotelling_points works correctly", {
+test_that("stat_outliers works correctly", {
   library(ggplot2)
 
   # Create a sample dataset
@@ -60,21 +60,21 @@ test_that("stat_hotelling_points works correctly", {
     y = c(rnorm(50, mean = 5), rnorm(50, mean = 7))
   )
 
-  # Create a ggplot with stat_hotelling_points
+  # Create a ggplot with stat_outliers
   p <- ggplot(df, aes(x = x, y = y, group = group)) +
-    stat_hotelling_points(aes(shape = group, color = after_stat(is_outlier)))
+    stat_outliers(aes(shape = group, color = after_stat(is_outlier)))
 
   # Test that the plot object is created successfully
   expect_s3_class(p, "ggplot")
 
   p <- ggplot(df, aes(x = x, y = y, group = group)) +
-    stat_hotelling_points(aes(shape = group, color = after_stat(is_outlier)), outlier_only = TRUE)
+    stat_outliers(aes(shape = group, color = after_stat(is_outlier)), outlier_only = TRUE)
   expect_s3_class(p, "ggplot")
 
   # check that geom_label_repel works as well
   library(ggrepel)
   p <- ggplot(df, aes(x = x, y = y, group = group)) +
-    stat_hotelling_points(geom = "label_repel",
+    stat_outliers(geom = "label_repel",
                           outlier_only = TRUE)
   expect_s3_class(p, "ggplot")
 
@@ -86,22 +86,22 @@ test_that("hotelling point statistics are calculated correctly", {
   data(iris)
   iris_subset <- iris[ iris$Species == "setosa", 1:2 ]
 
-  hp <- hotelling_points(iris_subset, type = "t2mean")
+  hp <- outliers(iris_subset, type = "t2mean")
   expect_s3_class(hp, "data.frame")
   expect_equal(ncol(hp), 5)
   expect_true(all(c("t2", "t2crit", "c2", "c2crit", "is_outlier") %in% colnames(hp)))
 
-  hp <- hotelling_points(as.matrix(iris_subset), type = "t2data")
+  hp <- outliers(as.matrix(iris_subset), type = "t2data")
   expect_s3_class(hp, "data.frame")
   expect_equal(ncol(hp), 5)
   expect_true(all(c("t2", "t2crit", "c2", "c2crit", "is_outlier") %in% colnames(hp)))
 
-  hp <- hotelling_points(as.matrix(iris_subset), type = "data")
+  hp <- outliers(as.matrix(iris_subset), type = "data")
   expect_s3_class(hp, "data.frame")
   expect_equal(ncol(hp), 5)
   expect_true(all(c("t2", "t2crit", "c2", "c2crit", "is_outlier") %in% colnames(hp)))
 
-  expect_error(hotelling_points(iris))
-  expect_error(hotelling_points(iris_subset[1:2, ]))
+  expect_error(outliers(iris))
+  expect_error(outliers(iris_subset[1:2, ]))
 
 })

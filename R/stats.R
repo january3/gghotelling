@@ -24,7 +24,7 @@
 #' differences between t2data, t2mean and data modes.
 #' @importFrom stats mahalanobis
 #' @export
-hotelling_points <- function(x, level = 0.95, robust = FALSE, type = c("t2data", "t2mean", "data")) {
+outliers <- function(x, level = 0.95, robust = FALSE, type = c("t2data", "t2mean", "data")) {
   type <- match.arg(type)
 
   x <- as.matrix(x)
@@ -106,7 +106,7 @@ hotelling_points <- function(x, level = 0.95, robust = FALSE, type = c("t2data",
 #'             confidence interval for the mean; data - normal 
 #'             data elllipse (using χ² distribution).
 #' @return A two-column matrix or data frame with npoints rows
-#' @seealso [hotelling_points()] for calculating per-point based T² and
+#' @seealso [outliers()] for calculating per-point based T² and
 #' Mahalonibis values and [geom_hotelling()] for plotting of the ellipse with
 #' ggplot
 #' @examples

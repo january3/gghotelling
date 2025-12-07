@@ -65,7 +65,7 @@ plot(df[,1], df[,2])
 lines(eli)
 }
 \seealso{
-\code{\link[=hotelling_points]{hotelling_points()}} for calculating per-point based T² and
+\code{\link[=outliers]{outliers()}} for calculating per-point based T² and
 Mahalonibis values and \code{\link[=geom_hotelling]{geom_hotelling()}} for plotting of the ellipse with
 ggplot
 }
