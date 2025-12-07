@@ -13,7 +13,7 @@ geom_hotelling(
   position = "identity",
   ...,
   level = 0.95,
-  type = TRUE,
+  type = "t2data",
   npoints = 100,
   na.rm = FALSE,
   show.legend = NA,

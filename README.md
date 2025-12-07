@@ -61,9 +61,6 @@ df <- cbind(iris, pca$x)
 ggplot(df, aes(PC1, PC2)) +
   geom_hotelling(level=.99) +
   geom_point()
-#> Warning: Computation failed in `stat_hotelling()`.
-#> Caused by error in `match.arg()`:
-#> ! 'arg' must be NULL or a character vector
 ```
 
 <img src="man/figures/README-example-1.png" width="50%" style="display: block; margin: auto;" />
@@ -73,9 +70,6 @@ ggplot(df, aes(PC1, PC2)) +
 ggplot(df, aes(PC1, PC2, color=Species)) +
   geom_hotelling() +
   geom_point()
-#> Warning: Computation failed in `stat_hotelling()`.
-#> Caused by error in `match.arg()`:
-#> ! 'arg' must be NULL or a character vector
 ```
 
 <img src="man/figures/README-example-2.png" width="50%" style="display: block; margin: auto;" />
@@ -85,9 +79,6 @@ ggplot(df, aes(PC1, PC2, color=Species)) +
 ggplot(df, aes(PC1, PC2, color=Species)) +
   geom_hotelling(alpha=0.1, aes(fill = Species)) +
   geom_point()
-#> Warning: Computation failed in `stat_hotelling()`.
-#> Caused by error in `match.arg()`:
-#> ! 'arg' must be NULL or a character vector
 ```
 
 <img src="man/figures/README-example-3.png" width="50%" style="display: block; margin: auto;" />
@@ -98,9 +89,6 @@ ggplot(df, aes(PC1, PC2, color=Species)) +
 ggplot(df, aes(PC1, PC2, color=Species)) +
   geom_hotelling(alpha=0.1, aes(fill = Species), level=.99) +
   geom_point()
-#> Warning: Computation failed in `stat_hotelling()`.
-#> Caused by error in `match.arg()`:
-#> ! 'arg' must be NULL or a character vector
 ```
 
 <img src="man/figures/README-example-4.png" width="50%" style="display: block; margin: auto;" />
@@ -113,9 +101,6 @@ ggplot(df, aes(PC1, PC2, group=Species)) +
   geom_hotelling(level = 0.75, alpha=0.1, aes(fill = Species)) +
   scale_color_manual(values=c("TRUE"="red", "FALSE"="grey")) +
   stat_hotelling_points(level = .75, aes(shape = Species, color = after_stat(is_outlier)))
-#> Warning: Computation failed in `stat_hotelling()`.
-#> Caused by error in `match.arg()`:
-#> ! 'arg' must be NULL or a character vector
 ```
 
 <img src="man/figures/README-example2-1.png" width="50%" style="display: block; margin: auto;" />
@@ -125,9 +110,6 @@ ggplot(df, aes(PC1, PC2, group=Species)) +
 ggplot(df, aes(PC1, PC2, group=Species)) +
   geom_hotelling(alpha=0.1, aes(fill = Species)) +
   stat_hotelling_points(size=2, aes(shape = Species, color = after_stat(t2)))
-#> Warning: Computation failed in `stat_hotelling()`.
-#> Caused by error in `match.arg()`:
-#> ! 'arg' must be NULL or a character vector
 ```
 
 <img src="man/figures/README-example2-2.png" width="50%" style="display: block; margin: auto;" />
@@ -141,9 +123,6 @@ ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
   geom_point(aes(color = Species)) +
   stat_hotelling_points(geom="label", 
                         outlier_only = TRUE)
-#> Warning: Computation failed in `stat_hotelling()`.
-#> Caused by error in `match.arg()`:
-#> ! 'arg' must be NULL or a character vector
 ```
 
 <img src="man/figures/README-example3-1.png" width="50%" style="display: block; margin: auto;" />
@@ -157,9 +136,6 @@ ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
   geom_point(aes(color = Species)) +
   stat_hotelling_points(geom="label_repel",
                         outlier_only = TRUE)
-#> Warning: Computation failed in `stat_hotelling()`.
-#> Caused by error in `match.arg()`:
-#> ! 'arg' must be NULL or a character vector
 ```
 
 <img src="man/figures/README-example3-2.png" width="50%" style="display: block; margin: auto;" />

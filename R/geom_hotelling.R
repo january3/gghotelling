@@ -179,14 +179,14 @@ geom_hotelling <- function(mapping = NULL, data = NULL,
                             position = "identity",
                             ...,
                             level = 0.95,
-                            type = TRUE,
+                            type = "t2data",
                             npoints = 100,
                             na.rm = FALSE,
                             show.legend = NA,
                             inherit.aes = TRUE) {
   layer(
-    stat = StatHotelling,
-    geom = GeomHotelling,
+    stat = StatHotelling,      # use our Stat
+    geom = GeomHotelling,          # but standard geom_polygon drawing
     data = data,
     mapping = mapping,
     position = position,
