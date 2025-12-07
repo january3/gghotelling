@@ -12,18 +12,18 @@ StatHotellingPoints <- ggproto(
   compute_group = function(data, scales,
                            outlier_only = FALSE,
                            type = c("t2data", "t2mean"),
-                           ci = 0.95) {
+                           level = 0.95) {
 
 
     X <- cbind(data$x, data$y)
-    t2_df <- hotelling_points(X, ci = ci, type = type)
+    t2_df <- hotelling_points(X, level = level, type = type)
 
     data$t2 <- t2_df$t2
     data$t2crit <- t2_df$t2crit
-    data$outside <- t2_df$outside
+    data$is_outlier <- t2_df$is_outlier
 
     if(outlier_only) {
-      data <- data[ data$outside, , drop=FALSE ]
+      data <- data[ data$is_outlier, , drop=FALSE ]
     }
 
     data
@@ -35,7 +35,7 @@ StatHotellingPoints <- ggproto(
 #' Calculate per-point T² Hotelling statistic for use in ggplot
 #'
 #' This calculates the T² Hotelling statistic for each point in the plot,
-#' group-wise. This allows to use the statistics `outside` and `t2` to be
+#' group-wise. This allows to use the statistics `is_outlier` and `t2` to be
 #' used as graphical parameters, e.g. for coloring the points (see Examples
 #' below) using the `ggplot2::after_stat()` function.
 #'
@@ -50,20 +50,20 @@ StatHotellingPoints <- ggproto(
 #' ggplot(df, aes(PC1, PC2, group=Species)) +
 #'   geom_hotelling(alpha=0.1, aes(fill = Species)) +
 #'   scale_color_manual(values=c("TRUE"="red", "FALSE"="grey")) +
-#'   stat_hotelling_points(aes(color = after_stat(outside)))
+#'   stat_hotelling_points(aes(color = after_stat(is_outlier)))
 #'
 #' ggplot(df, aes(PC1, PC2, group=Species)) +
-#'   geom_hotelling(alpha=0.1, ci = .75, aes(fill = Species)) +
-#'   stat_hotelling_points(ci = .75, 
+#'   geom_hotelling(alpha=0.1, level = .75, aes(fill = Species)) +
+#'   stat_hotelling_points(level = .75, 
 #'                         size=2, 
 #'                         aes(shape = Species, 
 #'                         color = after_stat(t2)))
 #'
 #' # label the outliers
 #' ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
-#'   geom_hotelling(ci = 0.75, alpha=0.1, aes(fill = Species)) +
+#'   geom_hotelling(level = 0.75, alpha=0.1, aes(fill = Species)) +
 #'   geom_point(aes(color = Species)) +
-#'   stat_hotelling_points(ci = .75, geom="label", 
+#'   stat_hotelling_points(level = .75, geom="label", 
 #'                         outlier_only = TRUE)
 #'
 #' @export
@@ -71,7 +71,7 @@ stat_hotelling_points <- function(mapping = NULL, data = NULL,
                                   geom = "point", position = "identity",
                                   ...,
                                   type = "t2data",
-                                  ci = 0.95,
+                                  level = 0.95,
                                   outlier_only = FALSE,
                                   na.rm = FALSE,
                                   show.legend = NA,
@@ -87,7 +87,7 @@ stat_hotelling_points <- function(mapping = NULL, data = NULL,
     params = list(
       type = type,
       outlier_only = outlier_only,
-      ci = ci,
+      level = level,
       na.rm = na.rm,
       ...
     )
@@ -105,8 +105,8 @@ StatHotelling <- ggproto(
   
   required_aes = c("x", "y"),
   
-  compute_group = function(data, scales, ci = 0.95, type = type, npoints = npoints) {
-    eli <- hotelling_ellipse(data[ , c("x", "y")], ci = ci, type = type, npoints = npoints)
+  compute_group = function(data, scales, level = 0.95, type = type, npoints = npoints) {
+    eli <- hotelling_ellipse(data[ , c("x", "y")], level = level, type = type, npoints = npoints)
 
     defaults <- data[1, setdiff(names(data), c("x", "y", "group")), drop = FALSE]
     rownames(defaults) <- NULL
@@ -147,7 +147,8 @@ GeomHotelling <- ggproto(
 #' This geom adds data or confidence ellipses to the plot. See
 #' `hotelling_ellipse()` documentation for more information.
 #'
-#' @param ci Confidence interval
+#' @param level Either coverage probability (for type = "t2data" or "data") or
+#'           confidence level (for type = "t2mean").
 #' @param ... Additional parameters passed to underlying `ggplot2::geom_polygon()`
 #'   or to `ggplot2::layer()`.
 #' @param na.rm Logical. Should missing values be removed? Default is FALSE.
@@ -161,7 +162,7 @@ GeomHotelling <- ggproto(
 #' library(ggplot2)
 #'   
 #'   ggplot(df, aes(PC1, PC2)) +
-#'     geom_hotelling(ci=.99) +
+#'     geom_hotelling(level=.99) +
 #'     geom_point()
 #'   
 #'   ggplot(df, aes(PC1, PC2, color=Species)) +
@@ -175,7 +176,7 @@ GeomHotelling <- ggproto(
 geom_hotelling <- function(mapping = NULL, data = NULL,
                             position = "identity",
                             ...,
-                            ci = 0.95,
+                            level = 0.95,
                             type = TRUE,
                             npoints = 100,
                             na.rm = FALSE,
@@ -189,7 +190,7 @@ geom_hotelling <- function(mapping = NULL, data = NULL,
     position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params = list(ci = ci, type = type, npoints = npoints, na.rm = na.rm, ...)
+    params = list(level = level, type = type, npoints = npoints, na.rm = na.rm, ...)
   )
 }
 

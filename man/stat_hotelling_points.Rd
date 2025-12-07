@@ -13,7 +13,7 @@ stat_hotelling_points(
   position = "identity",
   ...,
   type = "t2data",
-  ci = 0.95,
+  level = 0.95,
   outlier_only = FALSE,
   na.rm = FALSE,
   show.legend = NA,
@@ -74,7 +74,8 @@ or to \code{ggplot2::layer()}.}
 confidence interval for the mean; data - normal data elllipse
 (using χ² distribution).}
 
-\item{ci}{Confidence interval}
+\item{level}{Either coverage probability (for type = "t2data" or "data") or
+confidence level (for type = "t2mean").}
 
 \item{outlier_only}{Only return the statistic for outliers}
 
@@ -96,7 +97,7 @@ Calculate per-point T² Hotelling statistic for use in ggplot
 }
 \details{
 This calculates the T² Hotelling statistic for each point in the plot,
-group-wise. This allows to use the statistics \code{outside} and \code{t2} to be
+group-wise. This allows to use the statistics \code{is_outlier} and \code{t2} to be
 used as graphical parameters, e.g. for coloring the points (see Examples
 below) using the \code{ggplot2::after_stat()} function.
 }
@@ -108,20 +109,20 @@ library(ggplot2)
 ggplot(df, aes(PC1, PC2, group=Species)) +
   geom_hotelling(alpha=0.1, aes(fill = Species)) +
   scale_color_manual(values=c("TRUE"="red", "FALSE"="grey")) +
-  stat_hotelling_points(aes(color = after_stat(outside)))
+  stat_hotelling_points(aes(color = after_stat(is_outlier)))
 
 ggplot(df, aes(PC1, PC2, group=Species)) +
-  geom_hotelling(alpha=0.1, ci = .75, aes(fill = Species)) +
-  stat_hotelling_points(ci = .75, 
+  geom_hotelling(alpha=0.1, level = .75, aes(fill = Species)) +
+  stat_hotelling_points(level = .75, 
                         size=2, 
                         aes(shape = Species, 
                         color = after_stat(t2)))
 
 # label the outliers
 ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
-  geom_hotelling(ci = 0.75, alpha=0.1, aes(fill = Species)) +
+  geom_hotelling(level = 0.75, alpha=0.1, aes(fill = Species)) +
   geom_point(aes(color = Species)) +
-  stat_hotelling_points(ci = .75, geom="label", 
+  stat_hotelling_points(level = .75, geom="label", 
                         outlier_only = TRUE)
 
 }

@@ -13,7 +13,8 @@
 #' @param dims Dimensions to plot
 #' @param group Groups of the data to be shown on the plot
 #' @param type The type of the coverage / confidence area shown by \code{autolayer.prcomp}, can be one of t2data or t2mean.
-#' @param ci coverage / confidence level for \code{autolayer.prcomp}
+#' @param level Either coverage probability (for type = "t2data") or
+#'           confidence level (for type = "t2mean").
 #' @param labels optionally, a vector of labels for showing the outliers.
 #'               If NULL, the outliers will be identified by row number.
 #' @param ... ignored
@@ -43,7 +44,7 @@ autoplot.prcomp <- function(object, dims=c(1, 2), group = NULL, ...) {
 #' @export
 autolayer.prcomp <- function(object,  dims = c(1,2), group=NULL,
                              labels = NULL,
-                             type = c("t2data", "t2mean"), ci = 0.95, ...) {
+                             type = c("t2data", "t2mean"), level = 0.95, ...) {
   type <- match.arg(type)
 
   df <- object$x[ , dims, drop = FALSE ]
@@ -60,11 +61,11 @@ autolayer.prcomp <- function(object,  dims = c(1,2), group=NULL,
     geom_hotelling(aes(x=.data[["x"]], y=.data[["y"]], color = group, fill = group),
                         alpha = .1,
                         data = df,
-                        ci = ci,
+                        level = level,
                         type = type),
     stat_hotelling_points(aes(x=.data[["x"]], y=.data[["y"]], label=labels),
                           data = df,
-                          ci = ci,
+                          level = level,
                           type = type,
                           geom = "label", outlier_only = TRUE)
   )

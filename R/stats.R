@@ -2,14 +2,15 @@
 #'
 #' Calculate the T2 statistic for individual points
 #' @param x A matrix or data frame with two columns
-#' @param ci Coverate or confidence level
+#' @param level Either coverage probability (for type = "t2data" or "data") or
+#'           confidence level (for type = "t2mean").
 #' @param type what type of statistic should be calculated; can be t2data
 #'        (for data coverage) or t2mean (for difference from a mean)
 #' @return A data frame with one row per point including the columns t2 (t2
-#' statistic), t2crit (critical t2 value for the given ci) and outside
+#' statistic), t2crit (critical t2 value for the given level) and is_outlier
 #' (logical, whether t2 > t2crit).
 #' @export
-hotelling_points <- function(x, ci = 0.95, type = c("t2data", "t2mean")) {
+hotelling_points <- function(x, level = 0.95, type = c("t2data", "t2mean")) {
   type <- match.arg(type)
 
   x <- as.matrix(x)
@@ -28,7 +29,7 @@ hotelling_points <- function(x, ci = 0.95, type = c("t2data", "t2mean")) {
   t2 <- rowSums((Xc %*% Sinv) * Xc)
 
   # Hotelling T^2 critical value
-  fcrit <- qf(ci, df1 = p, df2 = n - p)
+  fcrit <- qf(level, df1 = p, df2 = n - p)
   t2crit <- (p * (n - 1) / (n - p)) * fcrit
 
   if (type == "t2mean") {
@@ -36,7 +37,7 @@ hotelling_points <- function(x, ci = 0.95, type = c("t2data", "t2mean")) {
     t2crit <- t2crit / n
   }
 
-  data <- data.frame(t2 = t2, t2crit = t2crit, outside = t2 > t2crit)
+  data <- data.frame(t2 = t2, t2crit = t2crit, is_outlier = t2 > t2crit)
 
   data
 }
@@ -56,7 +57,8 @@ hotelling_points <- function(x, ci = 0.95, type = c("t2data", "t2mean")) {
 #'  * T² Hotelling confidence ellipses of the group means.
 #'
 #' @param x A two-column matrix or data frame like object
-#' @param ci coverage probability or confidence level
+#' @param level Either coverage probability (for type = "t2data" or "data") or
+#'           confidence level (for type = "t2mean").
 #' @param npoints Number of points to estimate
 #' @param type t2data - Hotelling T² data ellipse; t2mean - Hotelling
 #' confidence interval for the mean; data - normal data elllipse
@@ -68,7 +70,7 @@ hotelling_points <- function(x, ci = 0.95, type = c("t2data", "t2mean")) {
 #' plot(df[,1], df[,2])
 #' lines(eli)
 #' @export
-hotelling_ellipse <- function(x, ci = 0.95, npoints = 100, type = "t2data") {
+hotelling_ellipse <- function(x, level = 0.95, npoints = 100, type = "t2data") {
   convert_to_df <- FALSE
   if(is.data.frame(x)) {
     convert_to_df <- TRUE
@@ -85,8 +87,8 @@ hotelling_ellipse <- function(x, ci = 0.95, npoints = 100, type = "t2data") {
   S <- cov(x)
   
   # Critical Hotelling T^2 value (for the DATA cloud, not mean CI)
-  t2crit <- (p * (n - 1) / (n - p)) * qf(ci, df1 = p, df2 = n - p)
-  c2   <- qchisq(ci, df = p)     # chi-square, df = p
+  t2crit <- (p * (n - 1) / (n - p)) * qf(level, df1 = p, df2 = n - p)
+  c2   <- qchisq(level, df = p)     # chi-square, df = p
   #fcrit <- stats::qf(conf, df1 = p, df2 = n - p)
   #c2 <- (p * (n - 1) / (n - p)) * fcrit / n  # divide by n for mean
 

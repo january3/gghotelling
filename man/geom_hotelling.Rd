@@ -12,7 +12,7 @@ geom_hotelling(
   data = NULL,
   position = "identity",
   ...,
-  ci = 0.95,
+  level = 0.95,
   type = TRUE,
   npoints = 100,
   na.rm = FALSE,
@@ -57,7 +57,8 @@ to use \code{position_jitter()}, give the position as \code{"jitter"}.
 \item{...}{Additional parameters passed to underlying \code{ggplot2::geom_polygon()}
 or to \code{ggplot2::layer()}.}
 
-\item{ci}{Confidence interval}
+\item{level}{Either coverage probability (for type = "t2data" or "data") or
+confidence level (for type = "t2mean").}
 
 \item{type}{t2data - Hotelling T² data ellipse; t2mean - Hotelling
 confidence interval for the mean; data - normal data elllipse
@@ -91,7 +92,7 @@ df <- cbind(iris, pca$x)
 library(ggplot2)
   
   ggplot(df, aes(PC1, PC2)) +
-    geom_hotelling(ci=.99) +
+    geom_hotelling(level=.99) +
     geom_point()
   
   ggplot(df, aes(PC1, PC2, color=Species)) +

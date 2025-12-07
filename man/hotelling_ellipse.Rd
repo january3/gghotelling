@@ -4,12 +4,13 @@
 \alias{hotelling_ellipse}
 \title{Calculate Hotelling or data ellipse around some points}
 \usage{
-hotelling_ellipse(x, ci = 0.95, npoints = 100, type = "t2data")
+hotelling_ellipse(x, level = 0.95, npoints = 100, type = "t2data")
 }
 \arguments{
 \item{x}{A two-column matrix or data frame like object}
 
-\item{ci}{coverage probability or confidence level}
+\item{level}{Either coverage probability (for type = "t2data" or "data") or
+confidence level (for type = "t2mean").}
 
 \item{npoints}{Number of points to estimate}
 

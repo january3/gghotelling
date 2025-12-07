@@ -8,18 +8,21 @@
 coverage](https://codecov.io/gh/january3/gghotelling/graph/badge.svg)](https://app.codecov.io/gh/january3/gghotelling)
 <!-- badges: end -->
 
-Hotelling data ellipses are using the Hotelling T² distribution to
-create coverage regions for the distribution of the data, often used in
-outlier detection in multivariate data. This is different from the
-ellipses returned by the `ellipse::ellipse()` or `car::dataEllipse()`
-functions, which produce data ellipses based on a χ² (chi-square)
-contour, representing the shape and spread of the data distribution.
+Hotelling data ellipses use the Hotelling T² distribution to create
+coverage regions for the distribution of the data, often used in outlier
+detection in multivariate data. This is different from the ellipses
+returned by the `ellipse::ellipse()` or `car::dataEllipse()` functions,
+which produce data ellipses based on a χ² (chi-square) contour,
+representing the shape and spread of the data distribution.
 
 This is also slightly different from the `stat_ellipse()` can be used to
 create data ellipses (much like the ones from `ellipse::ellipse()`), and
-also Hotelling data (?) ellipses. Unlike stat_ellipse(), it can also
-take the `fill` aesthetic for a visually pleasing representation of the
-ellipses.
+also certain type of t ellipses. In contrast, gghotelling provides
+explicit Hotelling T² data ellipses and Hotelling T² confidence
+ellipses, with a clear distinction between the two.
+
+Unlike stat_ellipse(), it can also take the `fill` aesthetic for a
+visually pleasing representation of the ellipses.
 
 A lot of functionality overlaps with `ggfortify::ggbiplot()` (and by
 extension `autoplot.pca_class`), but this function is less flexible than
@@ -56,7 +59,7 @@ pca <- prcomp(iris[, 1:4], scale.=TRUE)
 df <- cbind(iris, pca$x)
 
 ggplot(df, aes(PC1, PC2)) +
-  geom_hotelling(ci=.99) +
+  geom_hotelling(level=.99) +
   geom_point()
 ```
 
@@ -84,7 +87,7 @@ ggplot(df, aes(PC1, PC2, color=Species)) +
 
 # set custom CI/coverage level
 ggplot(df, aes(PC1, PC2, color=Species)) +
-  geom_hotelling(alpha=0.1, aes(fill = Species), ci=.99) +
+  geom_hotelling(alpha=0.1, aes(fill = Species), level=.99) +
   geom_point()
 ```
 
@@ -95,9 +98,9 @@ be used to identify multivariate outliers.
 
 ``` r
 ggplot(df, aes(PC1, PC2, group=Species)) +
-  geom_hotelling(ci = 0.75, alpha=0.1, aes(fill = Species)) +
+  geom_hotelling(level = 0.75, alpha=0.1, aes(fill = Species)) +
   scale_color_manual(values=c("TRUE"="red", "FALSE"="grey")) +
-  stat_hotelling_points(ci = .75, aes(shape = Species, color = after_stat(outside)))
+  stat_hotelling_points(level = .75, aes(shape = Species, color = after_stat(is_outlier)))
 ```
 
 <img src="man/figures/README-example2-1.png" width="50%" style="display: block; margin: auto;" />

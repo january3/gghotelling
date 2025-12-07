@@ -4,19 +4,20 @@
 \alias{hotelling_points}
 \title{Calculate the T2 statistic for individual points}
 \usage{
-hotelling_points(x, ci = 0.95, type = c("t2data", "t2mean"))
+hotelling_points(x, level = 0.95, type = c("t2data", "t2mean"))
 }
 \arguments{
 \item{x}{A matrix or data frame with two columns}
 
-\item{ci}{Coverate or confidence level}
+\item{level}{Either coverage probability (for type = "t2data" or "data") or
+confidence level (for type = "t2mean").}
 
 \item{type}{what type of statistic should be calculated; can be t2data
 (for data coverage) or t2mean (for difference from a mean)}
 }
 \value{
 A data frame with one row per point including the columns t2 (t2
-statistic), t2crit (critical t2 value for the given ci) and outside
+statistic), t2crit (critical t2 value for the given level) and is_outlier
 (logical, whether t2 > t2crit).
 }
 \description{

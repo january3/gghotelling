@@ -14,5 +14,8 @@ test_that("autoplot.prcomp works correctly", {
     autolayer(pca_result, data = iris, group = 'Species')
   expect_s3_class(p, "ggplot")
   
-
+  p <- autoplot(pca_result, data = iris, group = 'Species') +
+    autolayer(pca_result, data = iris, group = 'Species', labels = iris$Species)
+  expect_s3_class(p, "ggplot")
+ 
 })
