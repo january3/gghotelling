@@ -26,7 +26,8 @@
 #' library(ggplot2)
 #' autoplot(pca, group = iris$Species) + 
 #'   autolayer(pca, group = iris$Species)
-#' @importFrom ggplot2 geom_segment arrow unit geom_label
+#' @importFrom ggplot2 geom_segment arrow unit geom_label 
+#' @importFrom ggplot2 scale_x_continuous scale_y_continuous sec_axis
 #' @export
 autoplot.prcomp <- function(object, dims=c(1, 2), biplot = FALSE, group = NULL, ...) {
 
@@ -40,28 +41,37 @@ autoplot.prcomp <- function(object, dims=c(1, 2), biplot = FALSE, group = NULL, 
   c1 <- colnames(df)[1]
   c2 <- colnames(df)[2]
 
-  p <- ggplot(df, aes(x = .data[[c1]], y = .data[[c2]], color = group))
+  p <- ggplot(df, aes(x = .data[[c1]], y = .data[[c2]], color = group)) + 
+    geom_point()
 
-  if(biplot) {
-    load <- object$rotation[ , dims, drop = FALSE ]
-    score_max <- max(abs(df))
-    load_max <- max(abs(load))
-
-    scale <- .9 * score_max / load_max
-    load_df <- as.data.frame(load * scale)
-    load_df$feature <- rownames(load)
-
-    p <- p +
-      geom_segment(data = load_df,
-               aes(x = 0, y = 0, xend = .data[[c1]], yend = .data[[c2]]),
-               arrow = arrow(length = unit(0.02, "npc")),
-               colour = "red") +
-      geom_label(data = load_df,
-                 aes(.data[[c1]], .data[[c2]], label = .data[["feature"]]),
-                 colour = "red", vjust = -.3)
+  if(!biplot) {
+    return(p)
   }
 
-  p <- p + geom_point()
+  load <- object$rotation[ , dims, drop = FALSE ]
+  score_max <- max(abs(df))
+  load_max <- max(abs(load))
+
+  scale <- .9 * score_max / load_max
+  load_df <- as.data.frame(load * scale)
+  load_df$feature <- rownames(load)
+
+  p <- p +
+    geom_segment(data = load_df,
+             aes(x = 0, y = 0, xend = .data[[c1]], yend = .data[[c2]]),
+             arrow = arrow(length = unit(0.02, "npc")),
+             colour = "red") +
+    geom_label(data = load_df,
+               aes(.data[[c1]], .data[[c2]], label = .data[["feature"]]),
+               colour = "red", vjust = -.3) +
+    scale_x_continuous(
+      name = paste(c1, "scores"),
+      sec.axis = sec_axis(~ . / scale, name = paste(c1, "loadings"))
+    ) +
+    scale_y_continuous(
+      name = paste(c2, "scores"),
+      sec.axis = sec_axis(~ . / scale, name = paste(c2, "loadings"))
+    )
 
   p
 }
