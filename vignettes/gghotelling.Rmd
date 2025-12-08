@@ -55,7 +55,8 @@ the per-point Hotelling T² statistics, which can be used to identify and
 visualize multivariate outliers in scatter plots.
 
 My main motivation for creating this package was sorting out the different
-ellipse types and allowing the use of `fill` aesthetics for Hotelling ellipses.
+ellipse types and allowing the use of `fill` aesthetics for Hotelling
+ellipses. I tried to make the usage convenient, simple and intuitive.
 
 ## Installation
 

@@ -1,6 +1,6 @@
 Package: gghotelling
 Title: Hotelling's T² Ellipses and Outlier Detection for ggplot2
-Version: 0.0.0.9013
+Version: 0.0.0.9014
 Authors@R: 
     person("January", "Weiner", , "january.weiner@gmail.com", role = c("aut", "cre"))
 Description: Plot Hotelling's T² ellipses and detect multivariate outliers in ggplot2 scatter plots.
@@ -20,3 +20,4 @@ Suggests:
     rmarkdown
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+URL: https://january3.github.io/gghotelling/
