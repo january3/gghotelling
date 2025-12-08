@@ -85,23 +85,39 @@ test_that("hotelling point statistics are calculated correctly", {
   # use iris dataset for testing
   data(iris)
   iris_subset <- iris[ iris$Species == "setosa", 1:2 ]
+  cols <- c("t2", "t2crit", "c2", "c2crit", "is_outlier")
 
   hp <- outliers(iris_subset, type = "t2mean")
   expect_s3_class(hp, "data.frame")
   expect_equal(ncol(hp), 5)
-  expect_true(all(c("t2", "t2crit", "c2", "c2crit", "is_outlier") %in% colnames(hp)))
+  expect_true(all(cols %in% colnames(hp)))
 
   hp <- outliers(as.matrix(iris_subset), type = "t2data")
   expect_s3_class(hp, "data.frame")
   expect_equal(ncol(hp), 5)
-  expect_true(all(c("t2", "t2crit", "c2", "c2crit", "is_outlier") %in% colnames(hp)))
+  expect_true(all(cols %in% colnames(hp)))
+
+  hp <- outliers(as.matrix(iris_subset), type = "t2data", robust = TRUE)
+  expect_s3_class(hp, "data.frame")
+  expect_equal(ncol(hp), 5)
+  expect_true(all(cols %in% colnames(hp)))
 
   hp <- outliers(as.matrix(iris_subset), type = "data")
   expect_s3_class(hp, "data.frame")
   expect_equal(ncol(hp), 5)
-  expect_true(all(c("t2", "t2crit", "c2", "c2crit", "is_outlier") %in% colnames(hp)))
+  expect_true(all(cols %in% colnames(hp)))
 
   expect_error(outliers(iris))
   expect_error(outliers(iris_subset[1:2, ]))
+
+})
+
+test_that(".expanded_range works correctly", {
+  # Test the .expanded_range function
+  r <- .expanded_range(1:10)
+  expect_equal(r, c(-1.25, 12.25))
+
+  r <- .expanded_range(1:100, scale = 0.2)
+  expect_equal(r, c(-18.8, 119.8))
 
 })

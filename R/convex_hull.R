@@ -72,10 +72,10 @@ geom_hull <- function(mapping = NULL, data = NULL,
 
 ## KDE 
 
-.expanded_range <- function(x, frac = .25) {
+.expanded_range <- function(x, scale = .25) {
 
   r <- range(x)
-  d <- diff(r) * frac
+  d <- diff(r) * scale
   r + c(-d, +d)
 }
 
