@@ -22,3 +22,22 @@ test_that("geom_hull works correctly", {
   expect_true("GeomHull" %in% layer_classes)
 
 })
+
+
+test_that("geom_kde works correctly", {
+  library(ggplot2)
+
+  # Create a sample dataset
+  data(iris)
+  p <- ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+    geom_point() +
+    geom_kde(aes(fill = Species), alpha = 0.3, coverage = 0.95)
+
+  # Test that the plot object is created successfully
+  expect_s3_class(p, "ggplot")
+
+  # Test that the layers include geom_kde
+  layer_classes <- sapply(p$layers, function(layer) class(layer$geom)[1])
+  expect_true("GeomKDE" %in% layer_classes)
+
+})
