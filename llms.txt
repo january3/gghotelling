@@ -1,0 +1,189 @@
+# Hotelling’s T² Ellipses and Outlier Detection for ggplot2
+
+Hotelling data ellipses use the Hotelling T² distribution to create
+coverage regions for the distribution of the data, often used in outlier
+detection in multivariate data. This is different from the ellipses
+returned by the
+[`ellipse::ellipse()`](https://dmurdoch.github.io/ellipse/reference/ellipse.html)
+or `car::dataEllipse()` functions, which produce data ellipses based on
+a Mahalanobis distance contour, representing the shape and spread of the
+data distribution.
+
+This is also slightly different from the
+[`stat_ellipse()`](https://ggplot2.tidyverse.org/reference/stat_ellipse.html)
+can be used to create data ellipses (much like the ones from
+[`ellipse::ellipse()`](https://dmurdoch.github.io/ellipse/reference/ellipse.html)),
+and also certain type of t ellipses. In contrast, gghotelling provides
+explicit Hotelling T² data ellipses and Hotelling T² confidence
+ellipses, with a clear distinction between the two.
+
+Unlike stat_ellipse(), it can also take the `fill` aesthetic for a
+visually pleasing representation of the ellipses.
+
+A lot of functionality overlaps with `ggfortify::ggbiplot()` (and by
+extension `autoplot.pca_class`), but this function is less flexible than
+a separate geom that you can add to the figure.
+
+Moreover, the package provides a
+[`stat_outliers()`](https://january3.github.io/gghotelling/reference/stat_outliers.md)
+function to compute the per-point Hotelling T² statistics, which can be
+used to identify and visualize multivariate outliers in scatter plots.
+
+My main motivation for creating this package was sorting out the
+different ellipse types and allowing the use of `fill` aesthetics for
+Hotelling ellipses.
+
+## Installation
+
+You can install the development version of gghotelling from
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("january3/gghotelling")
+```
+
+## Hotelling Ellipses
+
+The package defines a new geom,
+[`geom_hotelling()`](https://january3.github.io/gghotelling/reference/geom_hotelling.md),
+which can be used to add Hotelling ellipses to ggplot2 scatter plots.
+
+``` r
+library(ggplot2)
+library(gghotelling)
+
+pca <- prcomp(iris[, 1:4], scale.=TRUE)
+df <- cbind(iris, pca$x)
+
+ggplot(df, aes(PC1, PC2)) +
+  geom_hotelling(level=.99) +
+  geom_point()
+```
+
+![](reference/figures/README-example-1.png)
+
+``` r
+
+ggplot(df, aes(PC1, PC2, color=Species)) +
+  geom_hotelling() +
+  geom_point()
+```
+
+![](reference/figures/README-example-2.png)
+
+``` r
+
+ggplot(df, aes(PC1, PC2, color=Species)) +
+  geom_hotelling(alpha=0.1, aes(fill = Species)) +
+  geom_point()
+```
+
+![](reference/figures/README-example-3.png)
+
+``` r
+
+# set custom CI/coverage level
+ggplot(df, aes(PC1, PC2, color=Species)) +
+  geom_hotelling(alpha=0.1, aes(fill = Species), level=.99) +
+  geom_point()
+```
+
+![](reference/figures/README-example-4.png)
+
+The package also provides per-point, group-wise T² statistics which can
+be used to identify multivariate outliers.
+
+``` r
+ggplot(df, aes(PC1, PC2, group=Species)) +
+  geom_hotelling(level = 0.75, alpha=0.1, aes(fill = Species)) +
+  scale_color_manual(values=c("TRUE"="red", "FALSE"="grey")) +
+  stat_outliers(level = .75, aes(shape = Species, color = after_stat(is_outlier)))
+```
+
+![](reference/figures/README-example2-1.png)
+
+``` r
+
+ggplot(df, aes(PC1, PC2, group=Species)) +
+  geom_hotelling(alpha=0.1, aes(fill = Species)) +
+  stat_outliers(size=2, aes(shape = Species, color = after_stat(t2)))
+```
+
+![](reference/figures/README-example2-2.png)
+
+This can be useful for identifying potential outliers in multivariate
+data. The outliers can be directly labeled as follows:
+
+``` r
+ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
+  geom_hotelling(alpha=0.1, aes(fill = Species)) +
+  geom_point(aes(color = Species)) +
+  stat_outliers(geom="label", 
+                        outlier_only = TRUE)
+```
+
+![](reference/figures/README-example3-1.png)
+
+``` r
+
+# or even with geom_label_repel from ggrepel
+library(ggrepel)
+ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
+  geom_hotelling(alpha=0.1, aes(fill = Species)) +
+  geom_point(aes(color = Species)) +
+  stat_outliers(geom="label_repel",
+                        outlier_only = TRUE)
+```
+
+![](reference/figures/README-example3-2.png)
+
+## Convex Hulls
+
+``` r
+ggplot(iris, aes(Sepal.Length, Sepal.Width, color=Species)) +
+  geom_hull(mapping = aes(fill = Species), alpha=.1) +
+  geom_point()
+```
+
+![](reference/figures/README-example_hull-1.png)
+
+## Autoplot
+
+The package also defines `autoplot.prcomp` and `autolayer.prcomp` for
+convenient plotting of PCA plots. Note that `autoplot.prcomp` is also
+implemented in a more sophisticated way in the `ggfortify` package.
+
+``` r
+autoplot(pca, group = iris$Species) + 
+  autolayer(pca, group = iris$Species)
+```
+
+![](reference/figures/README-example_autoplot-1.png)
+
+# Package index
+
+## All functions
+
+- [`autoplot(`*`<prcomp>`*`)`](https://january3.github.io/gghotelling/reference/autoplot.prcomp.md)
+  [`autolayer(`*`<prcomp>`*`)`](https://january3.github.io/gghotelling/reference/autoplot.prcomp.md)
+  : Automatic plotting of PCA objects
+- [`geom_hotelling()`](https://january3.github.io/gghotelling/reference/geom_hotelling.md)
+  : Hotelling ellipses for ggplot2
+- [`geom_hull()`](https://january3.github.io/gghotelling/reference/geom_hull.md)
+  : Draw a convex hull around a group of points
+- [`geom_kde()`](https://january3.github.io/gghotelling/reference/geom_kde.md)
+  : KDE contours for ggplot2
+- [`hotelling_ellipse()`](https://january3.github.io/gghotelling/reference/hotelling_ellipse.md)
+  : Calculate Hotelling or data ellipse around some points
+- [`outliers()`](https://january3.github.io/gghotelling/reference/outliers.md)
+  : Calculate the T2 statistic for individual points
+- [`stat_outliers()`](https://january3.github.io/gghotelling/reference/stat_outliers.md)
+  : Calculate per-point T² Hotelling statistic
+
+# Articles
+
+### All vignettes
+
+- [Hotelling ellipses, contours and
+  outliers](https://january3.github.io/gghotelling/articles/gghotelling.md):
