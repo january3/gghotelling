@@ -37,6 +37,7 @@ pak::pak("january3/gghotelling")
 The package defines a new geom,
 [`geom_hotelling()`](https://january3.github.io/gghotelling/reference/geom_hotelling.md),
 which can be used to add Hotelling ellipses to ggplot2 scatter plots.
+Here are two examples of usage:
 
 ``` r
 library(ggplot2)

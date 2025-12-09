@@ -78,13 +78,13 @@ geom_hotelling(
 
 - level:
 
-  Either coverage probability (for type = "t2data" or "data") or
+  Either coverage probability (for type = "t2data" or "c2data") or
   confidence level (for type = "t2mean").
 
 - type:
 
   t2data - Hotelling T² data ellipse; t2mean - Hotelling confidence
-  interval for the mean; data - normal data elllipse (using χ²
+  interval for the mean; c2data - normal data elllipse (using χ²
   distribution).
 
 - robust:

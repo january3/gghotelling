@@ -9,7 +9,7 @@ hotelling_ellipse(
   x,
   level = 0.95,
   npoints = 100,
-  type = c("t2data", "t2mean", "data"),
+  type = c("t2data", "t2mean", "c2data"),
   robust = FALSE
 )
 ```
@@ -32,7 +32,7 @@ hotelling_ellipse(
 - type:
 
   t2data - Hotelling T² data ellipse; t2mean - Hotelling confidence
-  interval for the mean; data - normal data elllipse (using χ²
+  interval for the mean; c2data - normal data elllipse (using χ²
   distribution).
 
 - robust:

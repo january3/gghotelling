@@ -14,7 +14,7 @@ autolayer(
   dims = c(1, 2),
   group = NULL,
   labels = NULL,
-  type = c("t2data", "t2mean", "data"),
+  type = c("t2data", "t2mean", "c2data"),
   level = 0.95,
   ...
 )
@@ -50,12 +50,13 @@ autolayer(
 - type:
 
   The type of the coverage / confidence area shown by
-  `autolayer.prcomp`, can be one of t2data (T² Hotelling coverage), data
-  (Mahalanobis coverage) or t2mean (confidence area for the group mean).
+  `autolayer.prcomp`, can be one of t2data (T² Hotelling coverage),
+  c2data (χ² coverage) or t2mean (T² based confidence area for the group
+  mean).
 
 - level:
 
-  Either coverage probability (for type = "t2data" and "data") or
+  Either coverage probability (for type = "t2data" and "c2data") or
   confidence level (for type = "t2mean").
 
 ## Details

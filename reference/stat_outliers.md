@@ -11,7 +11,7 @@ stat_outliers(
   geom = "point",
   position = "identity",
   ...,
-  type = c("t2data", "data", "t2mean"),
+  type = c("t2data", "t2mean", "c2data"),
   level = 0.95,
   outlier_only = FALSE,
   na.rm = FALSE,
@@ -98,12 +98,12 @@ stat_outliers(
 - type:
 
   t2data - Hotelling T² data ellipse; t2mean - Hotelling confidence
-  interval for the mean; data - normal data elllipse (using χ²
+  interval for the mean; c2data - normal data elllipse (using χ²
   distribution).
 
 - level:
 
-  Either coverage probability (for type = "t2data" or "data") or
+  Either coverage probability (for type = "t2data" or "c2data") or
   confidence level (for type = "t2mean").
 
 - outlier_only:

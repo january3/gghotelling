@@ -8,16 +8,17 @@ detection in multivariate data.
 
 Features:
 
-- Classical Hotelling and data ellipses
-- Robust Hotelling ellipses using MCD estimator
-- Hotelling confidence ellipses for group means
+- Classical Hotelling and data ellipses with
+  [`geom_hotelling()`](https://january3.github.io/gghotelling/reference/geom_hotelling.md)
+- Robust Hotelling ellipses using MCD estimator with `robust=TRUE`
+- Hotelling confidence ellipses for group means with `type="t2mean"`
 - Kernel density coverage contours with
   [`geom_kde()`](https://january3.github.io/gghotelling/reference/geom_kde.md)
 - Outlier detection and visualization with
   [`stat_outliers()`](https://january3.github.io/gghotelling/reference/stat_outliers.md)
 - Convex hulls with
   [`geom_hull()`](https://january3.github.io/gghotelling/reference/geom_hull.md)
-- Autoplot method for `prcomp` objects
+- Autoplot and autolayer methods for `prcomp` objects
 
 ### Installation
 
@@ -32,6 +33,8 @@ pak::pak("january3/gghotelling")
 ```
 
 ## Hotelling Ellipses
+
+### The `geom_hotelling()` function
 
 The package defines a new geom,
 [`geom_hotelling()`](https://january3.github.io/gghotelling/reference/geom_hotelling.md),
@@ -79,7 +82,64 @@ ggplot(pca_df, aes(PC1, PC2, color=Species)) +
 
 ![](gghotelling_files/figure-html/example-4.png)
 
-## Outlier Detection
+### Types of Ellipses
+
+OK, but how are the Hotelling ellipses different, say, from the ellipses
+created by
+[`stat_ellipse()`](https://ggplot2.tidyverse.org/reference/stat_ellipse.html)
+in ggplot2, or the
+[`ellipse::ellipse()`](https://dmurdoch.github.io/ellipse/reference/ellipse.html)
+function?
+
+Actually, the
+[`geom_hotelling()`](https://january3.github.io/gghotelling/reference/geom_hotelling.md)
+function can create three different types of ellipses:
+
+- Hotelling T² *data* ellipses (default, `type="t2data"`): these
+  ellipses represent the spread of the data points themselves, based on
+  the Hotelling T² distribution. They can be used to visualize the
+  overall distribution of the data and identify potential outliers.
+- Hotelling T² *confidence* ellipses for group means (`type="t2mean"`):
+  these ellipses represent the confidence region for the mean of each
+  group, based on the Hotelling T² distribution. They can be used to
+  compare the means of different groups and assess whether they are
+  significantly different from each other.
+- Chi-squared *data* ellipses (`type="c2data"`): these ellipses are
+  based on the chi-squared distribution and also represent the spread of
+  the data points. They are similar to the ellipses created by
+  [`stat_ellipse()`](https://ggplot2.tidyverse.org/reference/stat_ellipse.html)
+  in ggplot2 and the
+  [`ellipse::ellipse()`](https://dmurdoch.github.io/ellipse/reference/ellipse.html)
+  function.
+
+All three ellipses above use Mahalanobis distance contours, but differ
+in the statistical choice of distribution (Hotelling T² vs χ²) in order
+to select the Mahalanobis distance threshold for drawing the ellipse.
+
+So why the different distributions? The point is whether we are
+considering the data to be the actual *population* (in which case we use
+the χ² distribution) or a *sample* from a larger population (in which
+case we use the Hotelling T² distribution). The Hotelling T²
+distribution takes into account the uncertainty in estimating the
+population parameters (mean and covariance) from a finite sample,
+leading to wider ellipses compared to the χ² distribution, as you can
+see on the figure below - the dashed ellipses are the χ² data ellipses:
+
+``` r
+ggplot(pca_df, aes(PC1, PC2, color = Species)) +
+  geom_hotelling(level=.99) +
+  geom_hotelling(level=.99, type="c2data", linetype = "dashed") +
+  geom_point()
+```
+
+![](gghotelling_files/figure-html/example_types-1.png)
+
+In addition to the classical Hotelling ellipses, robust versions can be
+created with the `robust=TRUE` argument, which uses the Minimum
+Covariance Determinant (MCD) estimator to compute robust estimates of
+the mean and covariance matrix (see below for details).
+
+### Outlier Detection
 
 The package also provides per-point, group-wise T² statistics which can
 be used to identify multivariate outliers.
@@ -156,17 +216,36 @@ which can also be used directly on data frames to compute the statistics
 without plotting:
 
 ``` r
-outlier_stats <- outliers(pca_df[, c("PC1", "PC2")], level = 0.95)
+outlier_stats <- outliers(pca_df[ , c("PC1", "PC2")], level = 0.95)
 
 head(outlier_stats)
-#>         t2   t2crit       c2   c2crit is_outlier
-#> 1 1.996071 6.155707 1.996071 5.991465      FALSE
-#> 2 1.967770 6.155707 1.967770 5.991465      FALSE
-#> 3 2.029500 6.155707 2.029500 5.991465      FALSE
-#> 4 2.187372 6.155707 2.187372 5.991465      FALSE
-#> 5 2.398597 6.155707 2.398597 5.991465      FALSE
-#> 6 3.876401 6.155707 3.876401 5.991465      FALSE
+#>         d2   t2crit   c2crit is_outlier
+#> 1 1.996071 6.155707 5.991465      FALSE
+#> 2 1.967770 6.155707 5.991465      FALSE
+#> 3 2.029500 6.155707 5.991465      FALSE
+#> 4 2.187372 6.155707 5.991465      FALSE
+#> 5 2.398597 6.155707 5.991465      FALSE
+#> 6 3.876401 6.155707 5.991465      FALSE
 ```
+
+We can visualize it with the typical ggplot2 syntax:
+
+``` r
+outlier_stats$id <- 1:nrow(outlier_stats)
+outlier_labels <- ifelse(outlier_stats$is_outlier,
+                             as.character(outlier_stats$id), NA)
+ggplot(outlier_stats, aes(x = id, y = sqrt(d2))) +
+  geom_segment(aes(xend = id, yend = 0), alpha = .3) +
+  geom_point(aes(color = is_outlier), size = 2) +
+  scale_color_manual(values=c("TRUE"="red", "FALSE"="black")) +
+  geom_label(aes(label = outlier_labels), nudge_y = 0.2, na.rm = TRUE) +
+  geom_hline(aes(yintercept = sqrt(t2crit)), color = "red", linetype = "dashed") +
+  annotate("text", x = 1, y = sqrt(outlier_stats$t2crit[1]) + 0.1,
+           label = "Critical value", color = "red") +
+  labs(y = "Mahalanobis distance (T² statistic)")
+```
+
+![](gghotelling_files/figure-html/outlier_plot-1.png)
 
 ## Robust Hotelling Ellipses
 
@@ -185,8 +264,9 @@ accurate representation of the data distribution when outliers are
 present. Below I am showing a comparison between classical and robust
 Hotelling ellipses in the presence of outliers. The data set used,
 `wine`, contains chemical analysis of various wines, with several
-obvious outliers, and the figure recapitulates the figure 1 from a paper
-by Hubert, Debruyne, and Rousseeuw (2018).
+obvious outliers, and the figure recapitulates the figure 1 from [a
+paper](https://arxiv.org/pdf/1709.07045) by Hubert, Debruyne, and
+Rousseeuw (2018).
 
 ``` r
 library(HDclassif)
@@ -196,8 +276,8 @@ wine <- wine[ wine$class == 1, ]
 wine <- data.frame("malic_acid"=wine$V2, "proline"=wine$V13)
 
 ggplot(wine, aes(malic_acid, proline)) +
-  geom_hotelling(type="data", level = .975, color = "red") +
-  geom_hotelling(type="data", level = .975, robust = TRUE, color = "blue") +
+  geom_hotelling(type="c2data", level = .975, color = "red") +
+  geom_hotelling(type="c2data", level = .975, robust = TRUE, color = "blue") +
   geom_point() +
   annotate("text", x=2.5, y = 1675, label = "MCD", color = "blue") +
   annotate("text", x=3.5, y = 1400, label = "Classical", color = "red")
