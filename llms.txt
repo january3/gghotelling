@@ -2,10 +2,6 @@
 
 Here are a few examples of plots you can create with `gghotelling`:
 
-``` R
-#> Loading required package: MASS
-```
-
 ![](reference/figures/README-example-nocode-1.png)
 
 # Features:
@@ -21,13 +17,14 @@ Here are a few examples of plots you can create with `gghotelling`:
   [`geom_hull()`](https://january3.github.io/gghotelling/reference/geom_hull.md)
 - Autoplot method for `prcomp` objects
 
-See [the vignette](https://january3.github.io/gghotelling/) for more
-details.
+See [the
+vignette](https://january3.github.io/gghotelling/articles/gghotelling.html)
+for more details.
 
 ## Installation
 
 You can install the development version of gghotelling from
-[GitHub](https://github.com/) with:
+[GitHub](https://github.com/january3/gghotelling/) with:
 
 ``` r
 # install.packages("pak")

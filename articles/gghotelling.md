@@ -1,12 +1,5 @@
 # Hotelling ellipses, contours and outliers
 
-``` r
-library(ggplot2)
-library(gghotelling)
-
-theme_set(theme_minimal())
-```
-
 ## Hotelling’s T² Ellipses and Outlier Detection for ggplot2 ![](reference/figures/logo.png)
 
 Hotelling data ellipses use the Hotelling T² distribution to create
@@ -29,11 +22,13 @@ Features:
 ### Installation
 
 You can install the development version of gghotelling from
-[GitHub](https://github.com/) with:
+[GitHub](https://github.com/january3/gghotelling) with:
 
 ``` r
 # install.packages("pak")
 pak::pak("january3/gghotelling")
+
+# or devtools::install_github("january3/gghotelling")
 ```
 
 ## Hotelling Ellipses
@@ -92,8 +87,12 @@ be used to identify multivariate outliers.
 ``` r
 ggplot(pca_df, aes(PC1, PC2, group=Species)) +
   geom_hotelling(level = 0.75, alpha=0.1, aes(fill = Species)) +
-  scale_color_manual(values=c("TRUE"="red", "FALSE"="grey")) +
-  stat_outliers(level = .75, aes(shape = Species, color = after_stat(is_outlier)))
+  # add points and calculate outlier stats; we assign the `is_outlier` variable
+  # calculated by stat_outliers() to the color aesthetic
+  stat_outliers(level = .75, 
+                aes(shape = Species, color = after_stat(is_outlier))) +
+  # color outliers in red
+  scale_color_manual(values=c("TRUE"="red", "FALSE"="grey"))
 ```
 
 ![](gghotelling_files/figure-html/example2-1.png)
@@ -187,7 +186,7 @@ present. Below I am showing a comparison between classical and robust
 Hotelling ellipses in the presence of outliers. The data set used,
 `wine`, contains chemical analysis of various wines, with several
 obvious outliers, and the figure recapitulates the figure 1 from a paper
-by Hubert et al. (Hubert, Debruyne, and Rousseeuw 2018).
+by Hubert, Debruyne, and Rousseeuw (2018).
 
 ``` r
 library(HDclassif)
