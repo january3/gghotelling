@@ -69,3 +69,17 @@ QC, but not for statistical testing.
 [`hotelling_ellipse`](https://january3.github.io/gghotelling/reference/hotelling_ellipse.md)
 for more information on the differences between t2data, t2mean and
 c2data modes.
+
+## Examples
+
+``` r
+library(ggplot2)
+
+pca <- prcomp(iris[, 1:4], scale.=TRUE)
+pca_df <- cbind(iris, pca$x)
+outlier_stats <- outliers(pca_df[ , c("PC1", "PC2")], level = 0.95)
+
+# use plot_outliers() to directly plot them
+plot_outliers(pca_df[ , c("PC1", "PC2")], level = 0.95)
+
+```
