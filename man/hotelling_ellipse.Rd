@@ -15,14 +15,14 @@ hotelling_ellipse(
 \arguments{
 \item{x}{A two-column matrix or data frame like object}
 
-\item{level}{Either coverage probability (for type = "t2data" or "data") or
+\item{level}{Either coverage probability (for type = "t2data" or "c2data") or
 confidence level (for type = "t2mean").}
 
 \item{npoints}{Number of points to estimate}
 
-\item{type}{t2data - Hotelling T² data ellipse; t2mean - Hotelling
+\item{type}{t2data - Hotelling T2 data ellipse; t2mean - Hotelling
 confidence interval for the mean; c2data - normal
-data elllipse (using χ² distribution).}
+data elllipse (using chi squared distribution).}
 
 \item{robust}{If TRUE, then robust estimates of mean and covariance are
 used}
@@ -34,16 +34,16 @@ A two-column matrix or data frame with npoints rows
 Calculate Hotelling or data ellipse around some points
 }
 \details{
-Calculate the T² Hotelling ellipse or a data ellipse for
+Calculate the T2 Hotelling ellipse or a data ellipse for
 the given coverage probability. There are three types of ellipses which
 can be plotted:
 \itemize{
-\item T² Hotelling data ellipses, showing data coverage (like the
+\item T2 Hotelling data ellipses, showing data coverage (like the
 \code{type="t"} version of \code{stat_ellipse})
 \item normal multivariate distribution ellipses (like the \code{type="norm"}
 version of the \code{stat_ellipse}) which use Mahalonibis distance and
 chi-squared statistic
-\item T² Hotelling confidence ellipses of the group means.
+\item T2 Hotelling confidence ellipses of the group means.
 }
 
 The latter (for group means) correspond to the confidence interval for
@@ -54,7 +54,7 @@ The function can also use a robust estimator of location and scatter
 using the \code{\link[robustbase]{covMcd}} function, which uses the
 Maximum Covariance Determinant (MCD) estimator. Note that while this
 results in ellipses which are more resistent to outliers, the
-interpretation slightly changes, as the T² statistic used is only an
+interpretation slightly changes, as the T2 statistic used is only an
 approximation in this case. In other words, use it for visualisation and
 QC, but not for statistical testing.
 }
@@ -65,7 +65,7 @@ plot(df[,1], df[,2])
 lines(eli)
 }
 \seealso{
-\code{\link[=outliers]{outliers()}} for calculating per-point based T² and
+\code{\link[=outliers]{outliers()}} for calculating per-point based T2 and
 Mahalonibis values and \code{\link[=geom_hotelling]{geom_hotelling()}} for plotting of the ellipse with
 ggplot
 }

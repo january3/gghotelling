@@ -9,8 +9,8 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%",
   fig.align = "center",
-  fig.width = 12,
-  fig.height = 6,
+  fig.width = 10,
+  fig.height = 4,
   dpi = 96
 )
 ```
@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 
 Here are a few examples of plots you can create with `gghotelling`:
 
-```{r example-nocode,echo=FALSE}
+```{r example-nocode,echo=FALSE,fig.width=12, fig.height=9}
 library(ggplot2)
 library(gghotelling)
 library(cowplot)
@@ -70,7 +70,10 @@ p4 <- ggplot(wine, aes(malic_acid, proline)) +
   annotate("text", x=3.5, y = 1400, label = "Classical", color = "red") +
   ggtitle("Classical vs Robust Hotelling")
 
-plot_grid(p1, p2, p3, p4, ncol=2)
+p1234 <- plot_grid(p1, p2, p3, p4, ncol=2)
+p5 <- plot_outliers(iris[, 1:2]) +
+  ggtitle("Outlier detection")
+plot_grid(p1234, p5, ncol=1, rel_heights = c(2, 1))
 ```
 
 
@@ -80,7 +83,8 @@ plot_grid(p1, p2, p3, p4, ncol=2)
  * Robust Hotelling ellipses using MCD estimator with `robust=TRUE`
  * Hotelling confidence ellipses for group means with `type="t2mean"`
  * Kernel density coverage contours with `geom_kde()`
- * Outlier detection and visualization with `stat_outliers()` 
+ * Outlier detection with `outliers()`
+ * Outlier visualization with `stat_outliers()` and `plot_outliers()`
  * Convex hulls with `geom_hull()`
  * Autoplot and autolayer methods for `prcomp` objects
 

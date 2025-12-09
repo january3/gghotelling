@@ -6,21 +6,22 @@
 #' using the \code{\link[robustbase]{covMcd}} function, which uses the
 #' Maximum Covariance Determinant (MCD) estimator. Note that while this
 #' results in ellipses which are more resistent to outliers, the
-#' interpretation slightly changes, as the T² statistic used is only an
+#' interpretation slightly changes, as the T2 statistic used is only an
 #' approximation in this case. In other words, use it for visualisation and
 #' QC, but not for statistical testing.
 #'
 #' @param x A matrix or data frame with two columns
-#' @param level Either coverage probability (for type = "t2data" or "data") or
+#' @param labels Optional labels to use on the plot instead of rownames
+#' @param level Either coverage probability (for type = "t2data" or "c2data") or
 #'           confidence level (for type = "t2mean").
 #' @param type what type of statistic should be calculated; can be t2data
 #'        (for data coverage), t2mean (for difference from a mean) or
-#'        "c2data" (for coverage calculated with the χ² statistic)
+#'        "c2data" (for coverage calculated with the chi squared statistic)
 #' @inheritParams hotelling_ellipse
 #' @return A data frame with one row per point including the columns d2
 #' (squared mahalanobis distance)
-#' t2crit (critical T² value for the given level),
-#' c2crit (critical χ² value for the given level)
+#' t2crit (critical T squared value for the given level),
+#' c2crit (critical X squared value for the given level)
 #' and is_outlier
 #' (logical, whether d2 > t2crit or d2 > c2crit, depending on type).
 #' @seealso \code{\link{hotelling_ellipse}} for more information on the
@@ -58,7 +59,7 @@ outliers <- function(x, level = 0.95, robust = FALSE, type = c("t2data", "t2mean
   # Hotelling T^2 critical value
   fcrit <- qf(level, df1 = p, df2 = n - p)
 
-  # T² and X² critical values
+  # T2 and X2 critical values
   t2crit <- (p * (n - 1) / (n - p)) * fcrit
   c2crit <- qchisq(level, df = p)     # chi-square, df = p
 
@@ -69,27 +70,74 @@ outliers <- function(x, level = 0.95, robust = FALSE, type = c("t2data", "t2mean
 
   data <- data.frame(d2 = d2, t2crit = t2crit, c2crit = c2crit, is_outlier = d2 > t2crit)
 
-  if(type == "data") {
+  if(type == "c2data") {
     data$is_outlier = d2 > c2crit
   }
 
   data
 }
 
+#' @rdname outliers
+#' @importFrom ggplot2 geom_segment scale_color_manual geom_hline geom_label annotate labs ggplot theme
+#' @export
+plot_outliers <- function(x, level = 0.95, robust = FALSE, type = c("t2data", "t2mean", "c2data"),
+                          labels = NULL) {
+
+  type <- match.arg(type)
+
+  if(type == "t2mean") {
+    stop("no outlier plots for t2mean")
+  }
+
+  df <- outliers(x, level=level, robust=robust, type=type)
+
+  if(!is.null(labels)) {
+    df$id <- labels
+  } else {
+    df$id <- rownames(df)
+  }
+
+  df$index <- 1:nrow(df)
+
+  if(type == "t2data") {
+    title <- "Mahalanobis distance (T\u00B2 statistic)"
+    crit_title <- "T\u00B2 critical value"
+    crit <- "t2crit"
+  } else {
+    title <- "Mahalanobis distance (\u03A7\u00B2 statistic)"
+    crit_title <- "\u03A7\u00B2 critical value"
+    crit <- "c2crit"
+  }
+
+  outlier_labels <- ifelse(df$is_outlier,
+                             as.character(df$id), NA)
+
+  ggplot(df, aes(x = .data[["index"]], y = sqrt(.data[["d2"]]))) +
+    geom_segment(aes(xend = .data[["index"]], yend = 0), alpha = .3) +
+    geom_point(aes(color = .data[["is_outlier"]]), size = 2) +
+    scale_color_manual(values=c("TRUE"="red", "FALSE"="black")) +
+    geom_label(aes(label = outlier_labels), nudge_y = 0.2, na.rm = TRUE) +
+    geom_hline(aes(yintercept = sqrt(.data[[crit]])), color = "red", linetype = "dashed") +
+    annotate("text", x = 1, y = sqrt(df[[crit]][1]) + 0.1,
+             label = crit_title, color = "red", hjust = 0) +
+    theme(legend.position = "none") +
+    labs(y = title, x = "Index")
+}
+
 #' Calculate Hotelling or data ellipse around some points
 #'
 #' Calculate Hotelling or data ellipse around some points
 #'
-#' Calculate the T² Hotelling ellipse or a data ellipse for
+#' Calculate the T2 Hotelling ellipse or a data ellipse for
 #' the given coverage probability. There are three types of ellipses which
 #' can be plotted:
 #'
-#'  * T² Hotelling data ellipses, showing data coverage (like the
+#'  * T2 Hotelling data ellipses, showing data coverage (like the
 #'  `type="t"` version of `stat_ellipse`)
 #'  * normal multivariate distribution ellipses (like the `type="norm"`
 #'  version of the `stat_ellipse`) which use Mahalonibis distance and
 #'  chi-squared statistic
-#'  * T² Hotelling confidence ellipses of the group means.
+#'  * T2 Hotelling confidence ellipses of the group means.
 #'
 #' The latter (for group means) correspond to the confidence interval for
 #' the mean in the univariate world, so the ellipses are very small
@@ -99,21 +147,21 @@ outliers <- function(x, level = 0.95, robust = FALSE, type = c("t2data", "t2mean
 #' using the \code{\link[robustbase]{covMcd}} function, which uses the
 #' Maximum Covariance Determinant (MCD) estimator. Note that while this
 #' results in ellipses which are more resistent to outliers, the
-#' interpretation slightly changes, as the T² statistic used is only an
+#' interpretation slightly changes, as the T2 statistic used is only an
 #' approximation in this case. In other words, use it for visualisation and
 #' QC, but not for statistical testing.
 #'
 #' @param x A two-column matrix or data frame like object
-#' @param level Either coverage probability (for type = "t2data" or "data") or
+#' @param level Either coverage probability (for type = "t2data" or "c2data") or
 #'           confidence level (for type = "t2mean").
 #' @param npoints Number of points to estimate
 #' @param robust If TRUE, then robust estimates of mean and covariance are
 #'               used
-#' @param type t2data - Hotelling T² data ellipse; t2mean - Hotelling
+#' @param type t2data - Hotelling T2 data ellipse; t2mean - Hotelling
 #'             confidence interval for the mean; c2data - normal 
-#'             data elllipse (using χ² distribution).
+#'             data elllipse (using chi squared distribution).
 #' @return A two-column matrix or data frame with npoints rows
-#' @seealso [outliers()] for calculating per-point based T² and
+#' @seealso [outliers()] for calculating per-point based T2 and
 #' Mahalonibis values and [geom_hotelling()] for plotting of the ellipse with
 #' ggplot
 #' @examples
@@ -186,6 +234,5 @@ hotelling_ellipse <- function(x, level = 0.95, npoints = 100,
 
   ellipse
 }
-
 
 

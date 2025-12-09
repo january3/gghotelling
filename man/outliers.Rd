@@ -2,6 +2,7 @@
 % Please edit documentation in R/stats.R
 \name{outliers}
 \alias{outliers}
+\alias{plot_outliers}
 \title{Calculate the T2 statistic for individual points}
 \usage{
 outliers(
@@ -10,11 +11,19 @@ outliers(
   robust = FALSE,
   type = c("t2data", "t2mean", "c2data")
 )
+
+plot_outliers(
+  x,
+  level = 0.95,
+  robust = FALSE,
+  type = c("t2data", "t2mean", "c2data"),
+  labels = NULL
+)
 }
 \arguments{
 \item{x}{A matrix or data frame with two columns}
 
-\item{level}{Either coverage probability (for type = "t2data" or "data") or
+\item{level}{Either coverage probability (for type = "t2data" or "c2data") or
 confidence level (for type = "t2mean").}
 
 \item{robust}{If TRUE, then robust estimates of mean and covariance are
@@ -22,13 +31,15 @@ used}
 
 \item{type}{what type of statistic should be calculated; can be t2data
 (for data coverage), t2mean (for difference from a mean) or
-"c2data" (for coverage calculated with the χ² statistic)}
+"c2data" (for coverage calculated with the chi squared statistic)}
+
+\item{labels}{Optional labels to use on the plot instead of rownames}
 }
 \value{
 A data frame with one row per point including the columns d2
 (squared mahalanobis distance)
-t2crit (critical T² value for the given level),
-c2crit (critical χ² value for the given level)
+t2crit (critical T squared value for the given level),
+c2crit (critical X squared value for the given level)
 and is_outlier
 (logical, whether d2 > t2crit or d2 > c2crit, depending on type).
 }
@@ -40,7 +51,7 @@ The function can use a robust estimator of location and scatter
 using the \code{\link[robustbase]{covMcd}} function, which uses the
 Maximum Covariance Determinant (MCD) estimator. Note that while this
 results in ellipses which are more resistent to outliers, the
-interpretation slightly changes, as the T² statistic used is only an
+interpretation slightly changes, as the T2 statistic used is only an
 approximation in this case. In other words, use it for visualisation and
 QC, but not for statistical testing.
 }

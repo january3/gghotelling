@@ -41,3 +41,23 @@ test_that("geom_kde works correctly", {
   expect_true("GeomKDE" %in% layer_classes)
 
 })
+
+
+
+test_that("plot_outliers works correctly", {
+
+  p <- plot_outliers(iris[ , 1:2 ])
+  expect_s3_class(p, "ggplot")
+
+  p <- plot_outliers(iris[ , 1:2 ], labels = iris$Species)
+  expect_s3_class(p, "ggplot")
+
+  p <- plot_outliers(iris[ , 1:2 ], type = "t2data")
+  expect_s3_class(p, "ggplot")
+
+  p <- plot_outliers(iris[ , 1:2 ], type = "c2data")
+  expect_s3_class(p, "ggplot")
+
+  expect_error(plot_outliers(iris[ , 1:2 ], type = "t2mean"), "no outlier plots for t2mean")
+
+})

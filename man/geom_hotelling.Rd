@@ -62,9 +62,9 @@ or to \code{ggplot2::layer()}.}
 \item{level}{Either coverage probability (for type = "t2data" or "c2data") or
 confidence level (for type = "t2mean").}
 
-\item{type}{t2data - Hotelling T² data ellipse; t2mean - Hotelling
+\item{type}{t2data - Hotelling T2 data ellipse; t2mean - Hotelling
 confidence interval for the mean; c2data - normal
-data elllipse (using χ² distribution).}
+data elllipse (using chi squared distribution).}
 
 \item{robust}{If TRUE, then robust estimates of mean and covariance are
 used}

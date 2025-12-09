@@ -121,3 +121,4 @@ test_that(".expanded_range works correctly", {
   expect_equal(r, c(-18.8, 119.8))
 
 })
+
