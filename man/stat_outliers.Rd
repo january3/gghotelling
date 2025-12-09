@@ -72,7 +72,7 @@ or to \code{ggplot2::layer()}.}
 
 \item{type}{t2data - Hotelling T2 data ellipse; t2mean - Hotelling
 confidence interval for the mean; c2data - normal
-data elllipse (using chi squared distribution).}
+data ellipse (using chi squared distribution).}
 
 \item{level}{Either coverage probability (for type = "t2data" or "c2data") or
 confidence level (for type = "t2mean").}

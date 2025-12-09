@@ -169,7 +169,7 @@ plot_outliers <- function(x, level = 0.95, robust = FALSE, type = c("t2data", "t
 #'               used
 #' @param type t2data - Hotelling T2 data ellipse; t2mean - Hotelling
 #'             confidence interval for the mean; c2data - normal 
-#'             data elllipse (using chi squared distribution).
+#'             data ellipse (using chi squared distribution).
 #' @return A two-column matrix or data frame with npoints rows
 #' @seealso [outliers()] for calculating per-point based T2 and
 #' Mahalonibis values and [geom_hotelling()] for plotting of the ellipse with

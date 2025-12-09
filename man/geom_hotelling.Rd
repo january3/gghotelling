@@ -64,7 +64,7 @@ confidence level (for type = "t2mean").}
 
 \item{type}{t2data - Hotelling T2 data ellipse; t2mean - Hotelling
 confidence interval for the mean; c2data - normal
-data elllipse (using chi squared distribution).}
+data ellipse (using chi squared distribution).}
 
 \item{robust}{If TRUE, then robust estimates of mean and covariance are
 used}

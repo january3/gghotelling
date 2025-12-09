@@ -18,7 +18,9 @@ Suggests:
     ggrepel,
     knitr,
     rmarkdown,
-    HDclassif
+    HDclassif,
+    spelling
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://january3.github.io/gghotelling/
+Language: en-US
