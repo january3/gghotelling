@@ -32,8 +32,8 @@ hotelling_ellipse(
 - type:
 
   t2data - Hotelling T2 data ellipse; t2mean - Hotelling confidence
-  interval for the mean; c2data - normal data elllipse (using chi
-  squared distribution).
+  interval for the mean; c2data - normal data ellipse (using chi squared
+  distribution).
 
 - robust:
 

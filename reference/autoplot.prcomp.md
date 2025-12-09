@@ -51,8 +51,8 @@ autolayer(
 
   The type of the coverage / confidence area shown by
   `autolayer.prcomp`, can be one of t2data (T² Hotelling coverage),
-  c2data (χ² coverage) or t2mean (T² based confidence area for the group
-  mean).
+  c2data (chi-squared coverage) or t2mean (T-squared based confidence
+  area for the group mean).
 
 - level:
 
