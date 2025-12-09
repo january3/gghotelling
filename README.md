@@ -8,6 +8,8 @@
 coverage](https://codecov.io/gh/january3/gghotelling/graph/badge.svg)](https://app.codecov.io/gh/january3/gghotelling)
 <!-- badges: end -->
 
+Here are a few examples of plots you can create with `gghotelling`:
+
 Hotelling data ellipses use the Hotelling T² distribution to create
 coverage regions for the distribution of the data, often used in outlier
 detection in multivariate data. This is different from the ellipses
@@ -46,7 +48,7 @@ You can install the development version of gghotelling from
 pak::pak("january3/gghotelling")
 ```
 
-## Hotelling Ellipses
+## Minimal Example
 
 The package defines a new geom, `geom_hotelling()`, which can be used to
 add Hotelling ellipses to ggplot2 scatter plots.
@@ -54,111 +56,33 @@ add Hotelling ellipses to ggplot2 scatter plots.
 ``` r
 library(ggplot2)
 library(gghotelling)
+library(cowplot)
 
 pca <- prcomp(iris[, 1:4], scale.=TRUE)
 df <- cbind(iris, pca$x)
 
-ggplot(df, aes(PC1, PC2)) +
-  geom_hotelling(level=.99) +
-  geom_point()
-```
-
-<img src="man/figures/README-example-1.png" width="50%" style="display: block; margin: auto;" />
-
-``` r
-
-ggplot(df, aes(PC1, PC2, color=Species)) +
+p1 <- ggplot(df, aes(PC1, PC2, color=Species)) +
   geom_hotelling() +
   geom_point()
-```
-
-<img src="man/figures/README-example-2.png" width="50%" style="display: block; margin: auto;" />
-
-``` r
-
-ggplot(df, aes(PC1, PC2, color=Species)) +
-  geom_hotelling(alpha=0.1, aes(fill = Species)) +
-  geom_point()
-```
-
-<img src="man/figures/README-example-3.png" width="50%" style="display: block; margin: auto;" />
-
-``` r
 
 # set custom CI/coverage level
-ggplot(df, aes(PC1, PC2, color=Species)) +
+p2 <- ggplot(df, aes(PC1, PC2, color=Species)) +
   geom_hotelling(alpha=0.1, aes(fill = Species), level=.99) +
   geom_point()
+
+plot_grid(p1, p2, ncol=2)
 ```
 
-<img src="man/figures/README-example-4.png" width="50%" style="display: block; margin: auto;" />
+<img src="man/figures/README-example-1.png" width="100%" style="display: block; margin: auto;" />
 
-The package also provides per-point, group-wise T² statistics which can
-be used to identify multivariate outliers.
+Other features:
 
-``` r
-ggplot(df, aes(PC1, PC2, group=Species)) +
-  geom_hotelling(level = 0.75, alpha=0.1, aes(fill = Species)) +
-  scale_color_manual(values=c("TRUE"="red", "FALSE"="grey")) +
-  stat_outliers(level = .75, aes(shape = Species, color = after_stat(is_outlier)))
-```
+- Robust Hotelling ellipses using MCD estimator
+- Hotelling confidence ellipses for group means
+- Kernel density coverage contours with `geom_kde()`
+- Outlier detection and visualization with `stat_outliers()`
+- Convex hulls with `geom_hull()`
+- Autoplot method for `prcomp` objects
 
-<img src="man/figures/README-example2-1.png" width="50%" style="display: block; margin: auto;" />
-
-``` r
-
-ggplot(df, aes(PC1, PC2, group=Species)) +
-  geom_hotelling(alpha=0.1, aes(fill = Species)) +
-  stat_outliers(size=2, aes(shape = Species, color = after_stat(t2)))
-```
-
-<img src="man/figures/README-example2-2.png" width="50%" style="display: block; margin: auto;" />
-
-This can be useful for identifying potential outliers in multivariate
-data. The outliers can be directly labeled as follows:
-
-``` r
-ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
-  geom_hotelling(alpha=0.1, aes(fill = Species)) +
-  geom_point(aes(color = Species)) +
-  stat_outliers(geom="label", 
-                        outlier_only = TRUE)
-```
-
-<img src="man/figures/README-example3-1.png" width="50%" style="display: block; margin: auto;" />
-
-``` r
-
-# or even with geom_label_repel from ggrepel
-library(ggrepel)
-ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
-  geom_hotelling(alpha=0.1, aes(fill = Species)) +
-  geom_point(aes(color = Species)) +
-  stat_outliers(geom="label_repel",
-                        outlier_only = TRUE)
-```
-
-<img src="man/figures/README-example3-2.png" width="50%" style="display: block; margin: auto;" />
-
-## Convex Hulls
-
-``` r
-ggplot(iris, aes(Sepal.Length, Sepal.Width, color=Species)) +
-  geom_hull(mapping = aes(fill = Species), alpha=.1) +
-  geom_point()
-```
-
-<img src="man/figures/README-example_hull-1.png" width="50%" style="display: block; margin: auto;" />
-
-## Autoplot
-
-The package also defines `autoplot.prcomp` and `autolayer.prcomp` for
-convenient plotting of PCA plots. Note that `autoplot.prcomp` is also
-implemented in a more sophisticated way in the `ggfortify` package.
-
-``` r
-autoplot(pca, group = iris$Species) + 
-  autolayer(pca, group = iris$Species)
-```
-
-<img src="man/figures/README-example_autoplot-1.png" width="50%" style="display: block; margin: auto;" />
+See [the vignette](https://january3.github.io/gghotelling/) for more
+details.

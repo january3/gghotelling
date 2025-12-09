@@ -5,12 +5,13 @@ vignette: >
   %\VignetteIndexEntry{Hotelling ellipses, contours and outliers}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
 ---
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  out.width = "50%",
+  out.width = "75%",
   fig.align = "center",
   fig.width = 8,
   fig.height = 5,
@@ -132,6 +133,39 @@ ggplot(pca_df, aes(PC1, PC2, group=Species, label=rownames(pca_df))) +
                         outlier_only = TRUE)
 ```
 
+## Robust Hotelling Ellipses
+
+Robust Hotelling ellipses can be created by setting the `robust=TRUE`
+argument in `geom_hotelling()` or `stat_outliers()`. This uses the Minimum
+Covariance Determinant (MCD) estimator from the `robustbase` package to
+compute robust estimates of the mean and covariance matrix, which are then
+used to compute the Hotelling or chi-squared data ellipses.
+
+Robust ellipses are less sensitive to outliers and can provide a more accurate
+representation of the data distribution when outliers are present. Below I
+am showing a comparison between classical and robust Hotelling ellipses in the
+presence of outliers. The data set used, `wine`, contains chemical analysis of
+various wines, with several obvious outliers, and the figure recapitulates
+the figure 1 from a paper by Hubert et al. [@hubert2018minimum].
+
+
+```{r}
+library(HDclassif)
+data(wine)
+wine <- wine[ wine$class == 1, ]
+wine <- data.frame("malic_acid"=wine$V2, "proline"=wine$V13)
+
+ggplot(wine, aes(malic_acid, proline)) +
+  geom_hotelling(type="data", level = .975, color = "red") +
+  geom_hotelling(type="data", level = .975, robust = TRUE, color = "blue") +
+  geom_point() +
+  annotate("text", x=2.5, y = 1675, label = "MCD", color = "blue") +
+  annotate("text", x=3.5, y = 1400, label = "Classical", color = "red")
+```
+
+
+
+
 ## Convex Hulls and contours
 
 The package provides basic convex hull:
@@ -148,7 +182,6 @@ Unlike `geom_density_2d()`, this function actually creates a single contour
 for the specified coverage; for example, if `coverage=0.95`, the contour encloses
 roughly 95% of the data points. This is useful for visualizing the density distribution
 of non-elliptical data:
-
 
 
 ```{r}
