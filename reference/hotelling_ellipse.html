@@ -55,7 +55,7 @@
 
 
 <dt id="arg-level">level<a class="anchor" aria-label="anchor" href="#arg-level"></a></dt>
-<dd><p>Either coverage probability (for type = "t2data" or "data") or
+<dd><p>Either coverage probability (for type = "t2data" or "c2data") or
 confidence level (for type = "t2mean").</p></dd>
 
 
@@ -64,9 +64,9 @@ confidence level (for type = "t2mean").</p></dd>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
-<dd><p>t2data - Hotelling T² data ellipse; t2mean - Hotelling
+<dd><p>t2data - Hotelling T2 data ellipse; t2mean - Hotelling
 confidence interval for the mean; c2data - normal
-data elllipse (using χ² distribution).</p></dd>
+data elllipse (using chi squared distribution).</p></dd>
 
 
 <dt id="arg-robust">robust<a class="anchor" aria-label="anchor" href="#arg-robust"></a></dt>
@@ -80,14 +80,14 @@ used</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Calculate the T² Hotelling ellipse or a data ellipse for
+    <p>Calculate the T2 Hotelling ellipse or a data ellipse for
 the given coverage probability. There are three types of ellipses which
-can be plotted:</p><ul><li><p>T² Hotelling data ellipses, showing data coverage (like the
+can be plotted:</p><ul><li><p>T2 Hotelling data ellipses, showing data coverage (like the
 <code>type="t"</code> version of <code>stat_ellipse</code>)</p></li>
 <li><p>normal multivariate distribution ellipses (like the <code>type="norm"</code>
 version of the <code>stat_ellipse</code>) which use Mahalonibis distance and
 chi-squared statistic</p></li>
-<li><p>T² Hotelling confidence ellipses of the group means.</p></li>
+<li><p>T2 Hotelling confidence ellipses of the group means.</p></li>
 </ul><p>The latter (for group means) correspond to the confidence interval for
 the mean in the univariate world, so the ellipses are very small
 (depending on the number of points).</p>
@@ -95,13 +95,13 @@ the mean in the univariate world, so the ellipses are very small
 using the <code><a href="https://rdrr.io/pkg/robustbase/man/covMcd.html" class="external-link">covMcd</a></code> function, which uses the
 Maximum Covariance Determinant (MCD) estimator. Note that while this
 results in ellipses which are more resistent to outliers, the
-interpretation slightly changes, as the T² statistic used is only an
+interpretation slightly changes, as the T2 statistic used is only an
 approximation in this case. In other words, use it for visualisation and
 QC, but not for statistical testing.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="outliers.html">outliers()</a></code> for calculating per-point based T² and
+    <div class="dont-index"><p><code><a href="outliers.html">outliers()</a></code> for calculating per-point based T2 and
 Mahalonibis values and <code><a href="geom_hotelling.html">geom_hotelling()</a></code> for plotting of the ellipse with
 ggplot</p></div>
     </div>

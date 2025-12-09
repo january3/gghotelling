@@ -11,6 +11,14 @@ outliers(
   robust = FALSE,
   type = c("t2data", "t2mean", "c2data")
 )
+
+plot_outliers(
+  x,
+  level = 0.95,
+  robust = FALSE,
+  type = c("t2data", "t2mean", "c2data"),
+  labels = NULL
+)
 ```
 
 ## Arguments
@@ -21,7 +29,7 @@ outliers(
 
 - level:
 
-  Either coverage probability (for type = "t2data" or "data") or
+  Either coverage probability (for type = "t2data" or "c2data") or
   confidence level (for type = "t2mean").
 
 - robust:
@@ -32,14 +40,19 @@ outliers(
 
   what type of statistic should be calculated; can be t2data (for data
   coverage), t2mean (for difference from a mean) or "c2data" (for
-  coverage calculated with the χ² statistic)
+  coverage calculated with the chi squared statistic)
+
+- labels:
+
+  Optional labels to use on the plot instead of rownames
 
 ## Value
 
 A data frame with one row per point including the columns d2 (squared
-mahalanobis distance) t2crit (critical T² value for the given level),
-c2crit (critical χ² value for the given level) and is_outlier (logical,
-whether d2 \> t2crit or d2 \> c2crit, depending on type).
+mahalanobis distance) t2crit (critical T squared value for the given
+level), c2crit (critical X squared value for the given level) and
+is_outlier (logical, whether d2 \> t2crit or d2 \> c2crit, depending on
+type).
 
 ## Details
 
@@ -47,7 +60,7 @@ The function can use a robust estimator of location and scatter using
 the [`covMcd`](https://rdrr.io/pkg/robustbase/man/covMcd.html) function,
 which uses the Maximum Covariance Determinant (MCD) estimator. Note that
 while this results in ellipses which are more resistent to outliers, the
-interpretation slightly changes, as the T² statistic used is only an
+interpretation slightly changes, as the T2 statistic used is only an
 approximation in this case. In other words, use it for visualisation and
 QC, but not for statistical testing.
 

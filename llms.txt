@@ -12,8 +12,12 @@ Here are a few examples of plots you can create with `gghotelling`:
 - Hotelling confidence ellipses for group means with `type="t2mean"`
 - Kernel density coverage contours with
   [`geom_kde()`](https://january3.github.io/gghotelling/reference/geom_kde.md)
-- Outlier detection and visualization with
+- Outlier detection with
+  [`outliers()`](https://january3.github.io/gghotelling/reference/outliers.md)
+- Outlier visualization with
   [`stat_outliers()`](https://january3.github.io/gghotelling/reference/stat_outliers.md)
+  and
+  [`plot_outliers()`](https://january3.github.io/gghotelling/reference/outliers.md)
 - Convex hulls with
   [`geom_hull()`](https://january3.github.io/gghotelling/reference/geom_hull.md)
 - Autoplot and autolayer methods for `prcomp` objects
@@ -77,6 +81,7 @@ plot_grid(p1, p2, ncol=2)
 - [`hotelling_ellipse()`](https://january3.github.io/gghotelling/reference/hotelling_ellipse.md)
   : Calculate Hotelling or data ellipse around some points
 - [`outliers()`](https://january3.github.io/gghotelling/reference/outliers.md)
+  [`plot_outliers()`](https://january3.github.io/gghotelling/reference/outliers.md)
   : Calculate the T2 statistic for individual points
 - [`stat_outliers()`](https://january3.github.io/gghotelling/reference/stat_outliers.md)
   : Calculate per-point T² Hotelling statistic

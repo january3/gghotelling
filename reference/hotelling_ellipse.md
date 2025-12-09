@@ -22,7 +22,7 @@ hotelling_ellipse(
 
 - level:
 
-  Either coverage probability (for type = "t2data" or "data") or
+  Either coverage probability (for type = "t2data" or "c2data") or
   confidence level (for type = "t2mean").
 
 - npoints:
@@ -31,9 +31,9 @@ hotelling_ellipse(
 
 - type:
 
-  t2data - Hotelling T² data ellipse; t2mean - Hotelling confidence
-  interval for the mean; c2data - normal data elllipse (using χ²
-  distribution).
+  t2data - Hotelling T2 data ellipse; t2mean - Hotelling confidence
+  interval for the mean; c2data - normal data elllipse (using chi
+  squared distribution).
 
 - robust:
 
@@ -45,18 +45,18 @@ A two-column matrix or data frame with npoints rows
 
 ## Details
 
-Calculate the T² Hotelling ellipse or a data ellipse for the given
+Calculate the T2 Hotelling ellipse or a data ellipse for the given
 coverage probability. There are three types of ellipses which can be
 plotted:
 
-- T² Hotelling data ellipses, showing data coverage (like the `type="t"`
+- T2 Hotelling data ellipses, showing data coverage (like the `type="t"`
   version of `stat_ellipse`)
 
 - normal multivariate distribution ellipses (like the `type="norm"`
   version of the `stat_ellipse`) which use Mahalonibis distance and
   chi-squared statistic
 
-- T² Hotelling confidence ellipses of the group means.
+- T2 Hotelling confidence ellipses of the group means.
 
 The latter (for group means) correspond to the confidence interval for
 the mean in the univariate world, so the ellipses are very small
@@ -66,14 +66,14 @@ The function can also use a robust estimator of location and scatter
 using the [`covMcd`](https://rdrr.io/pkg/robustbase/man/covMcd.html)
 function, which uses the Maximum Covariance Determinant (MCD) estimator.
 Note that while this results in ellipses which are more resistent to
-outliers, the interpretation slightly changes, as the T² statistic used
+outliers, the interpretation slightly changes, as the T2 statistic used
 is only an approximation in this case. In other words, use it for
 visualisation and QC, but not for statistical testing.
 
 ## See also
 
 [`outliers()`](https://january3.github.io/gghotelling/reference/outliers.md)
-for calculating per-point based T² and Mahalonibis values and
+for calculating per-point based T2 and Mahalonibis values and
 [`geom_hotelling()`](https://january3.github.io/gghotelling/reference/geom_hotelling.md)
 for plotting of the ellipse with ggplot
 

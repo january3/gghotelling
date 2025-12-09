@@ -14,8 +14,12 @@ Features:
 - Hotelling confidence ellipses for group means with `type="t2mean"`
 - Kernel density coverage contours with
   [`geom_kde()`](https://january3.github.io/gghotelling/reference/geom_kde.md)
-- Outlier detection and visualization with
+- Outlier detection with
+  [`outliers()`](https://january3.github.io/gghotelling/reference/outliers.md)
+- Outlier visualization with
   [`stat_outliers()`](https://january3.github.io/gghotelling/reference/stat_outliers.md)
+  and
+  [`plot_outliers()`](https://january3.github.io/gghotelling/reference/outliers.md)
 - Convex hulls with
   [`geom_hull()`](https://january3.github.io/gghotelling/reference/geom_hull.md)
 - Autoplot and autolayer methods for `prcomp` objects
@@ -241,11 +245,20 @@ ggplot(outlier_stats, aes(x = id, y = sqrt(d2))) +
   geom_label(aes(label = outlier_labels), nudge_y = 0.2, na.rm = TRUE) +
   geom_hline(aes(yintercept = sqrt(t2crit)), color = "red", linetype = "dashed") +
   annotate("text", x = 1, y = sqrt(outlier_stats$t2crit[1]) + 0.1,
-           label = "Critical value", color = "red") +
+           label = "Critical value", color = "red", hjust = 0) +
+  theme(legend.position = "none") +
   labs(y = "Mahalanobis distance (T² statistic)")
 ```
 
 ![](gghotelling_files/figure-html/outlier_plot-1.png)
+
+For convenience, there is a
+[`plot_outliers()`](https://january3.github.io/gghotelling/reference/outliers.md)
+function that creates the above plot directly from a data frame:
+
+``` r
+plot_outliers(pca_df[ , c("PC1", "PC2")], level = 0.95)
+```
 
 ## Robust Hotelling Ellipses
 
@@ -270,7 +283,6 @@ Rousseeuw (2018).
 
 ``` r
 library(HDclassif)
-#> Loading required package: MASS
 data(wine)
 wine <- wine[ wine$class == 1, ]
 wine <- data.frame("malic_acid"=wine$V2, "proline"=wine$V13)
@@ -285,7 +297,7 @@ ggplot(wine, aes(malic_acid, proline)) +
 
 ![](gghotelling_files/figure-html/unnamed-chunk-2-1.png)
 
-As one can see, the MDCD based robust Hotelling ellipse (in blue)
+As one can see, the MCD based robust Hotelling ellipse (in blue)
 provides a much tighter fit to the main data cluster, while the
 classical Hotelling ellipse (in red) is heavily influenced by the
 outliers, resulting in a much larger and skewed ellipse.
