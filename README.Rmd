@@ -23,7 +23,6 @@ knitr::opts_chunk$set(
 
 Here are a few examples of plots you can create with `gghotelling`:
 
-
 ```{r example-nocode,echo=FALSE}
 library(ggplot2)
 library(gghotelling)
@@ -64,8 +63,8 @@ wine <- wine[ wine$class == 1, ]
 wine <- data.frame("malic_acid"=wine$V2, "proline"=wine$V13)
 
 p4 <- ggplot(wine, aes(malic_acid, proline)) +
-  geom_hotelling(type="data", level = .975, color = "red") +
-  geom_hotelling(type="data", level = .975, robust = TRUE, color = "blue") +
+  geom_hotelling(type="c2data", level = .975, color = "red") +
+  geom_hotelling(type="c2data", level = .975, robust = TRUE, color = "blue") +
   geom_point() +
   annotate("text", x=2.5, y = 1675, label = "MCD", color = "blue") +
   annotate("text", x=3.5, y = 1400, label = "Classical", color = "red") +
@@ -100,7 +99,8 @@ pak::pak("january3/gghotelling")
 
 ## Minimal Example
 
-The package defines a new geom, `geom_hotelling()`, which can be used to add Hotelling ellipses to ggplot2 scatter plots.
+The package defines a new geom, `geom_hotelling()`, which can be used to add Hotelling ellipses to ggplot2 scatter plots. 
+Here are two examples of usage:
 
 ```{r example}
 library(ggplot2)

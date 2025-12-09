@@ -15,16 +15,19 @@
 #'           confidence level (for type = "t2mean").
 #' @param type what type of statistic should be calculated; can be t2data
 #'        (for data coverage), t2mean (for difference from a mean) or
-#'        "data" (for Mahalanobis distance)
+#'        "c2data" (for coverage calculated with the χ² statistic)
 #' @inheritParams hotelling_ellipse
-#' @return A data frame with one row per point including the columns t2 (t2
-#' statistic), t2crit (critical t2 value for the given level) and is_outlier
-#' (logical, whether t2 > t2crit).
+#' @return A data frame with one row per point including the columns d2
+#' (squared mahalanobis distance)
+#' t2crit (critical T² value for the given level),
+#' c2crit (critical χ² value for the given level)
+#' and is_outlier
+#' (logical, whether d2 > t2crit or d2 > c2crit, depending on type).
 #' @seealso \code{\link{hotelling_ellipse}} for more information on the
-#' differences between t2data, t2mean and data modes.
+#' differences between t2data, t2mean and c2data modes.
 #' @importFrom stats mahalanobis
 #' @export
-outliers <- function(x, level = 0.95, robust = FALSE, type = c("t2data", "t2mean", "data")) {
+outliers <- function(x, level = 0.95, robust = FALSE, type = c("t2data", "t2mean", "c2data")) {
   type <- match.arg(type)
 
   x <- as.matrix(x)
@@ -46,12 +49,16 @@ outliers <- function(x, level = 0.95, robust = FALSE, type = c("t2data", "t2mean
   Sinv <- solve(S)
 
   # subtract means
-  Xc <- sweep(x, 2, center)
-  t2 <- rowSums((Xc %*% Sinv) * Xc)
-  c2 <- mahalanobis(x, center, S)
+  #Xc <- sweep(x, 2, center)
+  #t2 <- rowSums((Xc %*% Sinv) * Xc)
+
+  # mahalanobis squared distance
+  d2 <- mahalanobis(x, center, S)
 
   # Hotelling T^2 critical value
   fcrit <- qf(level, df1 = p, df2 = n - p)
+
+  # T² and X² critical values
   t2crit <- (p * (n - 1) / (n - p)) * fcrit
   c2crit <- qchisq(level, df = p)     # chi-square, df = p
 
@@ -60,10 +67,10 @@ outliers <- function(x, level = 0.95, robust = FALSE, type = c("t2data", "t2mean
     t2crit <- t2crit / n
   }
 
-  data <- data.frame(t2 = t2, t2crit = t2crit, c2 = c2, c2crit = c2crit, is_outlier = t2 > t2crit)
+  data <- data.frame(d2 = d2, t2crit = t2crit, c2crit = c2crit, is_outlier = d2 > t2crit)
 
   if(type == "data") {
-    data$is_outlier = c2 > c2crit
+    data$is_outlier = d2 > c2crit
   }
 
   data
@@ -103,7 +110,7 @@ outliers <- function(x, level = 0.95, robust = FALSE, type = c("t2data", "t2mean
 #' @param robust If TRUE, then robust estimates of mean and covariance are
 #'               used
 #' @param type t2data - Hotelling T² data ellipse; t2mean - Hotelling
-#'             confidence interval for the mean; data - normal 
+#'             confidence interval for the mean; c2data - normal 
 #'             data elllipse (using χ² distribution).
 #' @return A two-column matrix or data frame with npoints rows
 #' @seealso [outliers()] for calculating per-point based T² and
@@ -117,7 +124,7 @@ outliers <- function(x, level = 0.95, robust = FALSE, type = c("t2data", "t2mean
 #' @importFrom robustbase covMcd
 #' @export
 hotelling_ellipse <- function(x, level = 0.95, npoints = 100, 
-                              type = c("t2data", "t2mean", "data"),
+                              type = c("t2data", "t2mean", "c2data"),
                               robust = FALSE) {
   convert_to_df <- FALSE
 
@@ -145,7 +152,7 @@ hotelling_ellipse <- function(x, level = 0.95, npoints = 100,
   
   # Critical Hotelling T^2 value
   t2crit <- (p * (n - 1) / (n - p)) * qf(level, df1 = p, df2 = n - p)
-  c2   <- qchisq(level, df = p)
+  c2crit <- qchisq(level, df = p)
 
   # Eigen-decomposition
   eig <- eigen(S)
@@ -162,7 +169,7 @@ hotelling_ellipse <- function(x, level = 0.95, npoints = 100,
     axes <- sqrt(t2crit * eigvals)
   } else {
     #message("computing normal")
-    axes <- sqrt(c2 * eigvals)
+    axes <- sqrt(c2crit * eigvals)
   }
   
   # Parametric angles

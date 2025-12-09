@@ -12,7 +12,7 @@ StatOutliers <- ggproto(
   compute_group = function(data, scales,
                            outlier_only = FALSE,
                            robust = FALSE,
-                           type = c("t2data", "t2mean", "data"),
+                           type = c("t2data", "t2mean", "c2data"),
                            level = 0.95) {
 
 
@@ -73,7 +73,7 @@ StatOutliers <- ggproto(
 stat_outliers <- function(mapping = NULL, data = NULL,
                                   geom = "point", position = "identity",
                                   ...,
-                                  type = c("t2data", "data", "t2mean"),
+                                  type = c("t2data", "t2mean", "c2data"),
                                   level = 0.95,
                                   outlier_only = FALSE,
                                   na.rm = FALSE,
@@ -113,7 +113,7 @@ StatHotelling <- ggproto(
   compute_group = function(data, 
                            scales, 
                            level = 0.95, 
-                           type = c("t2data", "t2mean", "data"),
+                           type = c("t2data", "t2mean", "c2data"),
                            robust = FALSE, 
                            npoints = 100) {
 
@@ -159,7 +159,7 @@ GeomHotelling <- ggproto(
 #' This geom adds data or confidence ellipses to the plot. See
 #' `hotelling_ellipse()` documentation for more information.
 #'
-#' @param level Either coverage probability (for type = "t2data" or "data") or
+#' @param level Either coverage probability (for type = "t2data" or "c2data") or
 #'           confidence level (for type = "t2mean").
 #' @param ... Additional parameters passed to underlying `ggplot2::geom_polygon()`
 #'   or to `ggplot2::layer()`.

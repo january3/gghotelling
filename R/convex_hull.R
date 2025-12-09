@@ -169,7 +169,17 @@ GeomKDE <- ggproto(
 #' @importFrom MASS kde2d
 #' @examples
 #' library(ggplot2)
+#'
+#' # following shows a comparison
+#' # between a convex hull and KDE contour
+#' df <- data.frame(x=rnorm(500) + 5)
+#' df$y <- df$x^5 + rnorm(500)*500
+#' ggplot(df, aes(x=x, y=y)) +
+#'   geom_point()+
+#'   geom_hull(color = "grey") +
+#'   geom_kde(color="red", linewidth=1)
 #'   
+#' # we can also achieve similar effects to geom_contour
 #' pca <- prcomp(iris[, 1:4], scale.=TRUE)
 #' df <- cbind(iris, pca$x)
 #'   

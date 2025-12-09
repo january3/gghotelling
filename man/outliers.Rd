@@ -4,7 +4,12 @@
 \alias{outliers}
 \title{Calculate the T2 statistic for individual points}
 \usage{
-outliers(x, level = 0.95, robust = FALSE, type = c("t2data", "t2mean", "data"))
+outliers(
+  x,
+  level = 0.95,
+  robust = FALSE,
+  type = c("t2data", "t2mean", "c2data")
+)
 }
 \arguments{
 \item{x}{A matrix or data frame with two columns}
@@ -17,12 +22,15 @@ used}
 
 \item{type}{what type of statistic should be calculated; can be t2data
 (for data coverage), t2mean (for difference from a mean) or
-"data" (for Mahalanobis distance)}
+"c2data" (for coverage calculated with the χ² statistic)}
 }
 \value{
-A data frame with one row per point including the columns t2 (t2
-statistic), t2crit (critical t2 value for the given level) and is_outlier
-(logical, whether t2 > t2crit).
+A data frame with one row per point including the columns d2
+(squared mahalanobis distance)
+t2crit (critical T² value for the given level),
+c2crit (critical χ² value for the given level)
+and is_outlier
+(logical, whether d2 > t2crit or d2 > c2crit, depending on type).
 }
 \description{
 Calculate the T2 statistic or Mahalanobis distance for individual points
@@ -38,5 +46,5 @@ QC, but not for statistical testing.
 }
 \seealso{
 \code{\link{hotelling_ellipse}} for more information on the
-differences between t2data, t2mean and data modes.
+differences between t2data, t2mean and c2data modes.
 }

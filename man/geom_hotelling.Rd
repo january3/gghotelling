@@ -59,11 +59,11 @@ to use \code{position_jitter()}, give the position as \code{"jitter"}.
 \item{...}{Additional parameters passed to underlying \code{ggplot2::geom_polygon()}
 or to \code{ggplot2::layer()}.}
 
-\item{level}{Either coverage probability (for type = "t2data" or "data") or
+\item{level}{Either coverage probability (for type = "t2data" or "c2data") or
 confidence level (for type = "t2mean").}
 
 \item{type}{t2data - Hotelling T² data ellipse; t2mean - Hotelling
-confidence interval for the mean; data - normal
+confidence interval for the mean; c2data - normal
 data elllipse (using χ² distribution).}
 
 \item{robust}{If TRUE, then robust estimates of mean and covariance are

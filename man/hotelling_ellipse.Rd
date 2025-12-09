@@ -8,7 +8,7 @@ hotelling_ellipse(
   x,
   level = 0.95,
   npoints = 100,
-  type = c("t2data", "t2mean", "data"),
+  type = c("t2data", "t2mean", "c2data"),
   robust = FALSE
 )
 }
@@ -21,7 +21,7 @@ confidence level (for type = "t2mean").}
 \item{npoints}{Number of points to estimate}
 
 \item{type}{t2data - Hotelling T² data ellipse; t2mean - Hotelling
-confidence interval for the mean; data - normal
+confidence interval for the mean; c2data - normal
 data elllipse (using χ² distribution).}
 
 \item{robust}{If TRUE, then robust estimates of mean and covariance are
