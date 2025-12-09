@@ -148,6 +148,43 @@ ggplot(pca_df, aes(PC1, PC2, group=Species, label=rownames(pca_df))) +
 
 ![](gghotelling_files/figure-html/example3-2.png)
 
+### Robust Hotelling Ellipses
+
+Robust Hotelling ellipses can be created by setting the `robust=TRUE`
+argument in
+[`geom_hotelling()`](https://january3.github.io/gghotelling/reference/geom_hotelling.md)
+or
+[`stat_outliers()`](https://january3.github.io/gghotelling/reference/stat_outliers.md).
+This uses the Minimum Covariance Determinant (MCD) estimator from the
+`robustbase` package to compute robust estimates of the mean and
+covariance matrix, which are then used to compute the Hotelling or
+chi-squared data ellipses.
+
+Robust ellipses are less sensitive to outliers and can provide a more
+accurate representation of the data distribution when outliers are
+present. Below I am showing a comparison between classical and robust
+Hotelling ellipses in the presence of outliers. The data set used,
+`wine`, contains chemical analysis of various wines, with several
+obvious outliers, and the figure recapitulates the figure 1 from a paper
+by Hubert et al. (Hubert, Debruyne, and Rousseeuw 2018).
+
+``` r
+library(HDclassif)
+#> Loading required package: MASS
+data(wine)
+wine <- wine[ wine$class == 1, ]
+wine <- data.frame("malic_acid"=wine$V2, "proline"=wine$V13)
+
+ggplot(wine, aes(malic_acid, proline)) +
+  geom_hotelling(type="data", level = .975, color = "red") +
+  geom_hotelling(type="data", level = .975, robust = TRUE, color = "blue") +
+  geom_point() +
+  annotate("text", x=2.5, y = 1675, label = "MCD", color = "blue") +
+  annotate("text", x=3.5, y = 1400, label = "Classical", color = "red")
+```
+
+![](gghotelling_files/figure-html/unnamed-chunk-2-1.png)
+
 ### Convex Hulls and contours
 
 The package provides basic convex hull:
@@ -183,7 +220,7 @@ ggplot(df, aes(x=x, y=y)) +
 #> generated.
 ```
 
-![](gghotelling_files/figure-html/unnamed-chunk-2-1.png)
+![](gghotelling_files/figure-html/unnamed-chunk-3-1.png)
 
 As you can see, the
 [`geom_kde()`](https://january3.github.io/gghotelling/reference/geom_kde.md)
@@ -207,7 +244,7 @@ ggplot(pca_df, aes(x = PC1, y = PC2, color=Species)) +
   geom_point()
 ```
 
-![](gghotelling_files/figure-html/unnamed-chunk-3-1.png)
+![](gghotelling_files/figure-html/unnamed-chunk-4-1.png)
 
 ### Autoplot
 
@@ -221,3 +258,7 @@ autoplot(pca, group = iris$Species) +
 ```
 
 ![](gghotelling_files/figure-html/example_autoplot-1.png)
+
+Hubert, Mia, Michiel Debruyne, and Peter J Rousseeuw. 2018. “Minimum
+Covariance Determinant and Extensions.” *Wiley Interdisciplinary
+Reviews: Computational Statistics* 10 (3): e1421.
