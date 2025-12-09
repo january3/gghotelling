@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, include=FALSE}
 library(ggplot2)
 library(gghotelling)
 
@@ -49,11 +49,13 @@ Features:
 
 ## Installation
 
-You can install the development version of gghotelling from [GitHub](https://github.com/) with:
+You can install the development version of gghotelling from [GitHub](https://github.com/january3/gghotelling) with:
 
 ``` r
 # install.packages("pak")
 pak::pak("january3/gghotelling")
+
+# or devtools::install_github("january3/gghotelling")
 ```
 
 # Hotelling Ellipses
@@ -94,8 +96,12 @@ used to identify multivariate outliers.
 ```{r example2}
 ggplot(pca_df, aes(PC1, PC2, group=Species)) +
   geom_hotelling(level = 0.75, alpha=0.1, aes(fill = Species)) +
-  scale_color_manual(values=c("TRUE"="red", "FALSE"="grey")) +
-  stat_outliers(level = .75, aes(shape = Species, color = after_stat(is_outlier)))
+  # add points and calculate outlier stats; we assign the `is_outlier` variable
+  # calculated by stat_outliers() to the color aesthetic
+  stat_outliers(level = .75, 
+                aes(shape = Species, color = after_stat(is_outlier))) +
+  # color outliers in red
+  scale_color_manual(values=c("TRUE"="red", "FALSE"="grey"))
 ```
 
 The `stat_outliers()` function computes the Hotelling T² statistic for each
@@ -168,7 +174,7 @@ representation of the data distribution when outliers are present. Below I
 am showing a comparison between classical and robust Hotelling ellipses in the
 presence of outliers. The data set used, `wine`, contains chemical analysis of
 various wines, with several obvious outliers, and the figure recapitulates
-the figure 1 from a paper by Hubert et al. [@hubert2018minimum].
+the figure 1 from a paper by @hubert2018minimum.
 
 
 ```{r}

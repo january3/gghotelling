@@ -10,8 +10,6 @@ coverage](https://codecov.io/gh/january3/gghotelling/graph/badge.svg)](https://a
 
 Here are a few examples of plots you can create with `gghotelling`:
 
-    #> Loading required package: MASS
-
 <img src="man/figures/README-example-nocode-1.png" width="100%" style="display: block; margin: auto;" />
 
 # Features:
@@ -24,13 +22,14 @@ Here are a few examples of plots you can create with `gghotelling`:
 - Convex hulls with `geom_hull()`
 - Autoplot method for `prcomp` objects
 
-See [the vignette](https://january3.github.io/gghotelling/) for more
-details.
+See [the
+vignette](https://january3.github.io/gghotelling/articles/gghotelling.html)
+for more details.
 
 ## Installation
 
 You can install the development version of gghotelling from
-[GitHub](https://github.com/) with:
+[GitHub](https://github.com/january3/gghotelling/) with:
 
 ``` r
 # install.packages("pak")

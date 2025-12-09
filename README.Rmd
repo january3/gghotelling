@@ -29,6 +29,7 @@ library(ggplot2)
 library(gghotelling)
 library(cowplot)
 library(ggrepel)
+library(MASS)
 
 pca <- prcomp(iris[, 1:4], scale.=TRUE)
 df <- cbind(iris, pca$x)
@@ -81,13 +82,13 @@ plot_grid(p1, p2, p3, p4, ncol=2)
  * Convex hulls with `geom_hull()`
  * Autoplot method for `prcomp` objects
 
-See [the vignette](https://january3.github.io/gghotelling/) for more details.
+See [the vignette](https://january3.github.io/gghotelling/articles/gghotelling.html) for more details.
 
 
 
 ## Installation
 
-You can install the development version of gghotelling from [GitHub](https://github.com/) with:
+You can install the development version of gghotelling from [GitHub](https://github.com/january3/gghotelling/) with:
 
 ``` r
 # install.packages("pak")
