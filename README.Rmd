@@ -44,6 +44,7 @@ p2 <- ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
   geom_point(aes(color = Species)) +
   stat_outliers(geom="label_repel",
                         outlier_only = TRUE) +
+  theme(legend.position = "none") +
   ggtitle("Detect outliers")
 
 rings <- lapply(seq(.05, .95, length.out = 10), \(i) {
@@ -53,7 +54,9 @@ rings <- lapply(seq(.05, .95, length.out = 10), \(i) {
 p3 <- ggplot(df, aes(x = PC1, y = PC2, color=Species)) +
   rings +
   geom_point() +
+  theme(legend.position = "none") +
   ggtitle("Kernel density contours")
+
 
 library(HDclassif)
 data(wine)
@@ -74,13 +77,13 @@ plot_grid(p1, p2, p3, p4, ncol=2)
 
 # Features:
 
- * Classical Hotelling and data ellipses
- * Robust Hotelling ellipses using MCD estimator
- * Hotelling confidence ellipses for group means
+ * Classical Hotelling and data ellipses with `geom_hotelling()`
+ * Robust Hotelling ellipses using MCD estimator with `robust=TRUE`
+ * Hotelling confidence ellipses for group means with `type="t2mean"`
  * Kernel density coverage contours with `geom_kde()`
  * Outlier detection and visualization with `stat_outliers()` 
  * Convex hulls with `geom_hull()`
- * Autoplot method for `prcomp` objects
+ * Autoplot and autolayer methods for `prcomp` objects
 
 See [the vignette](https://january3.github.io/gghotelling/articles/gghotelling.html) for more details.
 
