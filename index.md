@@ -6,16 +6,17 @@ Here are a few examples of plots you can create with `gghotelling`:
 
 # Features:
 
-- Classical Hotelling and data ellipses
-- Robust Hotelling ellipses using MCD estimator
-- Hotelling confidence ellipses for group means
+- Classical Hotelling and data ellipses with
+  [`geom_hotelling()`](https://january3.github.io/gghotelling/reference/geom_hotelling.md)
+- Robust Hotelling ellipses using MCD estimator with `robust=TRUE`
+- Hotelling confidence ellipses for group means with `type="t2mean"`
 - Kernel density coverage contours with
   [`geom_kde()`](https://january3.github.io/gghotelling/reference/geom_kde.md)
 - Outlier detection and visualization with
   [`stat_outliers()`](https://january3.github.io/gghotelling/reference/stat_outliers.md)
 - Convex hulls with
   [`geom_hull()`](https://january3.github.io/gghotelling/reference/geom_hull.md)
-- Autoplot method for `prcomp` objects
+- Autoplot and autolayer methods for `prcomp` objects
 
 See [the
 vignette](https://january3.github.io/gghotelling/articles/gghotelling.html)
