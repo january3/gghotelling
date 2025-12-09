@@ -55,6 +55,17 @@ interpretation slightly changes, as the T2 statistic used is only an
 approximation in this case. In other words, use it for visualisation and
 QC, but not for statistical testing.
 }
+\examples{
+library(ggplot2)
+
+pca <- prcomp(iris[, 1:4], scale.=TRUE)
+pca_df <- cbind(iris, pca$x)
+outlier_stats <- outliers(pca_df[ , c("PC1", "PC2")], level = 0.95)
+
+# use plot_outliers() to directly plot them
+plot_outliers(pca_df[ , c("PC1", "PC2")], level = 0.95)
+
+}
 \seealso{
 \code{\link{hotelling_ellipse}} for more information on the
 differences between t2data, t2mean and c2data modes.

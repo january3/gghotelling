@@ -24,6 +24,16 @@
 #' c2crit (critical X squared value for the given level)
 #' and is_outlier
 #' (logical, whether d2 > t2crit or d2 > c2crit, depending on type).
+#' @examples
+#' library(ggplot2)
+#'
+#' pca <- prcomp(iris[, 1:4], scale.=TRUE)
+#' pca_df <- cbind(iris, pca$x)
+#' outlier_stats <- outliers(pca_df[ , c("PC1", "PC2")], level = 0.95)
+#'
+#' # use plot_outliers() to directly plot them
+#' plot_outliers(pca_df[ , c("PC1", "PC2")], level = 0.95)
+#'
 #' @seealso \code{\link{hotelling_ellipse}} for more information on the
 #' differences between t2data, t2mean and c2data modes.
 #' @importFrom stats mahalanobis
