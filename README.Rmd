@@ -75,7 +75,7 @@ p4b <- ggplot(df, aes(PC1, PC2, color=Species)) +
   geom_bag(aes(fill=Species), alpha=.1, what = "loop") +
   geom_point() +
   theme(legend.position = "none") +
-  ggtitle("Convex hulls")
+  ggtitle("Bag plots")
 
 p1234 <- plot_grid(p1, p2, p3, p4, p4b, ncol=2)
 p5 <- plot_outliers(iris[, 1:2]) +
