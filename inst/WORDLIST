@@ -1,4 +1,5 @@
 Autoplot
+Bagplots
 CMD
 Codecov
 Hotelling
@@ -7,12 +8,13 @@ Hotelling’s
 KDE
 Mahalonibis
 autolayer
+bagplot
 behaviour
 crit
-elllipse
 geoms
 ggplot
 ggproto
+halfspace
 mahalanobis
 npoints
 prcomp

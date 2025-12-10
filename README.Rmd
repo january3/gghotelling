@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 
 Here are a few examples of plots you can create with `gghotelling`:
 
-```{r example-nocode,echo=FALSE,fig.width=12, fig.height=9}
+```{r example-nocode,echo=FALSE,fig.width=12, fig.height=12}
 library(ggplot2)
 library(gghotelling)
 library(cowplot)
@@ -70,10 +70,17 @@ p4 <- ggplot(wine, aes(malic_acid, proline)) +
   annotate("text", x=3.5, y = 1400, label = "Classical", color = "red") +
   ggtitle("Classical vs Robust Hotelling")
 
-p1234 <- plot_grid(p1, p2, p3, p4, ncol=2)
+p4b <- ggplot(df, aes(PC1, PC2, color=Species)) +
+  geom_bag(aes(fill=Species), alpha=.3) +
+  geom_bag(aes(fill=Species), alpha=.1, what = "loop") +
+  geom_point() +
+  theme(legend.position = "none") +
+  ggtitle("Convex hulls")
+
+p1234 <- plot_grid(p1, p2, p3, p4, p4b, ncol=2)
 p5 <- plot_outliers(iris[, 1:2]) +
   ggtitle("Outlier detection")
-plot_grid(p1234, p5, ncol=1, rel_heights = c(2, 1))
+plot_grid(p1234, p5, ncol=1, rel_heights = c(3, 1))
 ```
 
 
@@ -86,6 +93,7 @@ plot_grid(p1234, p5, ncol=1, rel_heights = c(2, 1))
  * Outlier detection with `outliers()`
  * Outlier visualization with `stat_outliers()` and `plot_outliers()`
  * Convex hulls with `geom_hull()`
+ * Bagplots with `geom_bag()`
  * Autoplot and autolayer methods for `prcomp` objects
 
 See [the vignette](https://january3.github.io/gghotelling/articles/gghotelling.html) for more details.

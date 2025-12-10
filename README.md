@@ -21,6 +21,7 @@ Here are a few examples of plots you can create with `gghotelling`:
 - Outlier detection with `outliers()`
 - Outlier visualization with `stat_outliers()` and `plot_outliers()`
 - Convex hulls with `geom_hull()`
+- Bagplots with `geom_bag()`
 - Autoplot and autolayer methods for `prcomp` objects
 
 See [the

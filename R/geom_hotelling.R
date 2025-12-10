@@ -215,3 +215,118 @@ geom_hotelling <- function(mapping = NULL, data = NULL,
   )
 }
 
+
+#' @rdname geom_bag
+#' @format NULL
+#' @usage NULL
+#' @importFrom mrfDepth compBagplot
+#' @export
+StatBag <- ggproto(
+  "StatBag", Stat,
+  
+  required_aes = c("x", "y"),
+  
+  compute_group = function(data, 
+                           scales, 
+                           what = c("bag", "loop"),
+                           type = "hdepth") {
+
+    type <- match.arg(type)
+    what <- match.arg(what)
+
+    defaults <- data[1, setdiff(names(data), c("x", "y")), drop = FALSE]
+    rownames(defaults) <- NULL
+
+    bagstat <- compBagplot(x = data[, c("x", "y"), drop = FALSE], 
+                           type = type)
+
+    if(what == "bag") {
+      contour <- bagstat[["bag"]]
+    } else {
+      contour <- bagstat[["fence"]]
+    }
+
+    ret <- data.frame(
+      x = contour[,1],
+      y = contour[,2],
+      
+      # keep aesthetics constant across the whole polygon
+      defaults
+    )
+    ret
+  }
+)
+
+#' @rdname geom_bag
+#' @format NULL
+#' @usage NULL
+#' @export
+GeomBag <- ggproto(
+  "GeomBag", GeomPolygon,
+  
+  default_aes = aes(
+    colour    = "black",  # default outline
+    fill      = NA,       # default no fill
+    linewidth = 0.5,
+    linetype  = 1,
+    alpha     = NA,
+    subgroup  = NULL
+  )
+)
+
+#' Bag plots
+#'
+#' Bag plots for ggplot2
+#'
+#' Bag plots are 2-dimensional generalizations of box plots. This geom adds
+#' a bag region (which contains 50% of the data points, just like the "box"
+#' in "box plots") to the plot, plus the "loop" which can be used to
+#' identify potential outliers. 
+#' 
+#' geom_bag() is just a wrapper around the \code{[aplpack]{bagplot()}}
+#' function which actually does the calculations, .and the arguments
+#' are passed on to that function.
+#' 
+#' The geom either plots the inner "bag" or the outer "loop", but not both.
+#' If you need both, you can add two geom_bag layers to your ggplot object.
+#'
+#' @param what What to plot. Either "bag" (the inner bag region) or "loop" (the outer loop).
+#' @param ... Additional parameters passed to underlying `ggplot2::geom_polygon()`
+#'   or to `ggplot2::layer()`.
+#' @param na.rm Logical. Should missing values be removed? Default is FALSE.
+#' @inheritParams ggplot2::layer
+#' @inheritParams mrfDepth::compBagplot
+#' @importFrom ggplot2 ggproto layer Stat GeomPolygon aes
+#' @importFrom stats qchisq cov qf
+#' @examples
+#' library(ggplot2)
+#' ggplot(iris, aes(x = Sepal.Width, y = Sepal.Length, color = Species)) +
+#'   geom_point() +
+#'   geom_bag(aes(fill = Species), alpha = .1, what = "loop") +
+#'   geom_bag(aes(fill = Species), alpha = .3)
+#' 
+#' @export
+geom_bag <- function(mapping = NULL, data = NULL,
+                            position = "identity",
+                            ...,
+                            what = c("bag", "loop"),
+                            type = c("hdepth", "projdepth", "sprojdepth", "dprojdepth"),
+                            na.rm = FALSE,
+                            show.legend = NA,
+                            inherit.aes = TRUE) {
+  what <- match.arg(what)
+  type <- match.arg(type)
+
+  layer(
+    stat = StatBag,      # use our Stat
+    geom = GeomBag,          # but standard geom_polygon drawing
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(what = what, type = type, na.rm = na.rm, ...)
+  )
+}
+
+
