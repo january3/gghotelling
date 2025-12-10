@@ -22,6 +22,8 @@ Features:
   [`plot_outliers()`](https://january3.github.io/gghotelling/reference/outliers.md)
 - Convex hulls with
   [`geom_hull()`](https://january3.github.io/gghotelling/reference/geom_hull.md)
+- Bagplots with
+  [`geom_bag()`](https://january3.github.io/gghotelling/reference/geom_bag.md)
 - Autoplot and autolayer methods for `prcomp` objects
 
 ### Installation
@@ -302,7 +304,9 @@ provides a much tighter fit to the main data cluster, while the
 classical Hotelling ellipse (in red) is heavily influenced by the
 outliers, resulting in a much larger and skewed ellipse.
 
-## Convex Hulls and contours
+## Convex Hulls, bagplots and contours
+
+### Convex hulls with `geom_hull()`
 
 The package provides basic convex hull:
 
@@ -313,6 +317,31 @@ ggplot(iris, aes(Sepal.Length, Sepal.Width, color=Species)) +
 ```
 
 ![](gghotelling_files/figure-html/example_hull-1.png)
+
+### Bagplots with `geom_bag()`
+
+With
+[`geom_bag()`](https://january3.github.io/gghotelling/reference/geom_bag.md)
+we can create bagplots, which are bivariate generalizations of boxplots.
+The bagplot shows the central “bag” containing 50% of the data points,
+the “loop” which is an expanded region that helps identify outliers, and
+the outliers themselves. The
+[`geom_bag()`](https://january3.github.io/gghotelling/reference/geom_bag.md)
+can plot either the bag or the loop; plotting both together requires
+calling
+[`geom_bag()`](https://january3.github.io/gghotelling/reference/geom_bag.md)
+twice:
+
+``` r
+ggplot(iris, aes(Sepal.Width, Sepal.Length, color=Species)) +
+  geom_bag(aes(fill=Species), alpha=.3) +
+  geom_bag(aes(fill=Species), alpha=.1, what = "loop") +
+  geom_point()
+```
+
+![](gghotelling_files/figure-html/unnamed-chunk-3-1.png)
+
+### Kernel density estimate contours with `geom_kde()`
 
 Furthermore, we also have
 [`geom_kde()`](https://january3.github.io/gghotelling/reference/geom_kde.md)
@@ -332,7 +361,7 @@ ggplot(df, aes(x=x, y=y)) +
   geom_kde(color="red", linewidth=1)
 ```
 
-![](gghotelling_files/figure-html/unnamed-chunk-3-1.png)
+![](gghotelling_files/figure-html/unnamed-chunk-4-1.png)
 
 As you can see, the
 [`geom_kde()`](https://january3.github.io/gghotelling/reference/geom_kde.md)
@@ -356,7 +385,7 @@ ggplot(pca_df, aes(x = PC1, y = PC2, color=Species)) +
   geom_point()
 ```
 
-![](gghotelling_files/figure-html/unnamed-chunk-4-1.png)
+![](gghotelling_files/figure-html/unnamed-chunk-5-1.png)
 
 ## Autoplot
 

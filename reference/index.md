@@ -5,6 +5,8 @@
 - [`autoplot(`*`<prcomp>`*`)`](https://january3.github.io/gghotelling/reference/autoplot.prcomp.md)
   [`autolayer(`*`<prcomp>`*`)`](https://january3.github.io/gghotelling/reference/autoplot.prcomp.md)
   : Automatic plotting of PCA objects
+- [`geom_bag()`](https://january3.github.io/gghotelling/reference/geom_bag.md)
+  : Bag plots
 - [`geom_hotelling()`](https://january3.github.io/gghotelling/reference/geom_hotelling.md)
   : Hotelling ellipses for ggplot2
 - [`geom_hull()`](https://january3.github.io/gghotelling/reference/geom_hull.md)

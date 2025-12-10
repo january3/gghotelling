@@ -20,6 +20,8 @@ Here are a few examples of plots you can create with `gghotelling`:
   [`plot_outliers()`](https://january3.github.io/gghotelling/reference/outliers.md)
 - Convex hulls with
   [`geom_hull()`](https://january3.github.io/gghotelling/reference/geom_hull.md)
+- Bagplots with
+  [`geom_bag()`](https://january3.github.io/gghotelling/reference/geom_bag.md)
 - Autoplot and autolayer methods for `prcomp` objects
 
 See [the
