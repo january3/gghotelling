@@ -17,6 +17,6 @@
   : Calculate Hotelling or data ellipse around some points
 - [`outliers()`](https://january3.github.io/gghotelling/reference/outliers.md)
   [`plot_outliers()`](https://january3.github.io/gghotelling/reference/outliers.md)
-  : Calculate the T2 statistic for individual points
+  : Calculate the T2/D2 statistic for individual points
 - [`stat_outliers()`](https://january3.github.io/gghotelling/reference/stat_outliers.md)
-  : Calculate per-point T² Hotelling statistic
+  : Calculate per-point Hotelling statistic

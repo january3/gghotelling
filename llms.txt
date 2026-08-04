@@ -34,6 +34,7 @@ You can install the development version of gghotelling from
 [GitHub](https://github.com/january3/gghotelling/) with:
 
 ``` r
+
 # install.packages("pak")
 pak::pak("january3/gghotelling")
 ```
@@ -46,6 +47,7 @@ which can be used to add Hotelling ellipses to ggplot2 scatter plots.
 Here are two examples of usage:
 
 ``` r
+
 library(ggplot2)
 library(gghotelling)
 
@@ -62,10 +64,21 @@ p2 <- ggplot(df, aes(PC1, PC2, color=Species)) +
   geom_hotelling(alpha=0.1, aes(fill = Species), level=.99) +
   geom_point()
 
-plot_grid(p1, p2, ncol=2)
+cowplot::plot_grid(p1, p2, ncol=2)
 ```
 
 ![](reference/figures/README-example-1.png)
+
+## AI and other tools disclosure
+
+I used LLM modes to a) detect bugs, spelling errors, clerical mistakes
+and other deficiencies in the code and b) better understand the ggplot2
+specific code (especially
+[`after_stat()`](https://ggplot2.tidyverse.org/reference/aes_eval.html)).
+
+Furthermore, I used [devtools](https://devtools.r-lib.org/),
+[checktor](https://github.com/coatless-rpkg/checktor) and
+[covr](https://covr.r-lib.org/).
 
 # Package index
 
@@ -86,9 +99,9 @@ plot_grid(p1, p2, ncol=2)
   : Calculate Hotelling or data ellipse around some points
 - [`outliers()`](https://january3.github.io/gghotelling/reference/outliers.md)
   [`plot_outliers()`](https://january3.github.io/gghotelling/reference/outliers.md)
-  : Calculate the T2 statistic for individual points
+  : Calculate the T2/D2 statistic for individual points
 - [`stat_outliers()`](https://january3.github.io/gghotelling/reference/stat_outliers.md)
-  : Calculate per-point T² Hotelling statistic
+  : Calculate per-point Hotelling statistic
 
 # Articles
 

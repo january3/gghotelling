@@ -32,6 +32,7 @@ You can install the development version of gghotelling from
 [GitHub](https://github.com/january3/gghotelling) with:
 
 ``` r
+
 # install.packages("pak")
 pak::pak("january3/gghotelling")
 
@@ -47,12 +48,14 @@ The package defines a new geom,
 which can be used to add Hotelling ellipses to ggplot2 scatter plots.
 
 ``` r
+
 library(ggplot2)
 library(gghotelling)
 
 pca <- prcomp(iris[, 1:4], scale.=TRUE)
 pca_df <- cbind(iris, pca$x)
 
+# set the confidence level
 ggplot(pca_df, aes(PC1, PC2)) +
   geom_hotelling(level=.99) +
   geom_point()
@@ -61,6 +64,7 @@ ggplot(pca_df, aes(PC1, PC2)) +
 ![](gghotelling_files/figure-html/example-1.png)
 
 ``` r
+
 
 ggplot(pca_df, aes(PC1, PC2, color=Species)) +
   geom_hotelling() +
@@ -71,6 +75,7 @@ ggplot(pca_df, aes(PC1, PC2, color=Species)) +
 
 ``` r
 
+
 ggplot(pca_df, aes(PC1, PC2, color=Species)) +
   geom_hotelling(alpha=0.1, aes(fill = Species)) +
   geom_point()
@@ -79,6 +84,7 @@ ggplot(pca_df, aes(PC1, PC2, color=Species)) +
 ![](gghotelling_files/figure-html/example-3.png)
 
 ``` r
+
 
 # set custom CI/coverage level
 ggplot(pca_df, aes(PC1, PC2, color=Species)) +
@@ -90,16 +96,14 @@ ggplot(pca_df, aes(PC1, PC2, color=Species)) +
 
 ### Types of Ellipses
 
-OK, but how are the Hotelling ellipses different, say, from the ellipses
-created by
+How are the Hotelling ellipses different, say, from the ellipses created
+by
 [`stat_ellipse()`](https://ggplot2.tidyverse.org/reference/stat_ellipse.html)
-in ggplot2, or the
-[`ellipse::ellipse()`](https://dmurdoch.github.io/ellipse/reference/ellipse.html)
-function?
+in ggplot2, or the `ellipse::ellipse()` function?
 
 Actually, the
 [`geom_hotelling()`](https://january3.github.io/gghotelling/reference/geom_hotelling.md)
-function can create three different types of ellipses:
+function can create three different types of ellipses with two flavors:
 
 - Hotelling T² *data* ellipses (default, `type="t2data"`): these
   ellipses represent the spread of the data points themselves, based on
@@ -114,9 +118,9 @@ function can create three different types of ellipses:
   based on the chi-squared distribution and also represent the spread of
   the data points. They are similar to the ellipses created by
   [`stat_ellipse()`](https://ggplot2.tidyverse.org/reference/stat_ellipse.html)
-  in ggplot2 and the
-  [`ellipse::ellipse()`](https://dmurdoch.github.io/ellipse/reference/ellipse.html)
-  function.
+  in ggplot2 and the `ellipse::ellipse()` function.
+- Each of the above can be produced as a robust version using the MCD
+  estimator by setting `robust=TRUE`.
 
 All three ellipses above use Mahalanobis distance contours, but differ
 in the statistical choice of distribution (Hotelling T² vs χ²) in order
@@ -132,6 +136,7 @@ leading to wider ellipses compared to the χ² distribution, as you can
 see on the figure below - the dashed ellipses are the χ² data ellipses:
 
 ``` r
+
 ggplot(pca_df, aes(PC1, PC2, color = Species)) +
   geom_hotelling(level=.99) +
   geom_hotelling(level=.99, type="c2data", linetype = "dashed") +
@@ -151,6 +156,7 @@ The package also provides per-point, group-wise T² statistics which can
 be used to identify multivariate outliers.
 
 ``` r
+
 ggplot(pca_df, aes(PC1, PC2, group=Species)) +
   geom_hotelling(level = 0.75, alpha=0.1, aes(fill = Species)) +
   # add points and calculate outlier stats; we assign the `is_outlier` variable
@@ -172,8 +178,11 @@ to aesthetics via
 [`after_stat()`](https://ggplot2.tidyverse.org/reference/aes_eval.html),
 including:
 
-- `t2`: the Hotelling T² statistic for each point
-- `c2`: the χ² statistic for each point
+- `d2`: the squared Mahalanobis distance for each point
+- `c2crit`: the critical value for d2 from the Chi-squared distribution
+  at the specified confidence level
+- `t2crit`: the critical value for d2 from the Hotelling T2 distribution
+  at the specified confidence level
 - `is_outlier`: a logical indicating whether the point is an outlier
 
 These variables can be used, through
@@ -182,9 +191,10 @@ to map aesthetics such as `color`, `shape`, or `size` to highlight
 outliers. For example:
 
 ``` r
+
 ggplot(pca_df, aes(PC1, PC2, group=Species)) +
   geom_hotelling(alpha=0.1, aes(fill = Species)) +
-  stat_outliers(size=2, aes(shape = Species, color = after_stat(t2)))
+  stat_outliers(size=2, aes(shape = Species, color = after_stat(d2)))
 ```
 
 ![](gghotelling_files/figure-html/example2b-1.png)
@@ -193,6 +203,7 @@ This can be useful for identifying potential outliers in multivariate
 data. The outliers can be directly labeled as follows:
 
 ``` r
+
 ggplot(pca_df, aes(PC1, PC2, group=Species, label=rownames(pca_df))) +
   geom_hotelling(alpha=0.1, aes(fill = Species)) +
   geom_point(aes(color = Species)) +
@@ -205,6 +216,7 @@ ggplot(pca_df, aes(PC1, PC2, group=Species, label=rownames(pca_df))) +
 Or even better, using `ggrepel` to avoid overlapping labels:
 
 ``` r
+
 library(ggrepel)
 ggplot(pca_df, aes(PC1, PC2, group=Species, label=rownames(pca_df))) +
   geom_hotelling(alpha=0.1, aes(fill = Species)) +
@@ -222,6 +234,7 @@ which can also be used directly on data frames to compute the statistics
 without plotting:
 
 ``` r
+
 outlier_stats <- outliers(pca_df[ , c("PC1", "PC2")], level = 0.95)
 
 head(outlier_stats)
@@ -237,6 +250,7 @@ head(outlier_stats)
 We can visualize it with the typical ggplot2 syntax:
 
 ``` r
+
 outlier_stats$id <- 1:nrow(outlier_stats)
 outlier_labels <- ifelse(outlier_stats$is_outlier,
                              as.character(outlier_stats$id), NA)
@@ -259,6 +273,7 @@ For convenience, there is a
 function that creates the above plot directly from a data frame:
 
 ``` r
+
 plot_outliers(pca_df[ , c("PC1", "PC2")], level = 0.95)
 ```
 
@@ -280,10 +295,10 @@ present. Below I am showing a comparison between classical and robust
 Hotelling ellipses in the presence of outliers. The data set used,
 `wine`, contains chemical analysis of various wines, with several
 obvious outliers, and the figure recapitulates the figure 1 from [a
-paper](https://arxiv.org/pdf/1709.07045) by Hubert, Debruyne, and
-Rousseeuw (2018).
+paper](https://arxiv.org/pdf/1709.07045) by Hubert et al. (2018).
 
 ``` r
+
 library(HDclassif)
 data(wine)
 wine <- wine[ wine$class == 1, ]
@@ -311,6 +326,7 @@ outliers, resulting in a much larger and skewed ellipse.
 The package provides basic convex hull:
 
 ``` r
+
 ggplot(iris, aes(Sepal.Length, Sepal.Width, color=Species)) +
   geom_hull(mapping = aes(fill = Species), alpha=.1) +
   geom_point()
@@ -333,6 +349,7 @@ calling
 twice:
 
 ``` r
+
 ggplot(iris, aes(Sepal.Width, Sepal.Length, color=Species)) +
   geom_bag(aes(fill=Species), alpha=.3) +
   geom_bag(aes(fill=Species), alpha=.1, what = "loop") +
@@ -353,6 +370,7 @@ coverage; for example, if `coverage=0.95`, the contour encloses roughly
 distribution of non-elliptical data:
 
 ``` r
+
 df <- data.frame(x=rnorm(500) + 5)
 df$y <- df$x^5 + rnorm(500)*500
 ggplot(df, aes(x=x, y=y)) +
@@ -373,6 +391,7 @@ Of course, you can also use aesthetics like `fill` with
 and overlay several contours:
 
 ``` r
+
 # interesting little fact: ggplot2 happily accepts lists of geoms/layers
 # and adds them one by one to the plot
 
@@ -394,6 +413,7 @@ convenient plotting of PCA plots. Note that `autoplot.prcomp` is also
 implemented in a more sophisticated way in the `ggfortify` package.
 
 ``` r
+
 autoplot(pca, group = iris$Species) + 
   autolayer(pca, group = iris$Species)
 ```
@@ -409,10 +429,9 @@ package?
 
 The Hotelling ellipses returned by
 [`geom_hotelling()`](https://january3.github.io/gghotelling/reference/geom_hotelling.md)
-are different from the ellipses returned by the
-[`ellipse::ellipse()`](https://dmurdoch.github.io/ellipse/reference/ellipse.html)
-or `car::dataEllipse()` functions, which produce data ellipses based on
-a Mahalanobis distance contour and χ² distribution quantiles (actually,
+are different from the ellipses returned by the `ellipse::ellipse()` or
+`car::dataEllipse()` functions, which produce data ellipses based on a
+Mahalanobis distance contour and χ² distribution quantiles (actually,
 without getting into details, `dataEllipse()` is more sophisticated, but
 as far as I understand it does not produce Hotelling ellipses). Both
 Mahalanobis distance ellipses and Hotelling T² ellipses represent the
@@ -427,8 +446,7 @@ The
 is also different from the
 [`stat_ellipse()`](https://ggplot2.tidyverse.org/reference/stat_ellipse.html)
 which can also be used to create data ellipses in ggplot2; similarly to
-[`ellipse::ellipse()`](https://dmurdoch.github.io/ellipse/reference/ellipse.html)
-and `car::dataEllipse()`,
+`ellipse::ellipse()` and `car::dataEllipse()`,
 [`stat_ellipse()`](https://ggplot2.tidyverse.org/reference/stat_ellipse.html)
 uses Mahalanobis distance contours based on the χ² distribution
 quantiles.

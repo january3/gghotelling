@@ -108,6 +108,10 @@ geom_bag(
   plot specification, e.g.
   [`annotation_borders()`](https://ggplot2.tidyverse.org/reference/annotation_borders.html).
 
+## Value
+
+A ggplot2 geom layer that can be added to a ggplot object.
+
 ## Details
 
 Bag plots are 2-dimensional generalizations of box plots. This geom adds
@@ -115,9 +119,10 @@ a bag region (which contains 50% of the data points, just like the "box"
 in "box plots") to the plot, plus the "loop" which can be used to
 identify potential outliers.
 
-geom_bag() is just a wrapper around the `[aplpack]{bagplot()}` function
-which actually does the calculations, .and the arguments are passed on
-to that function.
+geom_bag() is just a wrapper around the
+[`mrfDepth::compBagplot()`](https://rdrr.io/pkg/mrfDepth/man/compBagplot.html)
+function which actually does the calculations, and the arguments are
+passed on to that function.
 
 The geom either plots the inner "bag" or the outer "loop", but not both.
 If you need both, you can add two geom_bag layers to your ggplot object.

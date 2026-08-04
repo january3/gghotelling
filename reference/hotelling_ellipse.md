@@ -41,7 +41,8 @@ hotelling_ellipse(
 
 ## Value
 
-A two-column matrix or data frame with npoints rows
+A two-column matrix or data frame with npoints rows, containing the
+coordinates of the ellipse. The columns are named "x" and "y".
 
 ## Details
 
@@ -53,7 +54,7 @@ plotted:
   version of `stat_ellipse`)
 
 - normal multivariate distribution ellipses (like the `type="norm"`
-  version of the `stat_ellipse`) which use Mahalonibis distance and
+  version of the `stat_ellipse`) which use Mahalanobis distance and
   chi-squared statistic
 
 - T2 Hotelling confidence ellipses of the group means.
@@ -73,7 +74,7 @@ visualisation and QC, but not for statistical testing.
 ## See also
 
 [`outliers()`](https://january3.github.io/gghotelling/reference/outliers.md)
-for calculating per-point based T2 and Mahalonibis values and
+for calculating per-point based statistic and
 [`geom_hotelling()`](https://january3.github.io/gghotelling/reference/geom_hotelling.md)
 for plotting of the ellipse with ggplot
 

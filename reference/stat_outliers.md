@@ -1,6 +1,6 @@
-# Calculate per-point T² Hotelling statistic
+# Calculate per-point Hotelling statistic
 
-Calculate per-point T² Hotelling statistic for use in ggplot
+Calculate per-point Hotelling statistic for use in ggplot
 
 ## Usage
 
@@ -11,7 +11,7 @@ stat_outliers(
   geom = "point",
   position = "identity",
   ...,
-  type = c("t2data", "t2mean", "c2data"),
+  type = c("t2data", "c2data"),
   level = 0.95,
   outlier_only = FALSE,
   na.rm = FALSE,
@@ -131,14 +131,34 @@ stat_outliers(
   plot specification, e.g.
   [`annotation_borders()`](https://ggplot2.tidyverse.org/reference/annotation_borders.html).
 
+## Value
+
+A stat layer that can be added to a ggplot object.
+
 ## Details
 
-This calculates the T² Hotelling statistic for each point in the plot,
-group-wise. This allows to use the statistics `is_outlier` and `t2` to
-be used as graphical parameters, e.g. for coloring the points (see
-Examples below) using the
+This calculates the Hotelling statistic for each point in the plot,
+group-wise. This allows to use the statistics `is_outlier`, `d2` (the
+squared Mahalanobis distance), `c2crit` (critical Chi-squared value for
+the specified level) and `t2crit` (critical Hotelling T2 value for the
+squared Mahalanobis distance) to be used as graphical parameters, e.g.
+for coloring the points (see Examples below) using the
 [`ggplot2::after_stat()`](https://ggplot2.tidyverse.org/reference/aes_eval.html)
 function.
+
+The `is_outlier` is simply either `d2 > t2crit` (if `type="t2data"` or
+`type="t2mean"`) or `d2 > c2crit` (if `type="c2data"`).
+
+The `type` argument chooses between the regular Hotelling statistic
+(with `type="t2data"`) or the Chi-squared statistic (with
+`type="c2data"`). The Hotelling statistic for the mean is not allowed as
+it makes no sense in the context of the outliers.
+
+The function is a wrapper around the
+[`outliers()`](https://january3.github.io/gghotelling/reference/outliers.md)
+function, which does the actual calculations, and the parameters passed
+(level, type, robust) are passed on to that function. For example, to
+calculate robust statistic, use `stat_outliers(robust=TRUE)`.
 
 ## Examples
 
@@ -155,10 +175,10 @@ ggplot(df, aes(PC1, PC2, group=Species)) +
 
 ggplot(df, aes(PC1, PC2, group=Species)) +
   geom_hotelling(alpha=0.1, level = .75, aes(fill = Species)) +
-  stat_outliers(level = .75, 
-                        size=2, 
-                        aes(shape = Species, 
-                        color = after_stat(t2)))
+  stat_outliers(level = .75,
+                        size=2,
+                        aes(shape = Species,
+                        color = after_stat(d2)))
 
 
 # label the outliers
@@ -167,7 +187,7 @@ ggplot(df, aes(PC1, PC2, group=Species)) +
 ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
   geom_hotelling(level = 0.75, alpha=0.1, aes(fill = Species)) +
   geom_point(aes(color = Species)) +
-  stat_outliers(level = .75, geom="label", 
+  stat_outliers(level = .75, geom="label",
                         outlier_only = TRUE)
 
 ```

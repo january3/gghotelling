@@ -93,6 +93,10 @@ geom_hull(
   plot specification, e.g.
   [`annotation_borders()`](https://ggplot2.tidyverse.org/reference/annotation_borders.html).
 
+## Value
+
+A ggplot2 geom layer that can be added to a ggplot object.
+
 ## Examples
 
 ``` r

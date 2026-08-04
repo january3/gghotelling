@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Hotelling ellipses, contours and outliers">
 </head>
@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gghotelling</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -120,38 +120,39 @@ can be used to add Hotelling ellipses to ggplot2 scatter plots.</p>
 <span><span class="va">pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html" class="external-link">prcomp</a></span><span class="op">(</span><span class="va">iris</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, scale.<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">pca_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">iris</span>, <span class="va">pca</span><span class="op">$</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># set the confidence level</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pca_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">PC1</span>, <span class="va">PC2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/geom_hotelling.html">geom_hotelling</a></span><span class="op">(</span>level<span class="op">=</span><span class="fl">.99</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gghotelling_files/figure-html/example-1.png" class="r-plt" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="gghotelling_files/figure-html/example-1.png" class="r-plt" alt="" width="75%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pca_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">PC1</span>, <span class="va">PC2</span>, color<span class="op">=</span><span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/geom_hotelling.html">geom_hotelling</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gghotelling_files/figure-html/example-2.png" class="r-plt" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="gghotelling_files/figure-html/example-2.png" class="r-plt" alt="" width="75%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pca_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">PC1</span>, <span class="va">PC2</span>, color<span class="op">=</span><span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/geom_hotelling.html">geom_hotelling</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.1</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gghotelling_files/figure-html/example-3.png" class="r-plt" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="gghotelling_files/figure-html/example-3.png" class="r-plt" alt="" width="75%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># set custom CI/coverage level</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pca_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">PC1</span>, <span class="va">PC2</span>, color<span class="op">=</span><span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/geom_hotelling.html">geom_hotelling</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.1</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">Species</span><span class="op">)</span>, level<span class="op">=</span><span class="fl">.99</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gghotelling_files/figure-html/example-4.png" class="r-plt" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="gghotelling_files/figure-html/example-4.png" class="r-plt" alt="" width="75%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="types-of-ellipses">Types of Ellipses<a class="anchor" aria-label="anchor" href="#types-of-ellipses"></a>
 </h3>
-<p>OK, but how are the Hotelling ellipses different, say, from the
-ellipses created by <code><a href="https://ggplot2.tidyverse.org/reference/stat_ellipse.html" class="external-link">stat_ellipse()</a></code> in ggplot2, or the
-<code><a href="https://dmurdoch.github.io/ellipse/reference/ellipse.html" class="external-link">ellipse::ellipse()</a></code> function?</p>
+<p>How are the Hotelling ellipses different, say, from the ellipses
+created by <code><a href="https://ggplot2.tidyverse.org/reference/stat_ellipse.html" class="external-link">stat_ellipse()</a></code> in ggplot2, or the
+<code>ellipse::ellipse()</code> function?</p>
 <p>Actually, the <code><a href="../reference/geom_hotelling.html">geom_hotelling()</a></code> function can create three
-different types of ellipses:</p>
+different types of ellipses with two flavors:</p>
 <ul>
 <li>Hotelling T² <em>data</em> ellipses (default,
 <code>type="t2data"</code>): these ellipses represent the spread of the
@@ -168,7 +169,9 @@ other.</li>
 these ellipses are based on the chi-squared distribution and also
 represent the spread of the data points. They are similar to the
 ellipses created by <code><a href="https://ggplot2.tidyverse.org/reference/stat_ellipse.html" class="external-link">stat_ellipse()</a></code> in ggplot2 and the
-<code><a href="https://dmurdoch.github.io/ellipse/reference/ellipse.html" class="external-link">ellipse::ellipse()</a></code> function.</li>
+<code>ellipse::ellipse()</code> function.</li>
+<li>Each of the above can be produced as a robust version using the MCD
+estimator by setting <code>robust=TRUE</code>.</li>
 </ul>
 <p>All three ellipses above use Mahalanobis distance contours, but
 differ in the statistical choice of distribution (Hotelling T² vs χ²) in
@@ -188,7 +191,7 @@ ellipses:</p>
 <span>  <span class="fu"><a href="../reference/geom_hotelling.html">geom_hotelling</a></span><span class="op">(</span>level<span class="op">=</span><span class="fl">.99</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/geom_hotelling.html">geom_hotelling</a></span><span class="op">(</span>level<span class="op">=</span><span class="fl">.99</span>, type<span class="op">=</span><span class="st">"c2data"</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gghotelling_files/figure-html/example_types-1.png" class="r-plt" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="gghotelling_files/figure-html/example_types-1.png" class="r-plt" alt="" width="75%" style="display: block; margin: auto;"></p>
 <p>In addition to the classical Hotelling ellipses, robust versions can
 be created with the <code>robust=TRUE</code> argument, which uses the
 Minimum Covariance Determinant (MCD) estimator to compute robust
@@ -208,7 +211,7 @@ can be used to identify multivariate outliers.</p>
 <span>                <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="va">Species</span>, color <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html" class="external-link">after_stat</a></span><span class="op">(</span><span class="va">is_outlier</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># color outliers in red</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"TRUE"</span><span class="op">=</span><span class="st">"red"</span>, <span class="st">"FALSE"</span><span class="op">=</span><span class="st">"grey"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gghotelling_files/figure-html/example2-1.png" class="r-plt" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="gghotelling_files/figure-html/example2-1.png" class="r-plt" alt="" width="75%" style="display: block; margin: auto;"></p>
 <p>The <code><a href="../reference/stat_outliers.html">stat_outliers()</a></code> function computes the Hotelling T²
 statistic for each point and compares it to the critical value from the
 Hotelling T² distribution at the specified confidence level (default is
@@ -216,9 +219,14 @@ Hotelling T² distribution at the specified confidence level (default is
 <code><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html" class="external-link">after_stat()</a></code>, including:</p>
 <ul>
 <li>
-<code>t2</code>: the Hotelling T² statistic for each point</li>
+<code>d2</code>: the squared Mahalanobis distance for each
+point</li>
 <li>
-<code>c2</code>: the χ² statistic for each point</li>
+<code>c2crit</code>: the critical value for d2 from the Chi-squared
+distribution at the specified confidence level</li>
+<li>
+<code>t2crit</code>: the critical value for d2 from the Hotelling T2
+distribution at the specified confidence level</li>
 <li>
 <code>is_outlier</code>: a logical indicating whether the point is
 an outlier</li>
@@ -229,8 +237,8 @@ map aesthetics such as <code>color</code>, <code>shape</code>, or
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pca_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">PC1</span>, <span class="va">PC2</span>, group<span class="op">=</span><span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/geom_hotelling.html">geom_hotelling</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.1</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/stat_outliers.html">stat_outliers</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">2</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="va">Species</span>, color <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html" class="external-link">after_stat</a></span><span class="op">(</span><span class="va">t2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gghotelling_files/figure-html/example2b-1.png" class="r-plt" width="75%" style="display: block; margin: auto;"></p>
+<span>  <span class="fu"><a href="../reference/stat_outliers.html">stat_outliers</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">2</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="va">Species</span>, color <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html" class="external-link">after_stat</a></span><span class="op">(</span><span class="va">d2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="gghotelling_files/figure-html/example2b-1.png" class="r-plt" alt="" width="75%" style="display: block; margin: auto;"></p>
 <p>This can be useful for identifying potential outliers in multivariate
 data. The outliers can be directly labeled as follows:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -239,7 +247,7 @@ data. The outliers can be directly labeled as follows:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/stat_outliers.html">stat_outliers</a></span><span class="op">(</span>geom<span class="op">=</span><span class="st">"label"</span>, </span>
 <span>                        outlier_only <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gghotelling_files/figure-html/example3-1.png" class="r-plt" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="gghotelling_files/figure-html/example3-1.png" class="r-plt" alt="" width="75%" style="display: block; margin: auto;"></p>
 <p>Or even better, using <code>ggrepel</code> to avoid overlapping
 labels:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -249,7 +257,7 @@ labels:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/stat_outliers.html">stat_outliers</a></span><span class="op">(</span>geom<span class="op">=</span><span class="st">"label_repel"</span>,</span>
 <span>                        outlier_only <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gghotelling_files/figure-html/example3b-1.png" class="r-plt" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="gghotelling_files/figure-html/example3b-1.png" class="r-plt" alt="" width="75%" style="display: block; margin: auto;"></p>
 <p>The actual calculation of the Hotelling T² statistics and critical
 values is done in the function <code><a href="../reference/outliers.html">outliers()</a></code>, which can also
 be used directly on data frames to compute the statistics without
@@ -280,7 +288,7 @@ plotting:</p>
 <span>           label <span class="op">=</span> <span class="st">"Critical value"</span>, color <span class="op">=</span> <span class="st">"red"</span>, hjust <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"Mahalanobis distance (T² statistic)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gghotelling_files/figure-html/outlier_plot-1.png" class="r-plt" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="gghotelling_files/figure-html/outlier_plot-1.png" class="r-plt" alt="" width="75%" style="display: block; margin: auto;"></p>
 <p>For convenience, there is a <code><a href="../reference/outliers.html">plot_outliers()</a></code> function
 that creates the above plot directly from a data frame:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
@@ -302,7 +310,7 @@ present. Below I am showing a comparison between classical and robust
 Hotelling ellipses in the presence of outliers. The data set used,
 <code>wine</code>, contains chemical analysis of various wines, with
 several obvious outliers, and the figure recapitulates the figure 1 from
-<a href="https://arxiv.org/pdf/1709.07045" class="external-link">a paper</a> by <span class="citation">Hubert, Debruyne, and Rousseeuw (2018)</span>.</p>
+<a href="https://arxiv.org/pdf/1709.07045" class="external-link">a paper</a> by <span class="citation">Hubert et al. (2018)</span>.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">HDclassif</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">wine</span><span class="op">)</span></span>
@@ -315,7 +323,7 @@ several obvious outliers, and the figure recapitulates the figure 1 from
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html" class="external-link">annotate</a></span><span class="op">(</span><span class="st">"text"</span>, x<span class="op">=</span><span class="fl">2.5</span>, y <span class="op">=</span> <span class="fl">1675</span>, label <span class="op">=</span> <span class="st">"MCD"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html" class="external-link">annotate</a></span><span class="op">(</span><span class="st">"text"</span>, x<span class="op">=</span><span class="fl">3.5</span>, y <span class="op">=</span> <span class="fl">1400</span>, label <span class="op">=</span> <span class="st">"Classical"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gghotelling_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="gghotelling_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="" width="75%" style="display: block; margin: auto;"></p>
 <p>As one can see, the MCD based robust Hotelling ellipse (in blue)
 provides a much tighter fit to the main data cluster, while the
 classical Hotelling ellipse (in red) is heavily influenced by the
@@ -332,7 +340,7 @@ outliers, resulting in a much larger and skewed ellipse.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">Sepal.Length</span>, <span class="va">Sepal.Width</span>, color<span class="op">=</span><span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/geom_hull.html">geom_hull</a></span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">Species</span><span class="op">)</span>, alpha<span class="op">=</span><span class="fl">.1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gghotelling_files/figure-html/example_hull-1.png" class="r-plt" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="gghotelling_files/figure-html/example_hull-1.png" class="r-plt" alt="" width="75%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="bagplots-with-geom_bag">Bagplots with <code>geom_bag()</code><a class="anchor" aria-label="anchor" href="#bagplots-with-geom_bag"></a>
@@ -348,7 +356,7 @@ both together requires calling <code><a href="../reference/geom_bag.html">geom_b
 <span>  <span class="fu"><a href="../reference/geom_bag.html">geom_bag</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill<span class="op">=</span><span class="va">Species</span><span class="op">)</span>, alpha<span class="op">=</span><span class="fl">.3</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/geom_bag.html">geom_bag</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill<span class="op">=</span><span class="va">Species</span><span class="op">)</span>, alpha<span class="op">=</span><span class="fl">.1</span>, what <span class="op">=</span> <span class="st">"loop"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gghotelling_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="gghotelling_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="75%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="kernel-density-estimate-contours-with-geom_kde">Kernel density estimate contours with <code>geom_kde()</code><a class="anchor" aria-label="anchor" href="#kernel-density-estimate-contours-with-geom_kde"></a>
@@ -366,7 +374,7 @@ distribution of non-elliptical data:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/geom_hull.html">geom_hull</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/geom_kde.html">geom_kde</a></span><span class="op">(</span>color<span class="op">=</span><span class="st">"red"</span>, linewidth<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gghotelling_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="gghotelling_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="75%" style="display: block; margin: auto;"></p>
 <p>As you can see, the <code><a href="../reference/geom_kde.html">geom_kde()</a></code> contour nicely captures
 the non-elliptical distribution of the data, while the convex hull
 includes a large empty area.</p>
@@ -383,7 +391,7 @@ includes a large empty area.</p>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pca_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">PC1</span>, y <span class="op">=</span> <span class="va">PC2</span>, color<span class="op">=</span><span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="va">rings</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gghotelling_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="gghotelling_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="75%" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -396,7 +404,7 @@ sophisticated way in the <code>ggfortify</code> package.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">pca</span>, group <span class="op">=</span> <span class="va">iris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autolayer.html" class="external-link">autolayer</a></span><span class="op">(</span><span class="va">pca</span>, group <span class="op">=</span> <span class="va">iris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gghotelling_files/figure-html/example_autoplot-1.png" class="r-plt" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="gghotelling_files/figure-html/example_autoplot-1.png" class="r-plt" alt="" width="75%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="other-packages-of-interest">Other packages of interest<a class="anchor" aria-label="anchor" href="#other-packages-of-interest"></a>
@@ -407,7 +415,7 @@ and outlier detection in multivariate data, including
 <code>ggplot2</code> itself. Why, then, create yet another package?</p>
 <p>The Hotelling ellipses returned by <code><a href="../reference/geom_hotelling.html">geom_hotelling()</a></code> are
 different from the ellipses returned by the
-<code><a href="https://dmurdoch.github.io/ellipse/reference/ellipse.html" class="external-link">ellipse::ellipse()</a></code> or <code>car::dataEllipse()</code>
+<code>ellipse::ellipse()</code> or <code>car::dataEllipse()</code>
 functions, which produce data ellipses based on a Mahalanobis distance
 contour and χ² distribution quantiles (actually, without getting into
 details, <code>dataEllipse()</code> is more sophisticated, but as far as
@@ -420,7 +428,7 @@ different statistical distributions to define the contour levels
 ellipses.</p>
 <p>The <code><a href="../reference/geom_hotelling.html">geom_hotelling()</a></code> is also different from the
 <code><a href="https://ggplot2.tidyverse.org/reference/stat_ellipse.html" class="external-link">stat_ellipse()</a></code> which can also be used to create data
-ellipses in ggplot2; similarly to <code><a href="https://dmurdoch.github.io/ellipse/reference/ellipse.html" class="external-link">ellipse::ellipse()</a></code> and
+ellipses in ggplot2; similarly to <code>ellipse::ellipse()</code> and
 <code>car::dataEllipse()</code>, <code><a href="https://ggplot2.tidyverse.org/reference/stat_ellipse.html" class="external-link">stat_ellipse()</a></code> uses
 Mahalanobis distance contours based on the χ² distribution
 quantiles.</p>
@@ -444,7 +452,7 @@ simple and intuitive.</p>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-hubert2018minimum" class="csl-entry">
 Hubert, Mia, Michiel Debruyne, and Peter J Rousseeuw. 2018.
 <span>“Minimum Covariance Determinant and Extensions.”</span> <em>Wiley
@@ -463,7 +471,7 @@ Interdisciplinary Reviews: Computational Statistics</em> 10 (3): e1421.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

@@ -1,6 +1,9 @@
-# Calculate the T2 statistic for individual points
+# Calculate the T2/D2 statistic for individual points
 
-Calculate the T2 statistic or Mahalanobis distance for individual points
+Calculate the T2/D2 statistic or Mahalanobis distance for individual
+points. For each point, it calculates the squared Mahalanobis distance
+from the center of the data, and compares it to the critical T2 or
+chi-squared value for the given coverage probability.
 
 ## Usage
 
@@ -49,17 +52,17 @@ plot_outliers(
 ## Value
 
 A data frame with one row per point including the columns d2 (squared
-mahalanobis distance) t2crit (critical T squared value for the given
-level), c2crit (critical X squared value for the given level) and
-is_outlier (logical, whether d2 \> t2crit or d2 \> c2crit, depending on
-type).
+mahalanobis distance or robust squared distance), t2crit (critical T
+squared value for the given level), c2crit (critical X squared value for
+the given level) and is_outlier (logical, whether d2 \> t2crit or d2 \>
+c2crit, depending on type).
 
 ## Details
 
 The function can use a robust estimator of location and scatter using
 the [`covMcd`](https://rdrr.io/pkg/robustbase/man/covMcd.html) function,
 which uses the Maximum Covariance Determinant (MCD) estimator. Note that
-while this results in ellipses which are more resistent to outliers, the
+while this results in ellipses which are more resistant to outliers, the
 interpretation slightly changes, as the T2 statistic used is only an
 approximation in this case. In other words, use it for visualisation and
 QC, but not for statistical testing.

@@ -116,6 +116,10 @@ geom_hotelling(
   plot specification, e.g.
   [`annotation_borders()`](https://ggplot2.tidyverse.org/reference/annotation_borders.html).
 
+## Value
+
+A ggplot2 geom layer that can be added to a ggplot object.
+
 ## Details
 
 This geom adds data or confidence ellipses to the plot. See
@@ -128,22 +132,22 @@ documentation for more information.
 pca <- prcomp(iris[, 1:4], scale.=TRUE)
 df <- cbind(iris, pca$x)
 library(ggplot2)
-  
+
   ggplot(df, aes(PC1, PC2)) +
     geom_hotelling(level=.99) +
     geom_point()
 
-  
+
   ggplot(df, aes(PC1, PC2, color=Species)) +
     geom_hotelling() +
     geom_point()
 
-  
+
   ggplot(df, aes(PC1, PC2, color=Species)) +
     geom_hotelling(alpha=0.1, aes(fill = Species)) +
     geom_point()
 
-  
+
 # compare the robust and regular approaches:
   ggplot(df, aes(PC1, PC2, color=Species)) +
     geom_hotelling() +

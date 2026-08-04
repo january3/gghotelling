@@ -99,6 +99,10 @@ geom_kde(
   plot specification, e.g.
   [`annotation_borders()`](https://ggplot2.tidyverse.org/reference/annotation_borders.html).
 
+## Value
+
+A ggplot2 geom layer that can be added to a ggplot object.
+
 ## Details
 
 This function uses the
@@ -110,7 +114,7 @@ density along a grid, and then plots a contour for a selected coverage.
 [`geom_hull()`](https://january3.github.io/gghotelling/reference/geom_hull.md)
 for simple convex contours and
 [`geom_hotelling()`](https://january3.github.io/gghotelling/reference/geom_hotelling.md)
-for Hotelling T² ellipses.
+for Hotelling T2 ellipses.
 
 ## Examples
 
