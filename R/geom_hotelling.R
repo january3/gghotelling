@@ -1,6 +1,6 @@
 
 
-#' @rdname stat_outliers 
+#' @rdname stat_outliers
 #' @format NULL
 #' @usage NULL
 #' @export
@@ -19,9 +19,10 @@ StatOutliers <- ggproto(
     X <- cbind(data$x, data$y)
     t2_df <- outliers(X, level = level, robust = robust, type = type)
 
-    data$t2 <- t2_df$t2
-    data$t2crit <- t2_df$t2crit
-    data$is_outlier <- t2_df$is_outlier
+    data$d2 <- t2_df[["d2"]]
+    data$t2crit <- t2_df[["t2crit"]]
+    data$c2crit <- t2_df[["c2crit"]]
+    data$is_outlier <- t2_df[["is_outlier"]]
 
     if(outlier_only) {
       data <- data[ data$is_outlier, , drop=FALSE ]
@@ -31,18 +32,35 @@ StatOutliers <- ggproto(
   }
 )
 
-#' Calculate per-point T² Hotelling statistic 
+#' Calculate per-point Hotelling statistic
 #'
-#' Calculate per-point T² Hotelling statistic for use in ggplot
+#' Calculate per-point Hotelling statistic for use in ggplot
 #'
-#' This calculates the T² Hotelling statistic for each point in the plot,
-#' group-wise. This allows to use the statistics `is_outlier` and `t2` to be
-#' used as graphical parameters, e.g. for coloring the points (see Examples
-#' below) using the `ggplot2::after_stat()` function.
+#' This calculates the Hotelling statistic for each point in the plot,
+#' group-wise. This allows to use the statistics `is_outlier`, `d2` (the
+#' squared Mahalanobis distance), `c2crit` (critical Chi-squared value for
+#' the specified level) and`t2crit` (critical Hotteling T2 value
+#' for the squared Mahalanobis disticance) to be used as graphical
+#' parameters, e.g. for coloring the points (see Examples below) using the
+#' `ggplot2::after_stat()` function.
+#'
+#' The `is_outlier` is simply either `d2 > t2crit` (if `type="t2data"` or
+#' `type="t2mean"`) or `d2 > c2crit` (if `type="c2data"`).
+#'
+#' The `type` argument chooses between
+#' the regular Hotelling statistic (with `type="t2data"`), the Hotelling
+#' statistic for the mean (with `type="t2mean"`), or the Chi-squared
+#' statistic (with `type="c2data"`).
+#'
+#' The function is a wrapper around the `outliers()` function, which does
+#' the actual calculations, and the parameters passed (level, type, robust)
+#' are passed on to that function. For example, to calculate robust
+#' statistic, use `stat_outliers(robust=TRUE)`.
 #'
 #' @param outlier_only Only return the statistic for outliers
 #' @inheritParams geom_hotelling
 #' @inheritParams ggplot2::layer
+#' @return A stat layer that can be added to a ggplot object.
 #' @examples
 #' pca <- prcomp(iris[, 1:4], scale.=TRUE)
 #' df <- cbind(iris, pca$x)
@@ -55,10 +73,10 @@ StatOutliers <- ggproto(
 #'
 #' ggplot(df, aes(PC1, PC2, group=Species)) +
 #'   geom_hotelling(alpha=0.1, level = .75, aes(fill = Species)) +
-#'   stat_outliers(level = .75, 
-#'                         size=2, 
-#'                         aes(shape = Species, 
-#'                         color = after_stat(t2)))
+#'   stat_outliers(level = .75,
+#'                         size=2,
+#'                         aes(shape = Species,
+#'                         color = after_stat(d2)))
 #'
 #' # label the outliers
 #' # note that you need to add the label aesthetics for the label geom to
@@ -66,7 +84,7 @@ StatOutliers <- ggproto(
 #' ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
 #'   geom_hotelling(level = 0.75, alpha=0.1, aes(fill = Species)) +
 #'   geom_point(aes(color = Species)) +
-#'   stat_outliers(level = .75, geom="label", 
+#'   stat_outliers(level = .75, geom="label",
 #'                         outlier_only = TRUE)
 #'
 #' @export
@@ -82,11 +100,11 @@ stat_outliers <- function(mapping = NULL, data = NULL,
   type <- match.arg(type)
 
   layer(
-    stat = StatOutliers, 
-    data = data, 
+    stat = StatOutliers,
+    data = data,
     mapping = mapping,
-    geom = geom, 
-    position = position, 
+    geom = geom,
+    position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
@@ -107,27 +125,27 @@ stat_outliers <- function(mapping = NULL, data = NULL,
 #' @export
 StatHotelling <- ggproto(
   "StatHotelling", Stat,
-  
+
   required_aes = c("x", "y"),
-  
-  compute_group = function(data, 
-                           scales, 
-                           level = 0.95, 
+
+  compute_group = function(data,
+                           scales,
+                           level = 0.95,
                            type = c("t2data", "t2mean", "c2data"),
-                           robust = FALSE, 
+                           robust = FALSE,
                            npoints = 100) {
 
-    eli <- hotelling_ellipse(data[ , c("x", "y")], level = level, 
+    eli <- hotelling_ellipse(data[ , c("x", "y")], level = level,
                              type = type, robust = robust, npoints = npoints)
 
     defaults <- data[1, setdiff(names(data), c("x", "y", "group")), drop = FALSE]
     rownames(defaults) <- NULL
-    
+
     ret <- data.frame(
       x = eli[,1],
       y = eli[,2],
       group = data$group[1],
-      
+
       # keep aesthetics constant across the whole polygon
       defaults
     )
@@ -141,7 +159,7 @@ StatHotelling <- ggproto(
 #' @export
 GeomHotelling <- ggproto(
   "GeomHotelling", GeomPolygon,
-  
+
   default_aes = aes(
     colour    = "black",  # default outline
     fill      = NA,       # default no fill
@@ -172,25 +190,25 @@ GeomHotelling <- ggproto(
 #' pca <- prcomp(iris[, 1:4], scale.=TRUE)
 #' df <- cbind(iris, pca$x)
 #' library(ggplot2)
-#'   
+#'
 #'   ggplot(df, aes(PC1, PC2)) +
 #'     geom_hotelling(level=.99) +
 #'     geom_point()
-#'   
+#'
 #'   ggplot(df, aes(PC1, PC2, color=Species)) +
 #'     geom_hotelling() +
 #'     geom_point()
-#'   
+#'
 #'   ggplot(df, aes(PC1, PC2, color=Species)) +
 #'     geom_hotelling(alpha=0.1, aes(fill = Species)) +
 #'     geom_point()
-#'   
+#'
 #' # compare the robust and regular approaches:
 #'   ggplot(df, aes(PC1, PC2, color=Species)) +
 #'     geom_hotelling() +
 #'     geom_hotelling(robust = TRUE, linetype = "dashed") +
 #'     geom_point()
-#' 
+#'
 #' @export
 geom_hotelling <- function(mapping = NULL, data = NULL,
                             position = "identity",
@@ -204,13 +222,13 @@ geom_hotelling <- function(mapping = NULL, data = NULL,
                             inherit.aes = TRUE) {
   layer(
     stat = StatHotelling,      # use our Stat
-    geom = GeomHotelling,          # but standard geom_polygon drawing
+    geom = GeomHotelling,      # but standard geom_polygon drawing
     data = data,
     mapping = mapping,
     position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params = list(level = level, type = type, robust = robust, 
+    params = list(level = level, type = type, robust = robust,
                   npoints = npoints, na.rm = na.rm, ...)
   )
 }
@@ -223,11 +241,11 @@ geom_hotelling <- function(mapping = NULL, data = NULL,
 #' @export
 StatBag <- ggproto(
   "StatBag", Stat,
-  
+
   required_aes = c("x", "y"),
-  
-  compute_group = function(data, 
-                           scales, 
+
+  compute_group = function(data,
+                           scales,
                            what = c("bag", "loop"),
                            type = "hdepth") {
 
@@ -237,7 +255,7 @@ StatBag <- ggproto(
     defaults <- data[1, setdiff(names(data), c("x", "y")), drop = FALSE]
     rownames(defaults) <- NULL
 
-    bagstat <- compBagplot(x = data[, c("x", "y"), drop = FALSE], 
+    bagstat <- compBagplot(x = data[, c("x", "y"), drop = FALSE],
                            type = type)
 
     if(what == "bag") {
@@ -249,7 +267,7 @@ StatBag <- ggproto(
     ret <- data.frame(
       x = contour[,1],
       y = contour[,2],
-      
+
       # keep aesthetics constant across the whole polygon
       defaults
     )
@@ -263,7 +281,7 @@ StatBag <- ggproto(
 #' @export
 GeomBag <- ggproto(
   "GeomBag", GeomPolygon,
-  
+
   default_aes = aes(
     colour    = "black",  # default outline
     fill      = NA,       # default no fill
@@ -281,12 +299,12 @@ GeomBag <- ggproto(
 #' Bag plots are 2-dimensional generalizations of box plots. This geom adds
 #' a bag region (which contains 50% of the data points, just like the "box"
 #' in "box plots") to the plot, plus the "loop" which can be used to
-#' identify potential outliers. 
-#' 
-#' geom_bag() is just a wrapper around the \code{[aplpack]{bagplot()}}
-#' function which actually does the calculations, .and the arguments
+#' identify potential outliers.
+#'
+#' geom_bag() is just a wrapper around the [mrfDepth::compBagplot()]
+#' function which actually does the calculations, and the arguments
 #' are passed on to that function.
-#' 
+#'
 #' The geom either plots the inner "bag" or the outer "loop", but not both.
 #' If you need both, you can add two geom_bag layers to your ggplot object.
 #'
@@ -304,7 +322,7 @@ GeomBag <- ggproto(
 #'   geom_point() +
 #'   geom_bag(aes(fill = Species), alpha = .1, what = "loop") +
 #'   geom_bag(aes(fill = Species), alpha = .3)
-#' 
+#'
 #' @export
 geom_bag <- function(mapping = NULL, data = NULL,
                             position = "identity",

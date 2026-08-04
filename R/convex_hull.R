@@ -193,7 +193,7 @@ GeomKDE <- ggproto(
 #' p + geom_point()
 #'
 #' @seealso [geom_hull()] for simple convex contours and [geom_hotelling()]
-#' for Hotelling T² ellipses.
+#' for Hotelling T2 ellipses.
 #' @export
 geom_kde <- function(mapping = NULL, data = NULL,
                             position = "identity",
