@@ -39,8 +39,8 @@ StatOutliers <- ggproto(
 #' This calculates the Hotelling statistic for each point in the plot,
 #' group-wise. This allows to use the statistics `is_outlier`, `d2` (the
 #' squared Mahalanobis distance), `c2crit` (critical Chi-squared value for
-#' the specified level) and`t2crit` (critical Hotteling T2 value
-#' for the squared Mahalanobis disticance) to be used as graphical
+#' the specified level) and`t2crit` (critical Hotelling T2 value
+#' for the squared Mahalanobis distance) to be used as graphical
 #' parameters, e.g. for coloring the points (see Examples below) using the
 #' `ggplot2::after_stat()` function.
 #'

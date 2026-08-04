@@ -21,6 +21,7 @@
 #'           confidence level (for type = "t2mean").
 #' @param labels optionally, a vector of labels for showing the outliers.
 #'               If NULL, the outliers will be identified by row number.
+#' @param outliers if TRUE, label the outliers.
 #' @param biplot whether to show the loadings as well as the scores
 #' @param ... ignored
 #' @importFrom ggplot2 autolayer autoplot .data geom_point ggplot
