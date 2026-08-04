@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/january3/gghotelling/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/january3/gghotelling/blob/v0.2.1/DESCRIPTION)
 
 Weiner J (2026). *gghotelling: Hotelling's T² Ellipses and Outlier
 Detection for 'ggplot2'*. R package version 0.2.1,
