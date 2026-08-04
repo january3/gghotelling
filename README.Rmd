@@ -131,7 +131,7 @@ p2 <- ggplot(df, aes(PC1, PC2, color=Species)) +
   geom_hotelling(alpha=0.1, aes(fill = Species), level=.99) +
   geom_point()
 
-plot_grid(p1, p2, ncol=2)
+cowplot::plot_grid(p1, p2, ncol=2)
 ```
 
 

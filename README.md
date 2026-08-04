@@ -10,7 +10,7 @@ coverage](https://codecov.io/gh/january3/gghotelling/graph/badge.svg)](https://a
 
 Here are a few examples of plots you can create with `gghotelling`:
 
-<img src="man/figures/README-example-nocode-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="man/figures/README-example-nocode-1.png" alt="" width="100%" style="display: block; margin: auto;" />
 
 # Features:
 
@@ -61,7 +61,7 @@ p2 <- ggplot(df, aes(PC1, PC2, color=Species)) +
   geom_hotelling(alpha=0.1, aes(fill = Species), level=.99) +
   geom_point()
 
-plot_grid(p1, p2, ncol=2)
+cowplot::plot_grid(p1, p2, ncol=2)
 ```
 
-<img src="man/figures/README-example-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="man/figures/README-example-1.png" alt="" width="100%" style="display: block; margin: auto;" />

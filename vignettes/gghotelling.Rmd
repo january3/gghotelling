@@ -74,6 +74,7 @@ library(gghotelling)
 pca <- prcomp(iris[, 1:4], scale.=TRUE)
 pca_df <- cbind(iris, pca$x)
 
+# set the confidence level
 ggplot(pca_df, aes(PC1, PC2)) +
   geom_hotelling(level=.99) +
   geom_point()
@@ -94,7 +95,7 @@ ggplot(pca_df, aes(PC1, PC2, color=Species)) +
 
 ## Types of Ellipses
 
-OK, but how are the Hotelling ellipses different, say, from the ellipses
+How are the Hotelling ellipses different, say, from the ellipses
 created by `stat_ellipse()` in ggplot2, or the `ellipse::ellipse()` function?
 
 Actually, the `geom_hotelling()` function can create three different types of ellipses:
@@ -158,8 +159,9 @@ point and compares it to the critical value from the Hotelling T² distribution
 at the specified confidence level (default is 0.95). The new data is
 available to aesthetics via `after_stat()`, including:
 
- * `t2`: the Hotelling T² statistic for each point
- * `c2`: the χ² statistic for each point
+ * `d2`: the squared Mahalanobis distance for each point
+ * `t2crit`: the critical value for d2 from the Hotelling T2 distribution
+   at the specified confidence level
  * `is_outlier`: a logical indicating whether the point is an outlier
 
 These variables can be used, through `stat_outliers()`, to map aesthetics such as
