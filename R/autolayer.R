@@ -1,6 +1,3 @@
-# this does not yet work like I would like it to work
-
-
 #' Automatic plotting of PCA objects
 #'
 #' Automatic plotting of PCA objects
@@ -12,7 +9,10 @@
 #' @param object An object of prcomp class
 #' @param dims Dimensions to plot
 #' @param group Groups of the data to be shown on the plot
-#' @param type The type of the coverage / confidence area shown by \code{autolayer.prcomp}, can be one of t2data (T² Hotelling coverage), c2data (chi-squared coverage) or t2mean (T-squared based confidence area for the group mean).
+#' @param type The type of the coverage / confidence area shown by
+#'        `autolayer.prcomp()`, can be one of t2data (T2 Hotelling coverage),
+#'        c2data (chi-squared coverage) or t2mean (T-squared based
+#'        confidence area for the group mean).
 #' @param level Either coverage probability (for type = "t2data" and "c2data") or
 #'           confidence level (for type = "t2mean").
 #' @param labels optionally, a vector of labels for showing the outliers.
@@ -24,9 +24,15 @@
 #' pca <- prcomp(iris[,1:4], scale.=TRUE)
 #'
 #' library(ggplot2)
-#' autoplot(pca, group = iris$Species) + 
+#' autoplot(pca, group = iris$Species) +
 #'   autolayer(pca, group = iris$Species)
-#' @importFrom ggplot2 geom_segment arrow unit geom_label 
+#'
+#' # show the 90% confidence area for the group means
+#' autoplot(pca, group = iris$Species) +
+#'   autolayer(pca, group = iris$Species,
+#'             type="t2mean", level = 0.90,
+#'             outlier = FALSE)
+#' @importFrom ggplot2 geom_segment arrow unit geom_label
 #' @importFrom ggplot2 scale_x_continuous scale_y_continuous sec_axis
 #' @export
 autoplot.prcomp <- function(object, dims=c(1, 2), biplot = FALSE, group = NULL, ...) {
@@ -41,7 +47,7 @@ autoplot.prcomp <- function(object, dims=c(1, 2), biplot = FALSE, group = NULL, 
   c1 <- colnames(df)[1]
   c2 <- colnames(df)[2]
 
-  p <- ggplot(df, aes(x = .data[[c1]], y = .data[[c2]], color = group)) + 
+  p <- ggplot(df, aes(x = .data[[c1]], y = .data[[c2]], color = group)) +
     geom_point()
 
   if(!biplot) {
@@ -81,7 +87,9 @@ autoplot.prcomp <- function(object, dims=c(1, 2), biplot = FALSE, group = NULL, 
 #' @export
 autolayer.prcomp <- function(object,  dims = c(1,2), group=NULL,
                              labels = NULL,
-                             type = c("t2data", "t2mean", "c2data"), level = 0.95, ...) {
+                             type = c("t2data", "t2mean", "c2data"),
+                             outliers = TRUE,
+                             level = 0.95, ...) {
   type <- match.arg(type)
 
   df <- object$x[ , dims, drop = FALSE ]
@@ -94,18 +102,19 @@ autolayer.prcomp <- function(object,  dims = c(1,2), group=NULL,
     df[["labels"]] <- 1:nrow(df)
   }
 
-  list(
+  ret <- list(
     geom_hotelling(aes(x=.data[["x"]], y=.data[["y"]], color = group, fill = group),
                         alpha = .1,
                         data = df,
                         level = level,
-                        type = type),
+                        type = type)
+    )
+  if(outliers) { ret <- c(ret,
     stat_outliers(aes(x=.data[["x"]], y=.data[["y"]], label=labels),
                           data = df,
                           level = level,
                           type = type,
-                          geom = "label", outlier_only = TRUE)
-  )
+                          geom = "label", outlier_only = TRUE))}
 
-
+  ret
 }

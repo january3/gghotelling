@@ -13,6 +13,7 @@
   group = NULL,
   labels = NULL,
   type = c("t2data", "t2mean", "c2data"),
+  outliers = TRUE,
   level = 0.95,
   ...
 )
@@ -31,7 +32,10 @@
 \item{labels}{optionally, a vector of labels for showing the outliers.
 If NULL, the outliers will be identified by row number.}
 
-\item{type}{The type of the coverage / confidence area shown by \code{autolayer.prcomp}, can be one of t2data (T² Hotelling coverage), c2data (chi-squared coverage) or t2mean (T-squared based confidence area for the group mean).}
+\item{type}{The type of the coverage / confidence area shown by
+\code{autolayer.prcomp()}, can be one of t2data (T2 Hotelling coverage),
+c2data (chi-squared coverage) or t2mean (T-squared based
+confidence area for the group mean).}
 
 \item{level}{Either coverage probability (for type = "t2data" and "c2data") or
 confidence level (for type = "t2mean").}
@@ -48,6 +52,12 @@ automatic plotting of prcomp objects, similar to
 pca <- prcomp(iris[,1:4], scale.=TRUE)
 
 library(ggplot2)
-autoplot(pca, group = iris$Species) + 
+autoplot(pca, group = iris$Species) +
   autolayer(pca, group = iris$Species)
+
+# show the 90\% confidence area for the group means
+autoplot(pca, group = iris$Species) +
+  autolayer(pca, group = iris$Species,
+            type="t2mean", level = 0.90,
+            outlier = FALSE)
 }
