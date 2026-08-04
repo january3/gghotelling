@@ -3,7 +3,7 @@
 \name{outliers}
 \alias{outliers}
 \alias{plot_outliers}
-\title{Calculate the T2 statistic for individual points}
+\title{Calculate the T2/D2 statistic for individual points}
 \usage{
 outliers(
   x,
@@ -37,14 +37,17 @@ used}
 }
 \value{
 A data frame with one row per point including the columns d2
-(squared mahalanobis distance)
+(squared mahalanobis distance or robust squared distance),
 t2crit (critical T squared value for the given level),
 c2crit (critical X squared value for the given level)
 and is_outlier
 (logical, whether d2 > t2crit or d2 > c2crit, depending on type).
 }
 \description{
-Calculate the T2 statistic or Mahalanobis distance for individual points
+Calculate the T2/D2 statistic or Mahalanobis distance for individual
+points. For each point, it calculates the squared Mahalanobis distance
+from the center of the data, and compares it to the critical T2 or
+chi-squared value for the given coverage probability.
 }
 \details{
 The function can use a robust estimator of location and scatter

@@ -133,9 +133,9 @@ ggplot(df, aes(PC1, PC2, group=Species)) +
 
 ggplot(df, aes(PC1, PC2, group=Species)) +
   geom_hotelling(alpha=0.1, level = .75, aes(fill = Species)) +
-  stat_outliers(level = .75, 
-                        size=2, 
-                        aes(shape = Species, 
+  stat_outliers(level = .75,
+                        size=2,
+                        aes(shape = Species,
                         color = after_stat(d2)))
 
 # label the outliers
@@ -144,7 +144,7 @@ ggplot(df, aes(PC1, PC2, group=Species)) +
 ggplot(df, aes(PC1, PC2, group=Species, label=rownames(df))) +
   geom_hotelling(level = 0.75, alpha=0.1, aes(fill = Species)) +
   geom_point(aes(color = Species)) +
-  stat_outliers(level = .75, geom="label", 
+  stat_outliers(level = .75, geom="label",
                         outlier_only = TRUE)
 
 }

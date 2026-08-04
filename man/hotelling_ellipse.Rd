@@ -28,7 +28,8 @@ data ellipse (using chi squared distribution).}
 used}
 }
 \value{
-A two-column matrix or data frame with npoints rows
+A two-column matrix or data frame with npoints rows, containing
+the coordinates of the ellipse. The columns are named "x" and "y".
 }
 \description{
 Calculate Hotelling or data ellipse around some points
@@ -41,7 +42,7 @@ can be plotted:
 \item T2 Hotelling data ellipses, showing data coverage (like the
 \code{type="t"} version of \code{stat_ellipse})
 \item normal multivariate distribution ellipses (like the \code{type="norm"}
-version of the \code{stat_ellipse}) which use Mahalonibis distance and
+version of the \code{stat_ellipse}) which use Mahalanobis distance and
 chi-squared statistic
 \item T2 Hotelling confidence ellipses of the group means.
 }
@@ -65,7 +66,7 @@ plot(df[,1], df[,2])
 lines(eli)
 }
 \seealso{
-\code{\link[=outliers]{outliers()}} for calculating per-point based T2 and
-Mahalonibis values and \code{\link[=geom_hotelling]{geom_hotelling()}} for plotting of the ellipse with
+\code{\link[=outliers]{outliers()}} for calculating per-point based statistic
+and \code{\link[=geom_hotelling]{geom_hotelling()}} for plotting of the ellipse with
 ggplot
 }
