@@ -1,15 +1,18 @@
 Package: gghotelling
 Title: Hotelling's T² Ellipses and Outlier Detection for 'ggplot2'
-Version: 0.2.0
+Version: 0.2.1
 Authors@R:
     person("January", "Weiner", , "january.weiner@gmail.com",
+    comment = c(ORCID = "0000-0003-1438-7819"),
     role = c("aut", "cre", "cph"))
+Author: January Weiner [aut, cre, cph]
 Description:
     Calculate Hotelling's T² ellipses and detect multivariate outliers both
     for base R plots and 'ggplot2' plots. Optionally, uses robust
     covariance estimation to reduce the influence of outliers on the
     ellipses. Also included: bagplots, kernel density plots and outlier
     diagnostic plots.
+URL: https://github.com/january3/gghotelling/, https://january3.github.io/gghotelling/
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -29,6 +32,5 @@ Suggests:
     cowplot
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-URL: https://january3.github.io/gghotelling/
 Language: en-US
 Config/roxygen2/version: 8.0.0
