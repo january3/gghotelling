@@ -26,6 +26,14 @@ Features:
   [`geom_bag()`](https://january3.github.io/gghotelling/reference/geom_bag.md)
 - Autoplot and autolayer methods for `prcomp` objects
 
+While the package is designed to work with ggplot2, the underlying
+calculations for Hotelling ellipses and outlier detection are
+implemented in base R functions,
+[`hotelling_ellipse()`](https://january3.github.io/gghotelling/reference/hotelling_ellipse.md)
+and
+[`outliers()`](https://january3.github.io/gghotelling/reference/outliers.md),
+which can be used independently of ggplot2.
+
 ### Installation
 
 You can install the development version of gghotelling from
@@ -468,6 +476,49 @@ My main motivation for creating this package was sorting out the
 different ellipse types and allowing the use of `fill` aesthetics for
 Hotelling ellipses. I tried to make the usage convenient, simple and
 intuitive.
+
+## Base R interface
+
+The calculations for outliers and Hotelling ellipses are done in two
+functions,
+[`hotelling_ellipse()`](https://january3.github.io/gghotelling/reference/hotelling_ellipse.md)
+and
+[`outliers()`](https://january3.github.io/gghotelling/reference/outliers.md)
+which are completely independent of ggplot2. You can use them to compute
+to create plots in base R:
+
+``` r
+
+pca <- prcomp(iris[, 1:4], scale.=TRUE)
+plot(pca$x[, 1:2], col=c(3,4,6)[iris$Species], pch=19)
+
+# create an ellipse for each species
+eli <- tapply(1:nrow(iris), iris$Species,
+              \(vec) hotelling_ellipse(pca$x[vec,1:2], level=.95))
+
+# plot the ellipse
+lapply(1:3, \(i) lines(eli[[i]], col=c(3,4,6)[i], lwd=2))
+#> [[1]]
+#> NULL
+#> 
+#> [[2]]
+#> NULL
+#> 
+#> [[3]]
+#> NULL
+
+# create outlier stats for each point in each species
+outl <- tapply(1:nrow(iris), iris$Species,
+              \(vec) outliers(pca$x[vec,1:2], level=.95))
+
+# make points and labels
+outl <- cbind(pca$x[, 1:2], do.call(rbind, outl))
+points(outl[outl$is_outlier, 1:2], col="red", pch=19, cex=2)
+text(outl[outl$is_outlier, 1:2], labels=rownames(outl)[outl$is_outlier],
+     pos=3, cex=.8)
+```
+
+![](gghotelling_files/figure-html/unnamed-chunk-6-1.png)
 
 ## References
 
