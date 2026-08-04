@@ -1,6 +1,9 @@
-#' Calculate the T2 statistic for individual points
+#' Calculate the T2/D2 statistic for individual points
 #'
-#' Calculate the T2 statistic or Mahalanobis distance for individual points
+#' Calculate the T2/D2 statistic or Mahalanobis distance for individual
+#' points. For each point, it calculates the squared Mahalanobis distance
+#' from the center of the data, and compares it to the critical T2 or
+#' chi-squared value for the given coverage probability.
 #'
 #' The function can use a robust estimator of location and scatter
 #' using the \code{\link[robustbase]{covMcd}} function, which uses the
@@ -19,7 +22,7 @@
 #'        "c2data" (for coverage calculated with the chi squared statistic)
 #' @inheritParams hotelling_ellipse
 #' @return A data frame with one row per point including the columns d2
-#' (squared mahalanobis distance)
+#' (squared mahalanobis distance or robust squared distance),
 #' t2crit (critical T squared value for the given level),
 #' c2crit (critical X squared value for the given level)
 #' and is_outlier
@@ -38,12 +41,13 @@
 #' differences between t2data, t2mean and c2data modes.
 #' @importFrom stats mahalanobis
 #' @export
-outliers <- function(x, level = 0.95, robust = FALSE, type = c("t2data", "t2mean", "c2data")) {
+outliers <- function(x, level = 0.95, robust = FALSE,
+                     type = c("t2data", "t2mean", "c2data")) {
   type <- match.arg(type)
 
   x <- as.matrix(x)
   if (ncol(x) != 2L) stop("x must have exactly 2 columns.")
-  
+
   n <- nrow(x)
   p <- 2L
   if (n <= p) stop("Need n > p to compute Hotelling ellipse.")
@@ -56,12 +60,12 @@ outliers <- function(x, level = 0.95, robust = FALSE, type = c("t2data", "t2mean
     center <- colMeans(x)
     S <- cov(x)
   }
-  
-  Sinv <- solve(S)
 
-  # subtract means
-  #Xc <- sweep(x, 2, center)
-  #t2 <- rowSums((Xc %*% Sinv) * Xc)
+  tryCatch({
+    Sinv <- solve(S)
+  }, error = function(e) {
+    stop("Covariance matrix is singular, cannot compute Mahalanobis distance.")
+  })
 
   # mahalanobis squared distance
   d2 <- mahalanobis(x, center, S)
@@ -78,7 +82,8 @@ outliers <- function(x, level = 0.95, robust = FALSE, type = c("t2data", "t2mean
     t2crit <- t2crit / n
   }
 
-  data <- data.frame(d2 = d2, t2crit = t2crit, c2crit = c2crit, is_outlier = d2 > t2crit)
+  data <- data.frame(d2 = d2, t2crit = t2crit, c2crit = c2crit,
+                     is_outlier = d2 > t2crit)
 
   if(type == "c2data") {
     data$is_outlier = d2 > c2crit
@@ -145,7 +150,7 @@ plot_outliers <- function(x, level = 0.95, robust = FALSE, type = c("t2data", "t
 #'  * T2 Hotelling data ellipses, showing data coverage (like the
 #'  `type="t"` version of `stat_ellipse`)
 #'  * normal multivariate distribution ellipses (like the `type="norm"`
-#'  version of the `stat_ellipse`) which use Mahalonibis distance and
+#'  version of the `stat_ellipse`) which use Mahalanobis distance and
 #'  chi-squared statistic
 #'  * T2 Hotelling confidence ellipses of the group means.
 #'
@@ -168,11 +173,12 @@ plot_outliers <- function(x, level = 0.95, robust = FALSE, type = c("t2data", "t
 #' @param robust If TRUE, then robust estimates of mean and covariance are
 #'               used
 #' @param type t2data - Hotelling T2 data ellipse; t2mean - Hotelling
-#'             confidence interval for the mean; c2data - normal 
+#'             confidence interval for the mean; c2data - normal
 #'             data ellipse (using chi squared distribution).
-#' @return A two-column matrix or data frame with npoints rows
-#' @seealso [outliers()] for calculating per-point based T2 and
-#' Mahalonibis values and [geom_hotelling()] for plotting of the ellipse with
+#' @return A two-column matrix or data frame with npoints rows, containing
+#' the coordinates of the ellipse. The columns are named "x" and "y".
+#' @seealso [outliers()] for calculating per-point based statistic
+#' and [geom_hotelling()] for plotting of the ellipse with
 #' ggplot
 #' @examples
 #' df <- iris[ iris$Species == "setosa", 1:2 ]
@@ -181,7 +187,7 @@ plot_outliers <- function(x, level = 0.95, robust = FALSE, type = c("t2data", "t
 #' lines(eli)
 #' @importFrom robustbase covMcd
 #' @export
-hotelling_ellipse <- function(x, level = 0.95, npoints = 100, 
+hotelling_ellipse <- function(x, level = 0.95, npoints = 100,
                               type = c("t2data", "t2mean", "c2data"),
                               robust = FALSE) {
   convert_to_df <- FALSE
@@ -194,11 +200,11 @@ hotelling_ellipse <- function(x, level = 0.95, npoints = 100,
 
   x <- as.matrix(x)
   if (ncol(x) != 2L) stop("x must have exactly 2 columns.")
-  
+
   n <- nrow(x)
   p <- 2L
   if (n <= p) stop("Need n > p to compute Hotelling ellipse.")
-  
+
   if(robust) {
     r <- covMcd(x)
     center <- r$center
@@ -207,7 +213,13 @@ hotelling_ellipse <- function(x, level = 0.95, npoints = 100,
     center <- colMeans(x)
     S <- cov(x)
   }
-  
+
+  tryCatch({
+    Sinv <- solve(S)
+  }, error = function(e) {
+    stop("Covariance matrix is singular, cannot compute Mahalanobis distance.")
+  })
+
   # Critical Hotelling T^2 value
   t2crit <- (p * (n - 1) / (n - p)) * qf(level, df1 = p, df2 = n - p)
   c2crit <- qchisq(level, df = p)
@@ -216,7 +228,7 @@ hotelling_ellipse <- function(x, level = 0.95, npoints = 100,
   eig <- eigen(S)
   eigvals <- eig$values
   eigvecs <- eig$vectors
-  
+
   # Semi-axis lengths of the ellipse
   if(type == "t2data") {
     #message("computing Hotelling data")
@@ -229,11 +241,11 @@ hotelling_ellipse <- function(x, level = 0.95, npoints = 100,
     #message("computing normal")
     axes <- sqrt(c2crit * eigvals)
   }
-  
+
   # Parametric angles
   theta <- seq(0, 2 * pi, length.out = npoints)
   circle <- rbind(cos(theta), sin(theta))  # 2 x npoints
-  
+
   # Transform unit circle to a Hotelling ellipse
   ellipse <- t(center + eigvecs %*% (diag(axes) %*% circle))
   colnames(ellipse) <- c("x", "y")
@@ -244,5 +256,3 @@ hotelling_ellipse <- function(x, level = 0.95, npoints = 100,
 
   ellipse
 }
-
-
