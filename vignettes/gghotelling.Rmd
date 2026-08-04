@@ -170,7 +170,7 @@ These variables can be used, through `stat_outliers()`, to map aesthetics such a
 ```{r example2b}
 ggplot(pca_df, aes(PC1, PC2, group=Species)) +
   geom_hotelling(alpha=0.1, aes(fill = Species)) +
-  stat_outliers(size=2, aes(shape = Species, color = after_stat(t2)))
+  stat_outliers(size=2, aes(shape = Species, color = after_stat(d2)))
 ```
 
 This can be useful for identifying potential outliers in multivariate data.
