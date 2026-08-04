@@ -6,6 +6,10 @@
 #' automatic plotting of prcomp objects, similar to
 #' \code{ggfortify::autoplot.prcomp}.
 #'
+#' Note, however, that the `group` parameter is a vector of the same length
+#' as the number of rows in the PCA object, rather than a column name in
+#' the data frame.
+#'
 #' @param object An object of prcomp class
 #' @param dims Dimensions to plot
 #' @param group Groups of the data to be shown on the plot
@@ -35,7 +39,8 @@
 #' @importFrom ggplot2 geom_segment arrow unit geom_label
 #' @importFrom ggplot2 scale_x_continuous scale_y_continuous sec_axis
 #' @export
-autoplot.prcomp <- function(object, dims=c(1, 2), biplot = FALSE, group = NULL, ...) {
+autoplot.prcomp <- function(object, dims=c(1, 2),
+                            biplot = FALSE, group = NULL, ...) {
 
   if(length(dims) != 2) {
     stop("Exactly two dimensions must be specified")

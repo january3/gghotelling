@@ -47,6 +47,10 @@ Automatic plotting of PCA objects
 The functions \code{autoplot.prcomp} and \code{autolayer.prcomp} are for
 automatic plotting of prcomp objects, similar to
 \code{ggfortify::autoplot.prcomp}.
+
+Note, however, that the \code{group} parameter is a vector of the same length
+as the number of rows in the PCA object, rather than a column name in
+the data frame.
 }
 \examples{
 pca <- prcomp(iris[,1:4], scale.=TRUE)
