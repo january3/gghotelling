@@ -41,7 +41,6 @@ StatHull <- ggproto(
 #'   or to `ggplot2::layer()`.
 #' @inheritParams ggplot2::layer
 #' @examples
-#' # nothing
 #' library(ggplot2)
 #' ggplot(iris, aes(Sepal.Length, Sepal.Width, color=Species)) +
 #'   geom_hull(mapping = aes(fill = Species), alpha=.1) +
