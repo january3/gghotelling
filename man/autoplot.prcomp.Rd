@@ -42,6 +42,9 @@ confidence area for the group mean).}
 \item{level}{Either coverage probability (for type = "t2data" and "c2data") or
 confidence level (for type = "t2mean").}
 }
+\value{
+A ggplot2 object
+}
 \description{
 Automatic plotting of PCA objects
 }
@@ -65,5 +68,5 @@ autoplot(pca, group = iris$Species) +
 autoplot(pca, group = iris$Species) +
   autolayer(pca, group = iris$Species,
             type="t2mean", level = 0.90,
-            outlier = FALSE)
+            outliers = FALSE)
 }

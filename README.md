@@ -65,3 +65,13 @@ cowplot::plot_grid(p1, p2, ncol=2)
 ```
 
 <img src="man/figures/README-example-1.png" alt="" width="100%" style="display: block; margin: auto;" />
+
+## AI and other tools disclosure
+
+I used LLM modes to a) detect bugs, spelling errors, clerical mistakes
+and other deficiencies in the code and b) better understand the ggplot2
+specific code (especially `after_stat()`).
+
+Furthermore, I used [devtools](https://devtools.r-lib.org/),
+[checktor](https://github.com/coatless-rpkg/checktor) and
+[covr](https://covr.r-lib.org/).

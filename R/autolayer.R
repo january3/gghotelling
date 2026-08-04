@@ -25,6 +25,7 @@
 #' @param biplot whether to show the loadings as well as the scores
 #' @param ... ignored
 #' @importFrom ggplot2 autolayer autoplot .data geom_point ggplot
+#' @return A ggplot2 object
 #' @examples
 #' pca <- prcomp(iris[,1:4], scale.=TRUE)
 #'
@@ -36,7 +37,7 @@
 #' autoplot(pca, group = iris$Species) +
 #'   autolayer(pca, group = iris$Species,
 #'             type="t2mean", level = 0.90,
-#'             outlier = FALSE)
+#'             outliers = FALSE)
 #' @importFrom ggplot2 geom_segment arrow unit geom_label
 #' @importFrom ggplot2 scale_x_continuous scale_y_continuous sec_axis
 #' @export

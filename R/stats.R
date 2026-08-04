@@ -8,7 +8,7 @@
 #' The function can use a robust estimator of location and scatter
 #' using the \code{\link[robustbase]{covMcd}} function, which uses the
 #' Maximum Covariance Determinant (MCD) estimator. Note that while this
-#' results in ellipses which are more resistent to outliers, the
+#' results in ellipses which are more resistant to outliers, the
 #' interpretation slightly changes, as the T2 statistic used is only an
 #' approximation in this case. In other words, use it for visualisation and
 #' QC, but not for statistical testing.
@@ -115,11 +115,11 @@ plot_outliers <- function(x, level = 0.95, robust = FALSE, type = c("t2data", "t
   df$index <- 1:nrow(df)
 
   if(type == "t2data") {
-    title <- "Mahalanobis distance (T\u00B2 statistic)"
+    title <- "Mahalanobis distance (with T\u00B2 statistic)"
     crit_title <- "T\u00B2 critical value"
     crit <- "t2crit"
   } else {
-    title <- "Mahalanobis distance (\u03A7\u00B2 statistic)"
+    title <- "Mahalanobis distance (with \u03A7\u00B2 statistic)"
     crit_title <- "\u03A7\u00B2 critical value"
     crit <- "c2crit"
   }

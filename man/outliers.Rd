@@ -53,7 +53,7 @@ chi-squared value for the given coverage probability.
 The function can use a robust estimator of location and scatter
 using the \code{\link[robustbase]{covMcd}} function, which uses the
 Maximum Covariance Determinant (MCD) estimator. Note that while this
-results in ellipses which are more resistent to outliers, the
+results in ellipses which are more resistant to outliers, the
 interpretation slightly changes, as the T2 statistic used is only an
 approximation in this case. In other words, use it for visualisation and
 QC, but not for statistical testing.

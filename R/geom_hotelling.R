@@ -12,7 +12,7 @@ StatOutliers <- ggproto(
   compute_group = function(data, scales,
                            outlier_only = FALSE,
                            robust = FALSE,
-                           type = c("t2data", "t2mean", "c2data"),
+                           type = c("t2data", "c2data"),
                            level = 0.95) {
 
 
@@ -39,7 +39,7 @@ StatOutliers <- ggproto(
 #' This calculates the Hotelling statistic for each point in the plot,
 #' group-wise. This allows to use the statistics `is_outlier`, `d2` (the
 #' squared Mahalanobis distance), `c2crit` (critical Chi-squared value for
-#' the specified level) and`t2crit` (critical Hotelling T2 value
+#' the specified level) and `t2crit` (critical Hotelling T2 value
 #' for the squared Mahalanobis distance) to be used as graphical
 #' parameters, e.g. for coloring the points (see Examples below) using the
 #' `ggplot2::after_stat()` function.
@@ -47,10 +47,10 @@ StatOutliers <- ggproto(
 #' The `is_outlier` is simply either `d2 > t2crit` (if `type="t2data"` or
 #' `type="t2mean"`) or `d2 > c2crit` (if `type="c2data"`).
 #'
-#' The `type` argument chooses between
-#' the regular Hotelling statistic (with `type="t2data"`), the Hotelling
-#' statistic for the mean (with `type="t2mean"`), or the Chi-squared
-#' statistic (with `type="c2data"`).
+#' The `type` argument chooses between the regular Hotelling statistic
+#' (with `type="t2data"`) or the Chi-squared statistic (with
+#' `type="c2data"`). The Hotelling statistic for the mean is not allowed as
+#' it makes no sense in the context of the outliers.
 #'
 #' The function is a wrapper around the `outliers()` function, which does
 #' the actual calculations, and the parameters passed (level, type, robust)
@@ -91,7 +91,7 @@ StatOutliers <- ggproto(
 stat_outliers <- function(mapping = NULL, data = NULL,
                                   geom = "point", position = "identity",
                                   ...,
-                                  type = c("t2data", "t2mean", "c2data"),
+                                  type = c("t2data", "c2data"),
                                   level = 0.95,
                                   outlier_only = FALSE,
                                   na.rm = FALSE,
@@ -186,6 +186,7 @@ GeomHotelling <- ggproto(
 #' @inheritParams hotelling_ellipse
 #' @importFrom ggplot2 ggproto layer Stat GeomPolygon aes
 #' @importFrom stats qchisq cov qf
+#' @return A ggplot2 geom layer that can be added to a ggplot object.
 #' @examples
 #' pca <- prcomp(iris[, 1:4], scale.=TRUE)
 #' df <- cbind(iris, pca$x)
@@ -316,6 +317,7 @@ GeomBag <- ggproto(
 #' @inheritParams mrfDepth::compBagplot
 #' @importFrom ggplot2 ggproto layer Stat GeomPolygon aes
 #' @importFrom stats qchisq cov qf
+#' @return A ggplot2 geom layer that can be added to a ggplot object.
 #' @examples
 #' library(ggplot2)
 #' ggplot(iris, aes(x = Sepal.Width, y = Sepal.Length, color = Species)) +

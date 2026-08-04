@@ -46,6 +46,7 @@ StatHull <- ggproto(
 #' ggplot(iris, aes(Sepal.Length, Sepal.Width, color=Species)) +
 #'   geom_hull(mapping = aes(fill = Species), alpha=.1) +
 #'   geom_point()
+#' @return A ggplot2 geom layer that can be added to a ggplot object.
 #' @export
 geom_hull <- function(mapping = NULL, data = NULL,
                       position = "identity",
@@ -194,6 +195,7 @@ GeomKDE <- ggproto(
 #'
 #' @seealso [geom_hull()] for simple convex contours and [geom_hotelling()]
 #' for Hotelling T2 ellipses.
+#' @return A ggplot2 geom layer that can be added to a ggplot object.
 #' @export
 geom_kde <- function(mapping = NULL, data = NULL,
                             position = "identity",

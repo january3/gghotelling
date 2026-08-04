@@ -98,7 +98,8 @@ ggplot(pca_df, aes(PC1, PC2, color=Species)) +
 How are the Hotelling ellipses different, say, from the ellipses
 created by `stat_ellipse()` in ggplot2, or the `ellipse::ellipse()` function?
 
-Actually, the `geom_hotelling()` function can create three different types of ellipses:
+Actually, the `geom_hotelling()` function can create three different types
+of ellipses with two flavors:
 
  * Hotelling T² *data* ellipses (default, `type="t2data"`): these ellipses represent the
    spread of the data points themselves, based on the Hotelling T² distribution.
@@ -112,6 +113,8 @@ Actually, the `geom_hotelling()` function can create three different types of el
    chi-squared distribution and also represent the spread of the data points.
    They are similar to the ellipses created by `stat_ellipse()` in ggplot2
    and the `ellipse::ellipse()` function.
+ * Each of the above can be produced as a robust version using the MCD
+   estimator by setting `robust=TRUE`.
 
 All three ellipses above use Mahalanobis distance contours, but differ in the
 statistical choice of distribution (Hotelling T² vs χ²) in order to select
@@ -160,6 +163,7 @@ at the specified confidence level (default is 0.95). The new data is
 available to aesthetics via `after_stat()`, including:
 
  * `d2`: the squared Mahalanobis distance for each point
+ * `c2crit`: the critical value for d2 from the Chi-squared distribution at the specified confidence level
  * `t2crit`: the critical value for d2 from the Hotelling T2 distribution
    at the specified confidence level
  * `is_outlier`: a logical indicating whether the point is an outlier

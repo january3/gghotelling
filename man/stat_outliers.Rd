@@ -11,7 +11,7 @@ stat_outliers(
   geom = "point",
   position = "identity",
   ...,
-  type = c("t2data", "t2mean", "c2data"),
+  type = c("t2data", "c2data"),
   level = 0.95,
   outlier_only = FALSE,
   na.rm = FALSE,
@@ -103,7 +103,7 @@ Calculate per-point Hotelling statistic for use in ggplot
 This calculates the Hotelling statistic for each point in the plot,
 group-wise. This allows to use the statistics \code{is_outlier}, \code{d2} (the
 squared Mahalanobis distance), \code{c2crit} (critical Chi-squared value for
-the specified level) and\code{t2crit} (critical Hotelling T2 value
+the specified level) and \code{t2crit} (critical Hotelling T2 value
 for the squared Mahalanobis distance) to be used as graphical
 parameters, e.g. for coloring the points (see Examples below) using the
 \code{ggplot2::after_stat()} function.
@@ -111,10 +111,10 @@ parameters, e.g. for coloring the points (see Examples below) using the
 The \code{is_outlier} is simply either \code{d2 > t2crit} (if \code{type="t2data"} or
 \code{type="t2mean"}) or \code{d2 > c2crit} (if \code{type="c2data"}).
 
-The \code{type} argument chooses between
-the regular Hotelling statistic (with \code{type="t2data"}), the Hotelling
-statistic for the mean (with \code{type="t2mean"}), or the Chi-squared
-statistic (with \code{type="c2data"}).
+The \code{type} argument chooses between the regular Hotelling statistic
+(with \code{type="t2data"}) or the Chi-squared statistic (with
+\code{type="c2data"}). The Hotelling statistic for the mean is not allowed as
+it makes no sense in the context of the outliers.
 
 The function is a wrapper around the \code{outliers()} function, which does
 the actual calculations, and the parameters passed (level, type, robust)
