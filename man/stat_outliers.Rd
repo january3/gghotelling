@@ -103,8 +103,8 @@ Calculate per-point Hotelling statistic for use in ggplot
 This calculates the Hotelling statistic for each point in the plot,
 group-wise. This allows to use the statistics \code{is_outlier}, \code{d2} (the
 squared Mahalanobis distance), \code{c2crit} (critical Chi-squared value for
-the specified level) and\code{t2crit} (critical Hotteling T2 value
-for the squared Mahalanobis disticance) to be used as graphical
+the specified level) and\code{t2crit} (critical Hotelling T2 value
+for the squared Mahalanobis distance) to be used as graphical
 parameters, e.g. for coloring the points (see Examples below) using the
 \code{ggplot2::after_stat()} function.
 

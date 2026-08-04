@@ -37,6 +37,8 @@ If NULL, the outliers will be identified by row number.}
 c2data (chi-squared coverage) or t2mean (T-squared based
 confidence area for the group mean).}
 
+\item{outliers}{if TRUE, label the outliers.}
+
 \item{level}{Either coverage probability (for type = "t2data" and "c2data") or
 confidence level (for type = "t2mean").}
 }
